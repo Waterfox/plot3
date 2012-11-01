@@ -1,0 +1,55 @@
+#buttons {
+	width:960px;
+}
+
+#settings {
+	position:relative;
+	left:730px;
+}
+#settings_nouser {
+	position:relative;
+	left:900px;
+}
+#settings_admin{
+	position:relative;
+	left:705px;
+}
+
+#settings_globe_user{
+	position:relative;
+	left:810px;
+}
+#global {
+	position:relative;
+	left:680px;
+}
+
+#global_user{
+	position:relative;
+	left:750px;
+}
+	
+
+#chart {
+  height: 550px;
+}
+
+.node rect {
+
+  shape-rendering: crispEdges;
+}
+
+.node text {
+  pointer-events: none;
+  text-shadow: 0 1px 0 #fff;
+}
+
+.link {
+  fill: none;
+  stroke: #000;
+  stroke-opacity: .2;
+}
+
+.link:hover {
+  stroke-opacity: .5;
+}

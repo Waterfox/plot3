@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Plot3 Sign-Up</title>
+
+		<link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic' rel='stylesheet' type='text/css'>
+
+		<link rel="stylesheet" href="stylesheets/global_style.css" />
+		<link rel="stylesheet" href="stylesheets/style.css" />
+
+		<script src="javascript/jquery.js"></script>
+		<script src="javascript/d3.v2.js"></script>
+		<script src="javascript/sankey.js"></script>
+
+		<script type="text/javascript">
+			function get_random_color() {
+				var letters = '0123456789ABCDEF'.split('');
+				var color = '#';
+				for (var i = 0; i < 6; i++ ) {
+					color += letters[Math.round(Math.random() * 15)];
+				}
+				return color;
+			}
+
+			$(document).ready(function() {
+				var rand_color = get_random_color().toString()
+
+				$('#title_num').css('color', rand_color);
+				$('.emph').css('color', rand_color);
+
+				$('article a').css('color', rand_color);
+				$('article a').hover(function() {
+					$(this).css('color', '#666');
+				}, function() {
+					$(this).css('color', rand_color);
+				});
+
+				$('footer a').css('color', rand_color);
+				$('footer a').hover(function() {
+					$(this).css('color', '#666');
+				}, function() {
+					$(this).css('color', rand_color);
+				});
+
+				$('.textbox').focus(function() {
+					$(this).css('border-color', rand_color);
+				});
+				$('.textbox').blur(function() {
+					$(this).css('border-color', '#111');
+				});
+
+				$('.textarea').focus(function() {
+					$(this).css('border-color', rand_color);
+				});
+				$('.textarea').blur(function() {
+					$(this).css('border-color', '#111');
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<div class="container">
+			<header>
+				<h1 id="header_title"><a href="/">Plot<span id="title_num">3</a></span></h1>
+
+				<nav>
+					<ul>
+						<li><a href="/contact">Contact</a></li>
+						<li><a href="/login" class="emph">Log In</a></li>
+					</ul>
+				</nav>
+			</header>
+			<article>
+				<h1>Sign Up</h1>
+
+				<br />
+
+				<form method="post">
+					<label for="username">Username</label> <input type="text" class="textbox" name="username" value={{Uname}}>{{w1}}
+					<label for="password">Password</label> <input type="password" class="textbox" name="password" >{{w2}}
+					<label for="password2">Retype Password</label> <input type="password" class="textbox" name="verify" >{{w3}}
+					<label for="email">Email (optional)</label> <input type="text" class="textbox long" name="email" value={{Uem}}>{{w4}}
+
+					<label></label>
+
+					<input type="submit" name="submit" class="button" value="Submit" />
+				</form>
+			</article>
+			<footer>
+				Powererd by  <a href="https://github.com/mbostock/d3/wiki">D3</a> and <a href="http://nvd3.com/">NVD3</a>.
+			</footer>
+		</div>
+	</body>
+</html>

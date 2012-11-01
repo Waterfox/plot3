@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Plot3</title>
+
+		<link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic' rel='stylesheet' type='text/css'>
+
+		<link rel="stylesheet" href="stylesheets/global_style.css" />
+		<link rel="stylesheet" href="stylesheets/frontpage_style.css" />
+		<link rel="stylesheet" href="stylesheets/sankeyStyle.css" />
+		<script src="javascript/pdfobject.js"></script>
+		<script src="javascript/jquery.js"></script>
+		<script>
+			function get_random_color() {
+				var letters = '0123456789ABCDEF'.split('');
+				var color = '#';
+				for (var i = 0; i < 6; i++ ) {
+					color += letters[Math.round(Math.random() * 15)];
+				}
+				return color;
+			}
+
+			$(document).ready(function() {
+				$('header').css('height', ($(window).height()-20).toString()+'px');
+
+				//$('nav').css('margin-top', ($(window).height()-630).toString()+'px');
+
+				$('#header_title').css('padding-top', (($(window).height()-460)/2).toString()+'px');
+				$('#header_title').css('padding-bottom', (($(window).height()-460)/2).toString()+'px');
+
+				var rand_color = get_random_color().toString()
+
+				$('#title_num').css('color', rand_color);
+				$('.emph').css('color', rand_color);
+
+				$('.textbox').focus(function() {
+					$(this).css('border-color', rand_color);
+				});
+				$('.textbox').blur(function() {
+					$(this).css('border-color', '#111');
+				});
+				
+				$('#introsvg').css('height', ($('#introsvg').width()*1.35).toString()+'px');
+				$('#introsvg svg').css('height', '100%');
+				$('#introsvg svg').css('width', '100%');
+
+				//$('#introbtn').attr('onmouseup',function() {window.scrollBy(0,100);});
+			});
+		</script>
+	</head>
+	<body>
+		<div class="container">
+			<span id="login_frontpage_text">Already a Plot3 User?</span>
+			<input type="button" class="button" id="login_frontpage" value="Log In" onmouseup="window.location='/login'" />
+			<header>
+				<h1 id="header_title">Plot<span id="title_num">3</span></h1>
+
+				<nav>
+					<ul>
+						<li><a href="" id="introbtn" 'onmouseup'="window.scrollBy(0,600)">Intro</a></li>
+						<li><a href="/signup">Sign Up</a></li>
+					</ul>
+				</nav>
+			</header>
+			<style>
+				#introsvg {
+				width: 90%;
+
+				margin-left: 5%;
+				}
+				#introsvg object,embed,svg {
+				height: 100%;
+				width: 100%;
+}
+			</style>
+				<div id="introsvg">
+						<object data="content/P3intro.svg" type="image/svg+xml"></object>
+				</div>
+
+		</div>
+	</body>
+</html>

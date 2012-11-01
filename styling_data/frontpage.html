@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Plot3 Prototype Style Signup</title>
+
+		<link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic' rel='stylesheet' type='text/css'>
+
+		<link rel="stylesheet" href="stylesheets/global_style.css" />
+		<link rel="stylesheet" href="stylesheets/frontpage_style.css" />
+
+		<link rel="stylesheet" href="stylesheets/sankeyStyle.css" />
+
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script>
+			function get_random_color() {
+				var letters = '0123456789ABCDEF'.split('');
+				var color = '#';
+				for (var i = 0; i < 6; i++ ) {
+					color += letters[Math.round(Math.random() * 15)];
+				}
+				return color;
+			}
+
+			$(document).ready(function() {
+				$('header').css('height', ($(window).height()-20).toString()+'px');
+
+				$('nav').css('margin-top', ($(window).height()-630).toString()+'px');
+
+				$('#header_title').css('padding-top', (($(window).height()-460)/2).toString()+'px');
+				$('#header_title').css('padding-bottom', (($(window).height()-460)/2).toString()+'px');
+
+				var rand_color = get_random_color().toString()
+
+				$('#title_num').css('color', rand_color);
+				$('.emph').css('color', rand_color);
+
+				$('.textbox').focus(function() {
+					$(this).css('border-color', rand_color);
+				});
+				$('.textbox').blur(function() {
+					$(this).css('border-color', '#111');
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<div class="container">
+			<span id="login_frontpage_text">Already a Plot3 User?</span>
+			<input type="button" class="button" id="login_frontpage" value="Log In" />
+			<header>
+				<h1 id="header_title">Plot<span id="title_num">3</span></h1>
+
+				<nav>
+					<ul>
+						<li><a href="#intro">Intro</a></li>
+						<li><a href="signup.html">Sign Up</a></li>
+					</ul>
+				</nav>
+			</header>
+			<article>
+				<h1>Introduction</h1>
+				<p>Lorum ipsum dolor set amet...</p>
+			</article>
+			<footer>
+				
+			</footer>
+		</div>
+	</body>
+</html>

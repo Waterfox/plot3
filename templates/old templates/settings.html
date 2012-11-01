@@ -1,0 +1,129 @@
+<html>
+<?xml version="1.0" encoding="UTF-8"?>
+<head>
+
+<link href="stylesheets/rstyle.css" rel="stylesheet" type="text/css">
+<style>
+#twoColRt {
+	height: 770px;
+	float: right;
+	width: 300px; /* the actual width of this div, in standards-compliant browsers, or standards mode in Internet Explorer will include the padding and border in addition to the width */
+	background: #EBEBEB;
+	padding-top: 15px;
+	padding-right: 10px;
+	padding-bottom: 15px;
+	padding-left: 10px;
+	
+}
+#twoColLt {
+margin: 0 0 0 0;
+}
+
+#container { 
+	height: 800px;
+	width: 1000px;  /* using 20px less than a full 800px width allows for browser chrome and avoids a horizontal scroll bar */
+	background: #FFFFFF;
+	margin: 0 auto; /* the auto margins (in conjunction with a width) center the page */
+	text-align: left; /* this overrides the text-align: center on the body element. */
+</style>
+<title>P3 Settings</title>
+</head>
+<body>
+
+<div id ="container">
+<form method="post">
+<div id ="twoColRt">
+{% if admin==True %}
+X axis format:
+</br>
+<input name = "XF" type ="radio" value ="0d"> 1234
+</br>
+<input name = "XF" type ="radio" value ="1d"> 1234.5
+</br>
+<input name = "XF" type ="radio" value ="2d"> 1234.56
+</br>
+<input name = "XF" type ="radio" value ="3d"> 1234.567
+</br>
+<input name = "XF" type ="radio" value ="strf"> strftime
+</br>
+</br>
+Y axis format:
+</br>
+<input name = "YF" type ="radio" value ="0d"> 9876
+</br>
+<input name = "YF" type ="radio" value ="1d"> 9876.5
+</br>
+<input name = "YF" type ="radio" value ="2d"> 9876.54
+</br>
+<input name = "YF" type ="radio" value ="3d"> 9876.543
+</br>
+</br>
+{% endif %}
+<input type="submit">
+</div>
+
+<div id ="twoColLt">
+
+	
+	<div class="cbutton" >
+	<embed src = "content/Rset1.svg" type = "image/svg+xml" onmouseout="this.style.opacity=1;" 
+                onmouseover="this.style.opacity=0.6;">
+	<input type ="radio" name="cSet" value = "Rset1" class ="rbtn">
+	</div>
+	
+	<div class="cbutton" >
+	<embed src = "content/Rset2.svg" type = "image/svg+xml" onmouseout="this.style.opacity=1;" 
+                onmouseover="this.style.opacity=0.6;">
+	<input type ="radio" name="cSet" value = "Rset2" class ="rbtn">
+	</div>
+
+	<div class="cbutton" >
+	<embed src = "content/CBset3.svg" type = "image/svg+xml" onmouseout="this.style.opacity=1;" 
+                onmouseover="this.style.opacity=0.6;">
+	<input type ="radio" name="cSet" value = "CBset3" class ="rbtn">
+	</div>
+	
+	<div class="cbutton" >
+	<embed src = "content/d3set10.svg" type = "image/svg+xml" onmouseout="this.style.opacity=1;" 
+                onmouseover="this.style.opacity=0.6;">
+	<input type ="radio" name="cSet" value = "d3set10" class ="rbtn">
+	</div>
+	
+	<div class="cbutton" >
+	<embed src = "content/d3set20.svg" type = "image/svg+xml" onmouseout="this.style.opacity=1;" 
+                onmouseover="this.style.opacity=0.6;">
+	<input type ="radio" name="cSet" value = "d3set20" class ="rbtn">
+	</div>	
+	<div class="cbutton" >
+	<embed src = "content/d3set20b.svg" type = "image/svg+xml" onmouseout="this.style.opacity=1;" 
+                onmouseover="this.style.opacity=0.6;">
+	<input type ="radio" name="cSet" value = "d3set20b" class ="rbtn">
+	</div>	
+	
+	<div class="cbutton" >
+	<embed src = "content/d3set20c.svg" type = "image/svg+xml" onmouseout="this.style.opacity=1;" 
+                onmouseover="this.style.opacity=0.6;">
+	<input type ="radio" name="cSet" value = "d3set20c" class ="rbtn">
+	</div>	
+	
+	<div class="cbutton" >
+	<embed src = "content/Rset3.svg" type = "image/svg+xml" onmouseout="this.style.opacity=1;" 
+                onmouseover="this.style.opacity=0.6;">
+	<input type ="radio" name="cSet" value = "Rset3" class ="rbtn">
+	</div>	
+	
+	
+</div>
+</form>
+</div>
+
+
+
+</body>
+
+
+
+
+
+
+</html>

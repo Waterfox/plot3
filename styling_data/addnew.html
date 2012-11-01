@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Plot3 Prototype Style</title>
+
+		<link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic' rel='stylesheet' type='text/css'>
+
+		<link rel="stylesheet" href="stylesheets/global_style.css" />
+		<link rel="stylesheet" href="stylesheets/style.css" />
+
+		<script src="javascript/jquery.js"></script>
+		<script src="javascript/d3.v2.js"></script>
+		<script src="javascript/sankey.js"></script>
+
+		<script type="text/javascript">
+			function get_random_color() {
+				var letters = '0123456789ABCDEF'.split('');
+				var color = '#';
+				for (var i = 0; i < 6; i++ ) {
+					color += letters[Math.round(Math.random() * 15)];
+				}
+				return color;
+			}
+
+			$(document).ready(function() {
+				var rand_color = get_random_color().toString()
+
+				$('#title_num').css('color', rand_color);
+				$('.emph').css('color', rand_color);
+
+				$('article a').css('color', rand_color);
+				$('article a').hover(function() {
+					$(this).css('color', '#666');
+				}, function() {
+					$(this).css('color', rand_color);
+				});
+
+				$('footer a').css('color', rand_color);
+				$('footer a').hover(function() {
+					$(this).css('color', '#666');
+				}, function() {
+					$(this).css('color', rand_color);
+				});
+
+				$('.textbox').focus(function() {
+					$(this).css('border-color', rand_color);
+				});
+				$('.textbox').blur(function() {
+					$(this).css('border-color', '#111');
+				});
+
+				$('.textarea').focus(function() {
+					$(this).css('border-color', rand_color);
+				});
+				$('.textarea').blur(function() {
+					$(this).css('border-color', '#111');
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<div class="wrapper">
+			<header>
+				<h1 id="header_title"><a href="index.html">Plot<span id="title_num">3</a></span></h1>
+
+				<nav>
+					<ul>
+						<li><a href="settings.html">Settings</a></li>
+						<li><a href="contact.html">Contact</a></li>
+						<li><a href="#" class="emph">Log Out</a></li>
+					</ul>
+				</nav>
+			</header>
+			<article>
+				<h1>Add New Data</h1>
+				<form method="post">
+					<div class="col_one">
+						<label for="cats">Categories (comma separated)</label> 
+						<input name="cats" type="text" class="textbox" />
+
+						<label for="title">Title</label>
+						<input name="title" type="text" class="textbox" />
+						
+						<label for="description">Description</label>
+						<textarea name="description" rows="5" cols="30" class="textarea"></textarea>
+
+						<label for="xlabel">Label for X Axis</label>
+						<input name="xlabel" type="text" class="textbox" />
+						
+						<label for="ylabel">Label for Y Axis</label>
+						<input name="ylabel" type="text" class="textbox" />
+
+						<label>Comma or Tab Seperated Data Set (CSV or \tSV)</label>
+						<textarea name="plotdata" rows="30" cols="30" style="height: 360px !important;" class="textarea"/></textarea>
+					</div>
+					<div class="col_two">
+						<label for="XF">X axis format</label>
+						<input name="XF" type="radio" value="0d" class="textbox" /> 1234
+						<br />
+						<input name="XF" type="radio" value="1d" class="textbox" /> 1234.5
+						<br />
+						<input name="XF" type="radio" value="2d" class="textbox" /> 1234.56
+						<br />
+						<input name="XF" type="radio" value="3d" class="textbox" /> 1234.567
+						<br />
+						<input name="XF" type="radio" value="strf" class="textbox" /> Time Format
+						<br />
+						<br />
+						<label for="YF">Y axis format</label>
+						<br />
+						<input name="YF" type ="radio" value ="0d" /> 9876
+						<br />
+						<input name="YF" type ="radio" value ="1d" /> 9876.5
+						<br />
+						<input name="YF" type ="radio" value ="2d" /> 9876.54
+						<br />
+						<input name="YF" type ="radio" value ="3d" /> 9876.543
+						<br />
+						<br />
+						<input type="submit" name="submit" value="Add Data" class="button" />
+						<input type="button" name="cancel" value="Cancel" onmouseup="window.location = 'index.html'" class="button" />
+					</div>
+				</form>
+			</article>
+			<footer>
+				Copyright {x} 2012. Some filler content. Some more filler content. <a href="#">Link</a>.
+			</footer>
+		</div>
+	</body>
+</html>

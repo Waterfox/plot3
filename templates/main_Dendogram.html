@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<?xml version-"1.0">
+<title>Robbie Work & Fun </title>
+<style>
+
+@import url(stylesheets/style.css);
+
+#chart {
+  height: 500px;
+}
+
+.node circle {
+  cursor: pointer;
+  fill: #fff;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+.node text {
+  font-size: 11px;
+}
+
+path.link {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 1.5px;
+}
+
+</style>
+<body>
+<h1> Robbie Fun and Work </h1>
+
+<p id="chart">
+
+
+
+<script src="http://d3js.org/d3.v2.min.js?2.9.1"></script>
+
+<script>
+
+data={{dataset}}
+
+var width = 960,
+    height = 2200;
+
+var cluster = d3.layout.cluster()
+    .size([height, width - 160]);
+
+var diagonal = d3.svg.diagonal()
+    .projection(function(d) { return [d.y, d.x]; });
+
+	var vis = d3.select("#chart").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g")
+    .attr("transform", "translate(40, 0)");
+
+  var nodes = cluster.nodes(data);
+  
+  var link = vis.selectAll("path.link")
+     .data(cluster.links(nodes))
+   .enter().append("path")
+     .attr("class", "link")
+     .attr("d", diagonal);
+  var node = vis.selectAll("g.node")
+     .data(nodes)
+   .enter().append("g")
+     .attr("class", "node")
+     .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; })
+  node.append("circle")
+     .attr("r", 4.5);
+  node.append("text")
+     .attr("dx", function(d) { return d.children ? -8 : 8; })
+     .attr("dy", 3)
+     .attr("text-anchor", function(d) { return d.children ? "end" : "start"; })
+     .text(function(d) { return d.name; });
+
+
+</script>
+</body>

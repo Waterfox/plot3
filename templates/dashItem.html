@@ -1,0 +1,232 @@
+<style type="text/css">
+#Chart{{id}} {position:absolute;
+ top: {{item.top}}; left:{{item.left}};
+ width: {{item.w}}; height: {{item.h}};
+ background:#FFFFFF;
+border-style:solid;
+border-width:5px;
+border-color:{{color}};}
+#titlebox {text-align:center; top:-20px; position:relative; font-size:12; font:cambria;}
+.ui-resizable-helper { border: 2px dotted #00F; }
+ </style>
+<script>
+
+  
+   $(document).ready(function() {
+    $("#Chart{{id}}").resizable({
+	//helper: "ui-resizable-helper",
+	stop: function(event,ui){
+		var res ='';
+		res = ui.size;
+		$("#{{id}}res").remove();
+		var inputres = '<input type="hidden" name="{{id}}res" id="{{id}}res" value="'+res.width+','+res.height+'"/>';
+		$('#posForm').append(inputres);
+		}
+	})
+  });
+  
+  $(document).ready(function() {
+    $("#Chart{{id}}").draggable({
+	containment: [0,0,1910,1190],
+	stop: function(event,ui){
+		var pos ='';
+		pos = ui.position;
+		$("#{{id}}pos").remove();
+		var inputpos = '<input type="hidden" name="{{id}}pos" id="{{id}}pos" value="'+pos.left+','+pos.top+'"/>';
+		$('#posForm').append(inputpos);
+		}
+	});
+  });
+ </script>
+
+
+<div id="Chart{{id}}">
+<svg> </svg>
+<div id="titlebox">{{title}}</div> 
+</div>
+
+
+
+{% if ptype == 'line' %}
+<script type="text/javascript">
+	data{{id}} = {{plotData}}
+
+	var d3_colorset{{id}} = {{colorset}};
+	
+	d3.scale.colorset{{id}}  = function() {
+	return d3.scale.ordinal().range(d3_colorset{{id}});
+	};	
+	
+	nv.addGraph(function() {
+     var chart = nv.models.lineChart()
+                   .x(function(d) { return d[0] })
+                   .y(function(d) { return d[1] }) 
+                   .color(d3.scale.colorset{{id}} ().range());
+ 
+      chart.xAxis
+         .axisLabel('{{xlabel}}')
+		 .tickFormat({{XF}});
+		 //.tickFormat(d3.format('0.1f'));
+		 //.tickFormat(function(d) { return d3.time.format('%x')(new Date(d)) });
+ 
+     chart.yAxis
+		 .axisLabel('{{ylabel}}')
+         .tickFormat({{YF}});
+ 
+     d3.select('#Chart{{id}} svg')
+         .datum(data{{id}})
+       .transition().duration(500)
+         .call(chart);
+ 
+     //TODO: Figure out a good way to do this automatically
+     nv.utils.windowResize(chart.update);
+     return chart;
+   });
+</script>
+{% elif ptype == 'area' %}
+<script type="text/javascript">
+	data{{id}} = {{plotData}}
+	
+	var d3_colorset{{id}} = {{colorset}};
+	
+	d3.scale.colorset{{id}} = function() {
+	return d3.scale.ordinal().range(d3_colorset{{id}});
+	};	
+	
+
+	nv.addGraph(function() {
+	  var chart = nv.models.stackedAreaChart()
+					.x(function(d) { return d[0] })
+					.y(function(d) { return d[1] })
+					.color(d3.scale.colorset{{id}}().range())
+					//.clipEdge(true);
+
+	  chart.xAxis
+		  .axisLabel('{{xlabel}}')
+		  .tickFormat({{XF}});
+		  //.tickFormat(function(d) { return d3.time.format('%x')(new Date(d)) });
+
+	  chart.yAxis
+		  .tickFormat({{YF}})
+		  .axisLabel('{{ylabel}}');
+
+	  d3.select('#Chart{{id}} svg')
+		.datum(data{{id}})
+		  .transition().duration(500).call(chart);
+
+	  nv.utils.windowResize(chart.update);
+
+	  return chart;
+	});
+</script>
+{% elif ptype == 'bar' %}
+<script type="text/javascript">
+	data{{id}} = {{plotData}}
+
+	var d3_colorset{{id}}  = {{colorset}};
+		
+	d3.scale.colorset{{id}} = function() {
+	return d3.scale.ordinal().range(d3_colorset{{id}});
+	};	
+	nv.addGraph(function() { 
+
+		  var chart = nv.models.multiBarChart()
+		   .x(function(d) { return d[0] })
+		   .y(function(d) { return d[1] })
+		   .color(d3.scale.colorset{{id}}().range());
+		   
+			{% if xflag %}
+			
+			{% else %}
+			chart.xAxis
+			.axisLabel('{{xlabel}}')
+		    .tickFormat({{XF}});
+			{% endif %}
+
+			chart.yAxis
+			.tickFormat({{YF}})
+			.axisLabel('{{ylabel}}');
+
+		  d3.select('#Chart{{id}} svg')
+			  .datum(data{{id}})
+			.transition().duration(500)
+			  .call(chart);
+
+		  nv.utils.windowResize(chart.update);
+
+		  return chart;
+		});
+</script>
+{% elif ptype == 'scatter' %}
+<script type="text/javascript">
+	data{{id}} = {{plotData}}
+
+	var d3_colorset{{id}} = {{colorset}};
+	
+	d3.scale.colorset{{id}} = function() {
+	return d3.scale.ordinal().range(d3_colorset{{id}});
+	};	
+	
+	nv.addGraph(function() {
+	  var chart = nv.models.scatterChart()
+					.showDistX(true)
+					.showDistY(true)
+					//.height(500)
+					.color(d3.scale.colorset{{id}}().range())
+					.x(function(d) { return d[0] })
+					.y(function(d) { return d[1] }) 
+					.size(function(d){ return d[1]})
+					.shape('diamond');
+
+	  chart.xAxis
+	  .tickFormat({{XF}})
+	  .axisLabel('{{xlabel}}');
+	  
+	  chart.yAxis
+	  .tickFormat({{YF}})
+	  .axisLabel('{{ylabel}}');
+
+	  d3.select('#Chart{{id}} svg')
+		  .datum(data{{id}})
+		.transition().duration(500)
+		  .call(chart);
+
+	  nv.utils.windowResize(chart.update);
+
+	  return chart;
+	});
+</script>
+{% elif ptype == 'pie' %}
+<script type="text/javascript">
+	data{{id}} = {{plotData}}
+
+	var d3_colorset{{id}} = {{colorset}};
+	
+	d3.scale.colorset{{id}} = function() {
+	return d3.scale.ordinal().range(d3_colorset{{id}});
+	};	
+
+	nv.addGraph(function() {
+		var width = 400,
+			height = 400;
+
+		var chart = nv.models.pieChart()
+			.x(function(d) { return d[0] })
+			.y(function(d) { return d[1] })
+			//.showLabels(false)
+			.color(d3.scale.colorset{{id}}().range())
+			.width(width)
+			.height(height);
+
+		  d3.select("#Chart{{id}} svg")
+			  .datum(data{{id}})
+			  //.datum(testdata)
+			.transition().duration(500)
+			  .attr('width', width)
+			  .attr('height', height)
+			  .call(chart);
+
+		return chart;
+	});
+</script>
+{% endif %}

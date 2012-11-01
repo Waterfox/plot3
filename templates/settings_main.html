@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Plot3 Settings</title>
+
+		<link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic' rel='stylesheet' type='text/css'>
+
+		<link rel="stylesheet" href="stylesheets/global_style.css" />
+		<link rel="stylesheet" href="stylesheets/style.css" />
+
+		<script src="javascript/jquery.js"></script>
+		<script src="javascript/d3.v2.js"></script>
+		<script src="javascript/sankey.js"></script>
+
+		<script type="text/javascript">
+			function get_random_color() {
+				var letters = '0123456789ABCDEF'.split('');
+				var color = '#';
+				for (var i = 0; i < 6; i++ ) {
+					color += letters[Math.round(Math.random() * 15)];
+				}
+				return color;
+			}
+
+			$(document).ready(function() {
+				var rand_color = get_random_color().toString()
+
+				$('#title_num').css('color', rand_color);
+				$('.emph').css('color', rand_color);
+
+				$('article a').css('color', rand_color);
+				$('article a').hover(function() {
+					$(this).css('color', '#666');
+				}, function() {
+					$(this).css('color', rand_color);
+				});
+
+				$('footer a').css('color', rand_color);
+				$('footer a').hover(function() {
+					$(this).css('color', '#666');
+				}, function() {
+					$(this).css('color', rand_color);
+				});
+
+				$('.textbox').focus(function() {
+					$(this).css('border-color', rand_color);
+				});
+				$('.textbox').blur(function() {
+					$(this).css('border-color', '#111');
+				});
+
+				$('.textarea').focus(function() {
+					$(this).css('border-color', rand_color);
+				});
+				$('.textarea').blur(function() {
+					$(this).css('border-color', '#111');
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<div class="wrapper">
+			<header>
+				<h1 id="header_title"><a href="index.html">Plot<span id="title_num">3</a></span></h1>
+
+				<nav>
+					<ul>
+						<li><a href="/contact">Contact</a></li>
+						<li><a href="/logout" class="emph">Log Out</a></li>
+					</ul>
+				</nav>
+			</header>
+			<article>
+				<h1>Settings</h1>
+
+				<form method="post" id="settingsform">
+					<div class="col_one_exp">
+						<div class="cbutton">
+							<label>4 Colors</label>
+							<input type="radio" name="cSet" id="Rset1" value="Rset1" class="rbtn" />
+							<embed src="content/Rset1.svg" type="image/svg+xml" />
+						</div>
+
+						<div class="cbutton">
+							<label>8 Colors</label>
+							<input type="radio" name="cSet" value="CBset3" class="rbtn" />
+							<embed src="content/CBset3.svg" type = "image/svg+xml" />
+						</div>
+							
+						<div class="cbutton">
+							<label>10 Colors (1)</label>
+							<input type="radio" name="cSet" value="Rset2" class="rbtn" />
+							<embed src="content/Rset2.svg" type="image/svg+xml" />
+						</div>
+							
+						<div class="cbutton">
+							<label>10 Colors (2)</label>
+							<input type="radio" name="cSet" value="d3set10" class="rbtn" />
+							<embed src="content/d3set10.svg" type="image/svg+xml" />
+						</div>
+							
+						<div class="cbutton">
+							<label>20 Colors (1)</label>
+							<input type="radio" name="cSet" value="d3set20" class="rbtn" />
+							<embed src = "content/d3set20.svg" type = "image/svg+xml" />
+						</div>
+
+						<div class="cbutton">
+							<label>20 Colors (2)</label>
+							<input type="radio" name="cSet" value="d3set20b" class="rbtn" />
+							<embed src="content/d3set20b.svg" type="image/svg+xml" />
+						</div>	
+							
+						<div class="cbutton">
+							<label>20 Colors (3)</label>
+							<input type="radio" name="cSet" value="d3set20c" class="rbtn" />
+							<embed src="content/d3set20c.svg" type="image/svg+xml" />
+						</div>	
+							
+						<div class="cbutton">
+							<label>20 Colors (4)</label>
+							<input type="radio" name="cSet" value="Rset3" class="rbtn" />
+							<embed src="content/Rset3.svg" type="image/svg+xml" />
+						</div>
+					</div>
+					
+						<input type="submit" name="submit" value="Save Settings" class="button" />
+						<input type="button" name="cancel" value="Cancel" onmouseup="window.location = '/'" class="button" />
+					</div>
+				</form>
+			</article>
+			<footer>
+				Powererd by  <a href="https://github.com/mbostock/d3/wiki">D3</a> and <a href="http://nvd3.com/">NVD3</a>.
+			</footer>
+		</div>
+	</body>
+</html>

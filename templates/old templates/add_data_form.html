@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Time to input some data brother</title>
+<style>
+@import url(stylesheets/style.css);
+@import url(stylesheets/rstyle.css);
+</style>
+</head>
+<body>
+<div id="container">
+<div id="twoColRt">
+<form method="post">
+X axis format:
+</br>
+<input name = "XF" type ="radio" value ="0d"> 1234
+</br>
+<input name = "XF" type ="radio" value ="1d"> 1234.5
+</br>
+<input name = "XF" type ="radio" value ="2d"> 1234.56
+</br>
+<input name = "XF" type ="radio" value ="3d"> 1234.567
+</br>
+<input name = "XF" type ="radio" value ="strf"> strftime
+</br>
+</br>
+Y axis format:
+</br>
+<input name = "YF" type ="radio" value ="0d"> 9876
+</br>
+<input name = "YF" type ="radio" value ="1d"> 9876.5
+</br>
+<input name = "YF" type ="radio" value ="2d"> 9876.54
+</br>
+<input name = "YF" type ="radio" value ="3d"> 9876.543
+</br>
+</br>
+<input type="submit">
+</div>
+
+<div id="twoColLt">
+Data go here
+</br>
+	{% if loggedIn==True %}
+	<label>
+		Catergories (comma separated)
+	<input name = "cats" type = "text">
+	</label> 
+	</br>
+	{% endif %}
+	<label>
+		Title
+	<input name = "title" type = "text">
+	</label>
+	</br>
+	<label>
+		Description
+		</br>
+		<textarea name = "description" rows="5" cols="30"></textarea>
+	</label>
+	</br>
+	<label>
+		xlabel
+	<input name = "xlabel" type = "text">
+	</label>
+	</br>
+	<label>
+		ylabel
+	<input name = "ylabel" type = "text">
+	</label>
+	</br>
+	<label>
+		CSV or \tSV Data Set
+		</br>
+		<textarea name = "plotdata" rows="30" cols="30"></textarea>
+	</label>
+	
+
+</form>
+
+</div>
+
+</div>
+</body>
+
+</html>

@@ -1,0 +1,83 @@
+<html>
+<head>
+<title>Plot3</title>
+<script src="javascript/d3.v2.js"></script>
+<script src="/javascript/jquery-1.8.0.js"></script>
+<style>
+#container {
+  width: 700px ;
+  margin-left: auto ;
+  margin-right: auto ;
+  position: relative;
+  top: 10%;
+}
+#enter {
+	position:relative;
+	left:65%;
+	bottom: -85px;
+	}
+#intro {
+	position:relative;
+	left:-20%;
+	bottom: -150px;
+	}
+</style>
+</head>
+
+	
+<body>
+<div id="container">
+<div id="logo">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="507px" height="205px" viewBox="0 0 507 205" enable-background="new 0 0 507 205" xml:space="preserve">
+<text transform="matrix(1 0 0 1 0 146.3032)"><tspan x="0" y="0" font-family="'Gill Sans MT'" font-size="150">PLOT</tspan></text>
+<text transform="matrix(1 0 0 1 379 185.3032)" id="three" fill="#34B44E" stroke="#000000" stroke-width="6" stroke-miterlimit="10" font-family="'Gill Sans MT'" font-size="250">3</text>
+</svg>
+</div>
+<div id="intro">
+<svg version="1.1" id="introbtn" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="187px" height="70px" viewBox="0 0 187.099 69.112" enable-background="new 0 0 187 70"
+	 xml:space="preserve" onmouseout="this.style.opacity=1;" 
+                onmouseover="this.style.opacity=0.6;">
+<text transform="matrix(1 0 0 1 17.9165 52.7412)" font-family="'Gill Sans MT'" font-size="72">Intro</text>
+</svg>
+</div>
+<div id="enter">
+<svg version="1.1" id="enterbtn" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="187px" height="70px" viewBox="0 0 187.099 69.112" enable-background="new 0 0 187 70"
+	 xml:space="preserve" onmouseout="this.style.opacity=1;" 
+                onmouseover="this.style.opacity=0.6;">
+<text transform="matrix(1 0 0 1 17.9165 52.7412)" font-family="'Gill Sans MT'" font-size="72" id="enterbtn">Enter</text>
+</svg>
+</div>
+
+</div>
+<script>
+
+var svgDoc,svgL,svg3;
+svg3 = d3.select("#three")
+svg3.style("fill",function(){
+var r,g,b;
+r=Math.random()*256;
+g=Math.random()*256;
+b=Math.random()*256;
+return d3.rgb(r,g,b)}
+);
+
+$("#enterbtn").click(function(){
+document.location.href = "/global";});
+$("#enterbtn").hover(function() {
+$(this).css('cursor','pointer');
+});
+
+$("#introbtn").click(function(){
+document.location.href = "/intro";});
+$("#introbtn").hover(function() {
+$(this).css('cursor','pointer');
+});
+
+
+</script>
+</body>
+</html>
+	
