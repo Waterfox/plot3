@@ -103,6 +103,15 @@
 				link.setAttribute("onmouseup","window.location ='/globalsettings?id="+numb.pop().toString()+"'");
 				//link.href = 'globalsettings?id='+numb.pop();
 			</script>
+			{% elif randplot==True %}
+			<input type="button" class="button"  value="Settings" id="set" onmouseup="window.location = '/randomssettings'" >
+			<script>
+				var link = document.getElementById("set");
+				loc = document.location.href;
+				var numb = loc.match(/\d+/g);
+				link.setAttribute('onmouseup',"window.location ='/randomsettings?id="+numb.pop().toString()+"'");
+				//link.href = 'settings?id='+numb.pop();
+			</script>			
 			{% else %}
 			<input type="button" class="button"  value="Settings" id="set" onmouseup="window.location = '/settings'" >
 			<script>
