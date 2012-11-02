@@ -1,3 +1,8 @@
+@font-face {
+	font-family: ('MyriadPro-Regular'),
+	src: url('fonts/MyriadPro-Regular.ttf ') format("truetype");
+}
+
 header {
 	background-color: #EEE;
 	border-bottom: 20px solid #CCC;
@@ -29,6 +34,9 @@ header nav {
 	clear: all;
 
 	height: 200px;
+
+	position: absolute;
+	bottom: 20px;
 }
 header nav ul {
 	list-style: none;
@@ -43,9 +51,10 @@ header nav ul li {
 header nav ul li a {
 	display: inline-block;
 
-	width: 99.9%;
+	width: 99.99%;
 	height: 200px;
 	line-height: 200px;
+
 	color: #111;
 
 	text-decoration: none;
@@ -57,6 +66,31 @@ header nav ul li a {
 header nav ul li a:hover {
 	background-color: #DDD;
 	text-decoration: underline;
+}
+
+article h1 {
+	padding: 0px;
+	margin: 0px;
+
+	padding-top: 75px;
+	padding-bottom: 75px;
+
+	text-align: center;
+
+	color: #111;
+
+	font-family: 'Lato', sans-serif;
+	font-size: 100px;
+}
+
+#introsvg {
+	width: 90%;
+
+	margin-left: 5%;
+}
+#introsvg object,embed,svg {
+	height: 100%;
+	width: 100%;
 }
 
 #login_frontpage {
