@@ -947,7 +947,7 @@ class RandomAddData(Plot3Handler):
 		xf = self.request.get('XF')		
 		yf = self.request.get('YF')
 		
-		cSet = self.request.cookies.get('cSet','0') #set the user's default colour when adding data
+		cSet = self.getPlotColour() #set the user's default colour when adding data
 		if cSet=='0':
 			cSet='d3set20'
 		entry = RANDOM3DB(PLOTDATA=plotdata_js,TITLE=title,DESC=description,XL=xlabel,YL=ylabel,SZ=size,CSET=cSet,XF=xf,YF=yf)
@@ -981,7 +981,7 @@ class RandomPlotSet(Plot3Handler):
 		if not dS.YF: dS.YF = '1d'
 			
 			
-		self.render('PlotSet.html',ptype=ptype,plotData=dS.PLOTDATA,title=dS.TITLE,description=dS.DESC,xlabel=dS.XL,ylabel=dS.YL,size=dS.SZ,id=int(entry_id),buttonSet=buttonSet,colorset=colorDict[cSet],XF=axisdict[dS.XF],YF=axisdict[dS.YF],xflag=noXlabels,loggedIn=loggedIn)
+		self.render('PlotSet.html',ptype=ptype,plotData=dS.PLOTDATA,title=dS.TITLE,description=dS.DESC,xlabel=dS.XL,ylabel=dS.YL,size=dS.SZ,id=int(entry_id),buttonSet=buttonSet,colorset=colorDict[cSet],XF=axisdict[dS.XF],YF=axisdict[dS.YF],xflag=noXlabels,loggedIn=loggedIn,randplot=True)
 
 class RandomPlotSettingHandler(Plot3Handler):
 	def get(self):

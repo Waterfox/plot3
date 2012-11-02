@@ -47,6 +47,12 @@
 				//$('#introbtn').attr('onmouseup',function() {window.scrollBy(0,100);});
 			});
 		</script>
+		<style>
+		@font-face {
+			font-family: ('MyriadPro-Regular'),
+			src: url('fonts/MyriadPro-Regular.ttf ') format("truetype");
+			}
+		</style>
 	</head>
 	<body>
 		<div class="container">
@@ -57,7 +63,7 @@
 
 				<nav>
 					<ul>
-						<li><a href="" id="introbtn" 'onmouseup'="window.scrollBy(0,600)">Intro</a></li>
+						<li><a href="#introsvg"  id="introbtn" >Intro</a></li>
 						<li><a href="/signup">Sign Up</a></li>
 					</ul>
 				</nav>
@@ -71,7 +77,7 @@
 				#introsvg object,embed,svg {
 				height: 100%;
 				width: 100%;
-}
+				}
 			</style>
 				<div id="introsvg">
 						<object data="content/P3intro.svg" type="image/svg+xml"></object>
