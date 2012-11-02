@@ -421,6 +421,14 @@ class AddDataHandler(Plot3Handler):
 		cSet = self.getPlotColour() #set the user's default colour when adding data
 		if cSet=='0':
 			cSet='d3set20'
+		#check there isn't an identical entry
+		TITLEcheck = db.GqlQuery("SELECT * FROM PERSONAL3DB WHERE TITLE = :titlecheck", titlecheck = title).fetch(100)
+		for match in TITLEcheck:
+			if match.CATS==cats:
+				w1="There is already an identical entry in your database"
+				self.render('add_data_form.html',loggedIn=loggedIn,warn=w1)
+				return
+
 		entry = PERSONAL3DB(UN=UN,CATS=cats,PLOTDATA=plotdata_js,TITLE=title,DESC=description,XL=xlabel,YL=ylabel,SZ=size,CSET=cSet,XF=xf,YF=yf)
 		entry.put()
 		entry_id=str(entry.key().id())
