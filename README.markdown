@@ -46,6 +46,8 @@ Invisible background and bottom border, stays in sight the whole time.
 
 Almost invisible until hover, tucked up into top of page.
 
+Default:
 ![Example Float Header WIP](http://i.imgur.com/XStC5.png)
 
+Hover:
 ![Example Float Header WIP2](http://i.imgur.com/XTXee.png)
