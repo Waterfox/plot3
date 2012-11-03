@@ -1,130 +1,187 @@
+<!DOCTYPE html>
 <html>
 	<head>
 		<title>Plot3 Dashboard</title>
-		<head>
 		<meta charset="utf-8">
-		<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+
+		<link href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
 		<link href="javascript/nvd3/src/nv.d3.css" rel="stylesheet" type="text/css">
 		<link rel="stylesheet" href="stylesheets/global_style.css" />
 		<link rel="stylesheet" href="stylesheets/style.css" />
+
 		<script type="text/javascript" src="javascript/d3.v2.js"> </script>
 		<script type="text/javascript" src="javascript/nv.d3.js"> </script>
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
-		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
-		
-		<style type="text/css">
-		#posForm {top:{{sTop}}; left:{{sLeft}};
-		width: 90px; height: 120px;
-		background:#C0C0C0; position:absolute;
-		}
-		body{
-		background:#585858;
-		}
-		#subbtn {
-		height:40px;
-		margin:10px;
-		}
-		#homebtn {
-		height:40px;
-		margin:10px;
-		}
-		#wrapper {
-		height:1200px;
-		width:1920px;
-		}
-	</style>
-	</head>
-	</body>
-		<script>  
-		cSet={{cSet}};
-		
-		  $(document).ready(function() {
-			$("#posForm").draggable({
-			containment: [0,0,1910,1190],
-			stop: function(event,ui){
-				var pos ='';
-				pos = ui.position;
-				$("#savebtn").remove();
-				var savepos = '<input type="hidden" name="savebtn" id="savebtn" value="'+pos.left+','+pos.top+'"/>';
-				$('#posForm').append(savepos);
-				}
-			});
-		  });
-		  
+		<script src="javascript/jquery.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
 
-		  
-		 $(document).ready(function(){
-			$("#homebtn").click(function(){
-				document.location.href='/'});
-				
-			function changeBack(){
-			$("#subbtn").css("background-color","#000000");
+		<script type="text/css">
+			function get_random_color() {
+				var letters = '0123456789ABCDEF'.split('');
+				var color = '#';
+				for (var i = 0; i < 6; i++ ) {
+					color += letters[Math.round(Math.random() * 15)];
+				}
+				return color;
 			}
+
+			$(document).ready(function() {
+				var rand_color = get_random_color().toString();
+
+				$('#title_num').css('color', rand_color);
+				$('.emph').css('color', rand_color);
+
+				$('article a').css('color', rand_color);
+				$('article a').hover(function() {
+					$(this).css('color', '#666');
+				}, function() {
+					$(this).css('color', rand_color);
+				});
+
+				$('footer a').css('color', rand_color);
+				$('footer a').hover(function() {
+					$(this).css('color', '#666');
+				}, function() {
+					$(this).css('color', rand_color);
+				});
+
+				$('.textbox').focus(function() {
+					$(this).css('border-color', rand_color);
+				});
+				$('.textbox').blur(function() {
+					$(this).css('border-color', '#111');
+				});
+
+				$('.textarea').focus(function() {
+					$(this).css('border-color', rand_color);
+				});
+				$('.textarea').blur(function() {
+					$(this).css('border-color', '#111');
+				});
+			});
+		</script>
 			
-			$("#subbtn").click(function(){
-				//color = d3.rgb(Math.random()*255,Math.random()*255,Math.random()*255);
-				color = cSet[Math.floor(Math.random()*cSet.length)];
-				$("#subbtn").css("background-color",color);
+		<style type="text/css">
+			#posForm {
+				position: absolute;
+				top: {{sTop}}; 
+				left: {{sLeft}};
+
+				width: 90px;
+				height: 120px;
+
+				background: #C0C0C0;
+			}
+			body {
+				background: #585858;
+			}
+			#subbtn {
+				height: 40px;
+				margin: 10px;
+			}
+			#homebtn {
+				height: 40px;
+				margin: 10px;
+			}
+			.wrapper {
+				height: 1200px;
+				width: 1920px;
+			}
+		</style>
+	</head>
+	<body>
+		<script type="text/javascript">  
+			cSet={{cSet}};
+		
+			$(document).ready(function() {
+				$("#posForm").draggable({
+					containment: [0,0,1910,1190],
+					stop: function(event,ui){
+							var pos ='';
+							pos = ui.position;
+							$("#savebtn").remove();
+							var savepos = '<input type="hidden" name="savebtn" id="savebtn" value="'+pos.left+','+pos.top+'" />';
+							$('#posForm').append(savepos);
+						}
+				});
+
+				$("#homebtn").click(function(){
+					document.location.href = '/';
+				});
+				
+				function changeBack(){
+					$("#subbtn").css("background-color","#000000");
+				}
+			
+				$("#subbtn").click(function(){
+					//color = d3.rgb(Math.random()*255,Math.random()*255,Math.random()*255);
+					color = cSet[Math.floor(Math.random()*cSet.length)];
+					$("#subbtn").css("background-color",color);
 				});	
 			});
-			
+		</script>
+		<div class="wrapper">
+			<header class="thin">
+				<h1 id="header_title"><a href="index.html">Plot<span id="title_num">3</a></span></h1>
 
-		
-		 </script>
-		<div class = "wrapper">
-		
-		{% for d in dashObjList %}
-			{{ d.dashPrint() | safe }}
-		{% endfor %}
-		
-		<form id="posForm" method="post">
-		<input type="submit" class="button" id="subbtn" value="Save">
-		
-		<input type="button" class="button" id="homebtn" value="Home">
-		</form>
-		
+				<nav>
+					<ul>
+						<li><a href="contact.html"><em>Contact</em></a></li>
+						<li><a href="settings.html">Settings</a></li>
+						<li><a href="contact.html"><strong>Save</strong></a></li>
+						<li><a href="#" class="emph">Log Out (!username here!)</a></li>
+					</ul>
+				</nav>
+			</header>
+
+			{% for d in dashObjList %}
+				{{ d.dashPrint() | safe }}
+			{% endfor %}
+			
+			<form id="posForm" method="post">
+				<input type="submit" class="button" id="subbtn" value="Save">
+				<input type="button" class="button" id="homebtn" value="Home">
+			</form>
 		</div>
 		
-		<script>
-			
-		$("#subbtn").click(function() {
-			//remove the default submit
-			$("#posForm").submit(function(event){
-			event.preventDefault();
-			});
-			var dashList = {{dashList}};
-			
-			
-			url = $("#posForm").attr( 'action' );
-			
-			var postData = new Object();
-			//add the save button position if it exists
-			name = 'savebtn';
-			term = $("#posForm").find( 'input[name="'+name+'"]' ).val();
-			if (term) {
-				postData[name] = term; }
+		<script type="text/javascript">	
+			$("#subbtn").click(function() {
+				//remove the default submit
+				$("#posForm").submit(function(event) {
+					event.preventDefault();
+				});
+				var dashList = {{dashList}};
 				
-			for (i=1;i<dashList.length;i++) {
-				id = dashList[i][0];
+				url = $("#posForm").attr('action');
 				
-				name = id+'pos';
-				term = $("#posForm").find( 'input[name="'+name+'"]' ).val();
-				if (term) {
-					postData[name] = term; }
+				var postData = new Object();
+				//add the save button position if it exists
+				name = 'savebtn';
+				term = $("#posForm").find('input[name="'+name+'"]').val();
+				if(term) {
+					postData[name] = term;
+				}
+					
+				for(i = 1; i<dashList.length; i++) {
+					id = dashList[i][0];
+					
+					name = id+'pos';
+					term = $("#posForm").find('input[name="'+name+'"]').val();
+					if (term) {
+						postData[name] = term;
+					}
+					
+					name = id+'res';
+					term = $("#posForm").find('input[name="'+name+'"]').val();
+					if (term) {
+						postData[name] = term;
+					}
+				}
 				
-				name = id+'res';
-				term = $("#posForm").find( 'input[name="'+name+'"]' ).val();
-				if (term) {
-					postData[name] = term; }
-			}
-			
-			//replace the form submit with an ajax post
-			$("#posForm").submit(function(event){
-				$.post(url, postData);
-			});
-			
-		  }); 
+				//replace the form submit with an ajax post
+				$("#posForm").submit(function(event){
+					$.post(url, postData);
+				});
+			}); 
 		</script>
-		
 	</body>
 </html>

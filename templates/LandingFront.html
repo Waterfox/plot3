@@ -8,8 +8,9 @@
 		<link rel="stylesheet" href="stylesheets/global_style.css" />
 		<link rel="stylesheet" href="stylesheets/frontpage_style.css" />
 		<link rel="stylesheet" href="stylesheets/sankeyStyle.css" />
-		<script src="javascript/pdfobject.js"></script>
+
 		<script src="javascript/jquery.js"></script>
+
 		<script>
 			function get_random_color() {
 				var letters = '0123456789ABCDEF'.split('');
@@ -28,7 +29,7 @@
 				$('#header_title').css('padding-top', (($(window).height()-460)/2).toString()+'px');
 				$('#header_title').css('padding-bottom', (($(window).height()-460)/2).toString()+'px');
 
-				var rand_color = get_random_color().toString()
+				var rand_color = get_random_color().toString();
 
 				$('#title_num').css('color', rand_color);
 				$('.emph').css('color', rand_color);
@@ -39,6 +40,52 @@
 				$('.textbox').blur(function() {
 					$(this).css('border-color', '#111');
 				});
+
+				function filterPath(string) {
+					return string
+						.replace(/^\//,'')
+						.replace(/(index|default).[a-zA-Z]{3,4}$/,'')
+						.replace(/\/$/,'');
+				}
+				var locationPath = filterPath(location.pathname);
+				var scrollElem = scrollableElement('html', 'body');
+				 
+				$('a[href*=#]').each(function() {
+					var thisPath = filterPath(this.pathname) || locationPath;
+					if (locationPath == thisPath
+					&& (location.hostname == this.hostname || !this.hostname)
+					&& this.hash.replace(/#/,'') ) {
+						var $target = $(this.hash), target = this.hash;
+						if (target) {
+							var targetOffset = $target.offset().top;
+							$(this).click(function(event) {
+								event.preventDefault();
+								$(scrollElem).animate({scrollTop: targetOffset}, 400, function() {
+									location.hash = target;
+								});
+							});
+						}
+					}
+				});
+			 
+				// use the first element that is "scrollable"
+				function scrollableElement(els) {
+					for (var i = 0, argLength = arguments.length; i <argLength; i++) {
+						var el = arguments[i],
+								$scrollElement = $(el);
+						if ($scrollElement.scrollTop()> 0) {
+							return el;
+						} else {
+							$scrollElement.scrollTop(1);
+							var isScrollable = $scrollElement.scrollTop()> 0;
+							$scrollElement.scrollTop(0);
+							if (isScrollable) {
+								return el;
+							}
+						}
+					}
+					return [];
+				}
 				
 				$('#introsvg').css('height', ($('#introsvg').width()*1.35).toString()+'px');
 				$('#introsvg svg').css('height', '100%');
@@ -47,12 +94,6 @@
 				//$('#introbtn').attr('onmouseup',function() {window.scrollBy(0,100);});
 			});
 		</script>
-		<style>
-		@font-face {
-			font-family: ('MyriadPro-Regular'),
-			src: url('fonts/MyriadPro-Regular.ttf ') format("truetype");
-			}
-		</style>
 	</head>
 	<body>
 		<div class="container">
@@ -63,26 +104,20 @@
 
 				<nav>
 					<ul>
-						<li><a href="#introsvg"  id="introbtn" >Intro</a></li>
+						<li><a href="#intro" id="introbtn">Intro</a></li>
 						<li><a href="/signup">Sign Up</a></li>
 					</ul>
 				</nav>
 			</header>
-			<style>
-				#introsvg {
-				width: 90%;
-
-				margin-left: 5%;
-				}
-				#introsvg object,embed,svg {
-				height: 100%;
-				width: 100%;
-				}
-			</style>
-				<div id="introsvg">
-						<object data="content/P3intro.svg" type="image/svg+xml"></object>
-				</div>
-
+			<article>
+ 				<h1 id="intro">Introduction</h1>
+ 				<div id="introsvg">
+ 					<object data="content/P3intro.svg" type="image/svg+xml"></object>
+ 				</div>
+ 			</article>
+ 			<footer>
+ 				
+ 			</footer>
 		</div>
 	</body>
 </html>

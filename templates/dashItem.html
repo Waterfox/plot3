@@ -1,60 +1,71 @@
 <style type="text/css">
-#Chart{{id}} {position:absolute;
- top: {{item.top}}; left:{{item.left}};
- width: {{item.w}}; height: {{item.h}};
- background:#FFFFFF;
-border-style:solid;
-border-width:5px;
-border-color:{{color}};}
-#titlebox {text-align:center; top:-20px; position:relative; font-size:12; font:cambria;}
-.ui-resizable-helper { border: 2px dotted #00F; }
- </style>
-<script>
+	#Chart{{id}} {
+		position: absolute;
 
-  
-   $(document).ready(function() {
-    $("#Chart{{id}}").resizable({
-	//helper: "ui-resizable-helper",
-	stop: function(event,ui){
-		var res ='';
-		res = ui.size;
-		$("#{{id}}res").remove();
-		var inputres = '<input type="hidden" name="{{id}}res" id="{{id}}res" value="'+res.width+','+res.height+'"/>';
-		$('#posForm').append(inputres);
-		}
-	})
-  });
-  
-  $(document).ready(function() {
-    $("#Chart{{id}}").draggable({
-	containment: [0,0,1910,1190],
-	stop: function(event,ui){
-		var pos ='';
-		pos = ui.position;
-		$("#{{id}}pos").remove();
-		var inputpos = '<input type="hidden" name="{{id}}pos" id="{{id}}pos" value="'+pos.left+','+pos.top+'"/>';
-		$('#posForm').append(inputpos);
-		}
+		top: {{item.top}};
+		left: {{item.left}};
+
+		width: {{item.w}};
+		height: {{item.h}};
+
+		padding: 5px;
+
+		color: white;
+		font-family: 'Lato', sans-serif;
+		font-size: 13px;
+
+		background-color: {color};
+	}
+
+	#titlebox {
+		margin-top: 2px;
+		display: inline-block;
+
+		font-family: 'Lato', sans-serif;
+	}
+	.ui-resizable-helper {
+		border: 2px dotted #00F;
+	}
+</style>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("#Chart{{id}}").resizable({
+			//helper: "ui-resizable-helper",
+			stop: function(event, ui) {
+				var res ='';
+				res = ui.size;
+				$("#{{id}}res").remove();
+				var inputres = '<input type="hidden" name="{{id}}res" id="{{id}}res" value="'+res.width+','+res.height+'"/>';
+				$('#posForm').append(inputres);
+			}
+		});
+
+		$("#Chart{{id}}").draggable({
+			containment: [0,0,1910,1190],
+			stop: function(event, ui) {
+				var pos ='';
+				pos = ui.position;
+				$("#{{id}}pos").remove();
+				var inputpos = '<input type="hidden" name="{{id}}pos" id="{{id}}pos" value="'+pos.left+','+pos.top+'" />';
+				$('#posForm').append(inputpos);
+			}
+		});
 	});
-  });
- </script>
-
+</script>
 
 <div id="Chart{{id}}">
-<svg> </svg>
-<div id="titlebox">{{title}}</div> 
+	<span id="titlebox">{{title}}</span> 
+	<svg></svg>
 </div>
-
-
 
 {% if ptype == 'line' %}
 <script type="text/javascript">
-	data{{id}} = {{plotData}}
+	data{{id}} = {{plotData}};
 
 	var d3_colorset{{id}} = {{colorset}};
 	
 	d3.scale.colorset{{id}}  = function() {
-	return d3.scale.ordinal().range(d3_colorset{{id}});
+		return d3.scale.ordinal().range(d3_colorset{{id}});
 	};	
 	
 	nv.addGraph(function() {
@@ -83,14 +94,16 @@ border-color:{{color}};}
      return chart;
    });
 </script>
+
 {% elif ptype == 'area' %}
+
 <script type="text/javascript">
-	data{{id}} = {{plotData}}
+	data{{id}} = {{plotData}};
 	
 	var d3_colorset{{id}} = {{colorset}};
 	
 	d3.scale.colorset{{id}} = function() {
-	return d3.scale.ordinal().range(d3_colorset{{id}});
+		return d3.scale.ordinal().range(d3_colorset{{id}});
 	};	
 	
 
@@ -119,14 +132,16 @@ border-color:{{color}};}
 	  return chart;
 	});
 </script>
+
 {% elif ptype == 'bar' %}
+
 <script type="text/javascript">
-	data{{id}} = {{plotData}}
+	data{{id}} = {{plotData}};
 
 	var d3_colorset{{id}}  = {{colorset}};
 		
 	d3.scale.colorset{{id}} = function() {
-	return d3.scale.ordinal().range(d3_colorset{{id}});
+		return d3.scale.ordinal().range(d3_colorset{{id}});
 	};	
 	nv.addGraph(function() { 
 
@@ -157,14 +172,16 @@ border-color:{{color}};}
 		  return chart;
 		});
 </script>
+
 {% elif ptype == 'scatter' %}
+
 <script type="text/javascript">
-	data{{id}} = {{plotData}}
+	data{{id}} = {{plotData}};
 
 	var d3_colorset{{id}} = {{colorset}};
 	
 	d3.scale.colorset{{id}} = function() {
-	return d3.scale.ordinal().range(d3_colorset{{id}});
+		return d3.scale.ordinal().range(d3_colorset{{id}});
 	};	
 	
 	nv.addGraph(function() {
@@ -196,14 +213,16 @@ border-color:{{color}};}
 	  return chart;
 	});
 </script>
+
 {% elif ptype == 'pie' %}
+
 <script type="text/javascript">
-	data{{id}} = {{plotData}}
+	data{{id}} = {{plotData}};
 
 	var d3_colorset{{id}} = {{colorset}};
 	
 	d3.scale.colorset{{id}} = function() {
-	return d3.scale.ordinal().range(d3_colorset{{id}});
+		return d3.scale.ordinal().range(d3_colorset{{id}});
 	};	
 
 	nv.addGraph(function() {

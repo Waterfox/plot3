@@ -7,10 +7,14 @@
 
 		<link rel="stylesheet" href="stylesheets/global_style.css" />
 		<link rel="stylesheet" href="stylesheets/style.css" />
+		<link href="javascript/nvd3/src/nv.d3.css" rel="stylesheet" type="text/css" />
+		<link href="stylesheets/jquery.handsontable.css" rel="stylesheet" type="text/css" />
 
-		<script src="javascript/jquery.js"></script>
-		<script src="javascript/d3.v2.js"></script>
-		<script src="javascript/sankey.js"></script>
+		<script src="javascript/jquery.js" type="text/javascript"></script>
+		<script src="javascript/d3.v2.js" type="text/javascript"></script>
+		<script src="javascript/nv.d3.js" type="text/javascript"> </script>
+		<script src="javascript/sankey.js" type="text/javascript"></script>
+		<script src="javascript/jquery.handsontable.js" type="text/javascript"></script>
 
 		<script type="text/javascript">
 			function get_random_color() {
@@ -23,7 +27,8 @@
 			}
 
 			$(document).ready(function() {
-				var rand_color = get_random_color().toString()
+				var rand_color = get_random_color().toString();
+				var state = "upload";
 
 				$('#title_num').css('color', rand_color);
 				$('.emph').css('color', rand_color);
@@ -55,6 +60,50 @@
 				$('.textarea').blur(function() {
 					$(this).css('border-color', '#111');
 				});
+
+				$('.handsontable .htBorder.current').css('background-color', rand_color);
+				$('.handsontable .htBorder.selection').css('background-color', rand_color);
+				$('.handsontable .htFillHandle').css('background-color', rand_color);
+
+				$('#catbutton').click(function() {
+					if($('#cats').val() != '' && $('#cats').val() != ' ') {
+						$('#catholder').append('<div id="catadded">' + $('#cats').val() + '<input type="button" class="button inline removecat" value="X" /></div> ');
+						$('#cats').attr('value', '');
+					}
+
+					$('.removecat').click(function() {
+						$(this).closest('#catadded').remove();
+					});
+				});
+
+				$('#upload_in').click(function() {
+					state = "upload";
+
+					$('#preview_sh').css('visibility', 'hidden');
+
+					$('#csv_fileupload').css('visibility', 'inherit');
+					$('#csv_fileupload').css('height', '45px');
+
+					$('#csv_maninput').css('visibility', 'hidden');
+					$('#csv_maninput').css('height', '0px');
+				});
+				$('#input_in').click(function() {
+					state = "input";
+
+					$('#preview_sh').css('visibility', 'inherit');
+
+					$('#csv_fileupload').css('visibility', 'hidden');
+					$('#csv_fileupload').css('height', '0px');
+
+					$('#csv_maninput').css('visibility', 'inherit');
+					$('#csv_maninput').css('height', 'auto');
+				});
+
+				function upd_addrow_w() {
+					$('.addrow').css('width', ($('.htBlockedRows').width()-10).toString() + 'px');
+				}
+
+				upd_addrow_w();
 			});
 		</script>
 	</head>
@@ -67,7 +116,7 @@
 					<ul>
 						<li><a href="/settings_main">Settings</a></li>
 						<li><a href="/contact">Contact</a></li>
-						<li><a href="/logout" class="emph">Log Out</a></li>
+						<li><a href="/logout" class="emph">Log Out (!username here!)</a></li>
 					</ul>
 				</nav>
 			</header>
@@ -76,10 +125,16 @@
 				<form method="post">
 					<div class="col_one">
 						{% if loggedIn == True %}
-						<label for="cats">Categories (comma separated)</label> 
-						<input name="cats" type="text" class="textbox" />
+						<label>Categories</label>
+						<div id="catholder">
+
+						</div>
+
+						<label for="cats">Add New Category</label> 
+						<input name="cats" id="cats" type="text" class="textbox" /> <input id="catbutton" type="button" class="button inline" value="+" />
 						{% endif %}
-						<label for="title">Title</label><font color="red">{{warn}}</font>
+
+						<label for="title">Title</label><span style="color: red">{{warn}}</span>
 						<input name="title" type="text" class="textbox" />
 						
 						<label for="description">Description</label>
@@ -91,24 +146,63 @@
 						<label for="ylabel">Label for Y Axis</label>
 						<input name="ylabel" type="text" class="textbox" />
 
-						<label>Comma or Tab Seperated Data Set (CSV or \tSV)</label>
-						<textarea name="plotdata" rows="30" cols="30" style="height: 360px !important;" class="textarea"/></textarea>
+						<label>Do you want to:</label>
+						<input type="radio" name="inputtype" id="upload_in" value="upload" checked/> Upload CSV File
+						<input type="radio" name="inputtype" id="input_in" value="input" /> Input Data Manually
+
+						<div id="csv_fileupload">
+							<label>Upload CSV</label>
+							<input type="file" name="csvfile" id="csvfile" />
+						</div>
+
+						<div id="csv_maninput" style="visibility: hidden; height: 0px;">
+							<label>Input Data</label>
+							<div id="inputdata_man">
+
+							</div>
+							<small>Table plugin by <a href="http://handsontable.com/">http://handsontable.com/</a></small>
+							<script>
+								$("#inputdata_man").handsontable({
+									startRows: 6,
+									startCols: 5,
+									rowHeaders: true,
+									colHeaders: true,
+									minSpareRows: 1,
+									fillHandle: true //possible values: true, false, "horizontal", "vertical"
+								});
+
+								var data = [
+									["", "set1", "set2", "set3", "set4"],
+									[1,	100, 110, 220, 330],
+									[2, 200, 310, 140, 130],
+									[3, 400, 150, 320, 270],
+									[4, null, null, null, null],
+									[5, null, null, null, null]
+								];
+
+								$("#inputdata_man").handsontable("loadData", data);
+							</script>
+						</div>
+
+						<br /><br />
+
+						<div id="data_preview"></div>
+						<div id="message"></div>
 					</div>
 					<div class="col_two">
 						<label for="XF">X axis format</label>
-						<input name="XF" type="radio" value="0d"  /> 1234
+						<input name="XF" type="radio" value="0d" /> 1234
 						<br />
-						<input name="XF" type="radio" value="1d"  /> 1234.5
+						<input name="XF" type="radio" value="1d" /> 1234.5
 						<br />
-						<input name="XF" type="radio" value="2d"  /> 1234.56
+						<input name="XF" type="radio" value="2d" /> 1234.56
 						<br />
-						<input name="XF" type="radio" value="3d"  /> 1234.567
+						<input name="XF" type="radio" value="3d" /> 1234.567
 						<br />
-						<input name="XF" type="radio" value="strf"  /> Time Format
+						<input name="XF" type="radio" value="strf" /> Time Format
 						<br />
 						<br />
 						<label for="YF">Y axis format</label>
-						<br />
 						<input name="YF" type ="radio" value ="0d" /> 9876
 						<br />
 						<input name="YF" type ="radio" value ="1d" /> 9876.5
@@ -120,6 +214,181 @@
 						<br />
 						<input type="submit" name="submit" value="Add Data" class="button" />
 						<input type="button" name="cancel" value="Cancel" onmouseup="window.location = '/'" class="button" />
+
+						<br />
+						<br />
+
+						<div id="preview_sh" style="visibility: hidden;"><label>Preview</label>
+							<div id="preview_chart">
+								<svg id="preview_chart_svg" />
+							</div>
+
+							<br />
+
+							<input type="radio" name="charttype" id="ct_line" value="line" checked/> Line Chart <br />
+							<input type="radio" name="charttype" id="ct_bar" value="bar" /> Bar Graph <br />
+							<input type="radio" name="charttype" id="ct_scatter" value="scatter" /> Scatter Chart <br />
+							<input type="radio" name="charttype" id="ct_pie" value="pie" /> Pie Chart <br />
+						</div>
+						<script type="text/javascript">
+							function getParameterByName(name) {
+								name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+								var regexS = "[\\?&]" + name + "=([^&#]*)";
+								var regex = new RegExp(regexS);
+								var results = regex.exec(window.location.search);
+								if(results == null)
+									return "";
+								else
+									return decodeURIComponent(results[1].replace(/\+/g, " "));
+							}
+						</script>
+
+						<script type="text/javascript">
+							//<![CDATA[ 
+							$(document).ready(function() {
+								var g_data = [{
+									"key": "set1", 
+									"values": [
+										[
+											1.0, 
+											100
+										], 
+										[
+											2.0, 
+											200
+										], 
+										[
+											3.0, 
+											400
+										]
+									]
+								},{
+									"key": "set2", 
+									"values": [
+										[
+											1.0, 
+											110
+										], 
+										[
+											2.0, 
+											310
+										], 
+										[
+											3.0, 
+											150
+										]
+									]
+								},{
+									"key": "set3", 
+									"values": [
+										[
+											1.0, 
+											220
+										], 
+										[
+											2.0, 
+											140
+										], 
+										[
+											3.0, 
+											320
+										]
+									]
+								},{
+									"key": "set4", 
+									"values": [
+										[
+											1.0, 
+											330
+										], 
+										[
+											2.0, 
+											130
+										], 
+										[
+											3.0, 
+											270
+										]
+									]
+								}];
+								var chart;
+
+								var d3_colorset = ['#A7CEE2', '#2078B4', '#B4D88B', '#34A048', '#F69999', '#E21F26', '#FDBF6E', '#F57E20'];
+				
+								d3.scale.colorset = function() {
+									return d3.scale.ordinal().range(d3_colorset);
+								};
+			
+								nv.addGraph(function() {
+									chart = nv.models.lineChart()
+												.x(function(d) { return d[0] })
+												.y(function(d) { return d[1] }) 
+												.color(d3.scale.colorset().range());
+		 
+									chart.xAxis
+										.axisLabel('')
+										.tickFormat(d3.format(',r'));
+										//.tickFormat(d3.format('0.1f'));
+										//.tickFormat(function(d) { return d3.time.format('%x')(new Date(d)) });
+			 
+									chart.yAxis
+										.axisLabel('')
+										.tickFormat(d3.format(',r'));
+			 
+									d3.select('#preview_chart svg')
+										.datum(g_data)
+										.transition().duration(500)
+										.call(chart);
+				 
+										//TODO: Figure out a good way to do this automatically
+									nv.utils.windowResize(chart.update);
+									return chart;
+								});
+
+								function redraw() {
+									d3.select('#preview_chart svg')
+										.datum(g_data)
+										//.transition().duration(500)
+										.call(chart);
+
+									nv.utils.windowResize(chart.update);
+								}
+
+								setInterval(function () {
+									data = $("#inputdata_man").data('handsontable').getData();
+
+									g_data = Array();
+
+									numcols = 4;
+									curcol = 1;
+
+									while(curcol <= numcols) {
+										if(data[0][curcol] != "") {
+											data_col = {
+												"key": data[0][curcol],
+												"values": []
+											};
+
+											var rows_down = 1;
+
+											while(data[rows_down][curcol] != undefined && data[rows_down][curcol] != '') {
+												data_col.values.push([
+													data[rows_down][0],
+													data[rows_down][curcol]
+												]);
+
+												rows_down++;
+											}
+											g_data.push(data_col);
+										}
+
+										curcol++;
+									}
+
+									redraw();
+								}, 500);
+							});//]]>
+						</script>
 					</div>
 				</form>
 			</article>
