@@ -11,7 +11,7 @@
 
 		<script src="javascript/jquery.js"></script>
 
-		<script>
+		<script type="text/javascript">
 			function get_random_color() {
 				var letters = '0123456789ABCDEF'.split('');
 				var color = '#';
@@ -96,6 +96,9 @@
 		</script>
 	</head>
 	<body>
+		<!--[if lt IE 9]>
+			<strong>Please use Internet Explorer 9 or larger, or get a modern browser like Google Chrome.</strong>
+		<![endif]-->
 		<div class="container">
 			<span id="login_frontpage_text">Already a Plot3 User?</span>
 			<input type="button" class="button" id="login_frontpage" value="Log In" onmouseup="window.location='/login'" />
@@ -112,6 +115,15 @@
 			<article>
  				<h1 id="intro">Introduction</h1>
  				<div id="introsvg">
+ 					<!--[if lt IE 9>
+						<img id="ieintro" src="content/P3intro.png" width="800" />
+						<script type="text/javascript">
+							$(document).ready(function() {
+								$('object').css('height', '0px');
+							});
+						</script>
+ 					<![endif]-->
+
  					<object data="content/P3intro.svg" type="image/svg+xml"></object>
  				</div>
  			</article>
