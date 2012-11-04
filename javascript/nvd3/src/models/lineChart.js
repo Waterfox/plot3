@@ -23,13 +23,13 @@ nv.models.lineChart = function() {
       }
     , x
     , y
-    , noData = "No Data Available."
+    , noData = 'No Data Available.'
     , dispatch = d3.dispatch('tooltipShow', 'tooltipHide')
     ;
 
   xAxis
     .orient('bottom')
-    .tickPadding(5)
+    .tickPadding(7)
     ;
   yAxis
     .orient('left')
@@ -79,20 +79,29 @@ nv.models.lineChart = function() {
                              - margin.top - margin.bottom;
 
 
+      chart.update = function() { chart(selection) };
+      chart.container = this;
+
+
       //------------------------------------------------------------
       // Display noData message if there's nothing to show.
 
       if (!data || !data.length || !data.filter(function(d) { return d.values.length }).length) {
-        container.append('text')
+        var noDataText = container.selectAll('.nv-noData').data([noData]);
+
+        noDataText.enter().append('text')
           .attr('class', 'nvd3 nv-noData')
-          .attr('x', availableWidth / 2)
-          .attr('y', availableHeight / 2)
           .attr('dy', '-.7em')
-          .style('text-anchor', 'middle')
-          .text(noData);
-          return chart;
+          .style('text-anchor', 'middle');
+
+        noDataText
+          .attr('x', margin.left + availableWidth / 2)
+          .attr('y', margin.top + availableHeight / 2)
+          .text(function(d) { return d });
+
+        return chart;
       } else {
-        container.select('.nv-noData').remove();
+        container.selectAll('.nv-noData').remove();
       }
 
       //------------------------------------------------------------
@@ -227,10 +236,6 @@ nv.models.lineChart = function() {
 
       //============================================================
 
-
-      chart.update = function() { chart(selection) };
-      chart.container = this;
-
     });
 
     return chart;
@@ -272,7 +277,10 @@ nv.models.lineChart = function() {
 
   chart.margin = function(_) {
     if (!arguments.length) return margin;
-    margin = _;
+    margin.top    = typeof _.top    != 'undefined' ? _.top    : margin.top;
+    margin.right  = typeof _.right  != 'undefined' ? _.right  : margin.right;
+    margin.bottom = typeof _.bottom != 'undefined' ? _.bottom : margin.bottom;
+    margin.left   = typeof _.left   != 'undefined' ? _.left   : margin.left;
     return chart;
   };
 

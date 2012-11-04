@@ -12,7 +12,7 @@ nv.models.multiBarChart = function() {
     , controls = nv.models.legend()
     ;
 
-  var margin = {top: 30, right: 20, bottom: 50, left: 60}
+  var margin = {top: 30, right: 20, bottom: 30, left: 60}
     , width = null
     , height = null
     , color = nv.utils.defaultColor()
@@ -36,7 +36,7 @@ nv.models.multiBarChart = function() {
     ;
   xAxis
     .orient('bottom')
-    .tickPadding(5)
+    .tickPadding(7)
     .highlightZero(false)
     .showMaxMin(false)
     .tickFormat(function(d) { return d })
@@ -76,21 +76,29 @@ nv.models.multiBarChart = function() {
           availableHeight = (height || parseInt(container.style('height')) || 400)
                              - margin.top - margin.bottom;
 
+      chart.update = function() { selection.transition().call(chart) };
+      chart.container = this;
+
 
       //------------------------------------------------------------
       // Display noData message if there's nothing to show.
 
       if (!data || !data.length || !data.filter(function(d) { return d.values.length }).length) {
-        container.append('text')
+        var noDataText = container.selectAll('.nv-noData').data([noData]);
+
+        noDataText.enter().append('text')
           .attr('class', 'nvd3 nv-noData')
-          .attr('x', availableWidth / 2)
-          .attr('y', availableHeight / 2)
           .attr('dy', '-.7em')
-          .style('text-anchor', 'middle')
-          .text(noData);
-          return chart;
+          .style('text-anchor', 'middle');
+
+        noDataText
+          .attr('x', margin.left + availableWidth / 2)
+          .attr('y', margin.top + availableHeight / 2)
+          .text(function(d) { return d });
+
+        return chart;
       } else {
-        container.select('.nv-noData').remove();
+        container.selectAll('.nv-noData').remove();
       }
 
       //------------------------------------------------------------
@@ -268,15 +276,12 @@ nv.models.multiBarChart = function() {
         selection.transition().call(chart);
       });
 
-      dispatch.on('tooltipShow', function(e) { 
-        if (tooltips) showTooltip(e, that.parentNode) 
+      dispatch.on('tooltipShow', function(e) {
+        if (tooltips) showTooltip(e, that.parentNode)
       });
 
       //============================================================
 
-
-      chart.update = function() { selection.transition().call(chart) };
-      chart.container = this; 
 
     });
 
@@ -288,7 +293,7 @@ nv.models.multiBarChart = function() {
   // Event Handling/Dispatching (out of chart's scope)
   //------------------------------------------------------------
 
-  multibar.dispatch.on('elementMouseover.tooltip2', function(e) {
+  multibar.dispatch.on('elementMouseover.tooltip', function(e) {
     e.pos = [e.pos[0] +  margin.left, e.pos[1] + margin.top];
     dispatch.tooltipShow(e);
   });
@@ -318,7 +323,10 @@ nv.models.multiBarChart = function() {
 
   chart.margin = function(_) {
     if (!arguments.length) return margin;
-    margin = _;
+    margin.top    = typeof _.top    != 'undefined' ? _.top    : margin.top;
+    margin.right  = typeof _.right  != 'undefined' ? _.right  : margin.right;
+    margin.bottom = typeof _.bottom != 'undefined' ? _.bottom : margin.bottom;
+    margin.left   = typeof _.left   != 'undefined' ? _.left   : margin.left;
     return chart;
   };
 

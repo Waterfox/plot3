@@ -35,6 +35,7 @@ nv.models.pie = function() {
       //------------------------------------------------------------
       // Setup containers and skeleton of chart
 
+      //var wrap = container.selectAll('.nv-wrap.nv-pie').data([data]);
       var wrap = container.selectAll('.nv-wrap.nv-pie').data([getValues(data[0])]);
       var wrapEnter = wrap.enter().append('g').attr('class','nvd3 nv-wrap nv-pie nv-chart-' + id);
       var gEnter = wrapEnter.append('g');
@@ -229,7 +230,10 @@ nv.models.pie = function() {
 
   chart.margin = function(_) {
     if (!arguments.length) return margin;
-    margin = _;
+    margin.top    = typeof _.top    != 'undefined' ? _.top    : margin.top;
+    margin.right  = typeof _.right  != 'undefined' ? _.right  : margin.right;
+    margin.bottom = typeof _.bottom != 'undefined' ? _.bottom : margin.bottom;
+    margin.left   = typeof _.left   != 'undefined' ? _.left   : margin.left;
     return chart;
   };
 

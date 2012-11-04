@@ -15,9 +15,11 @@ nv.models.bullet = function() {
     , ranges = function(d) { return d.ranges }
     , markers = function(d) { return d.markers }
     , measures = function(d) { return d.measures }
+    , forceX = [0] // List of numbers to Force into the X scale (ie. 0, or a max / min, etc.)
     , width = 380
     , height = 30
     , tickFormat = null
+    , color = nv.utils.getColor(['#1f77b4'])
     , dispatch = d3.dispatch('elementMouseover', 'elementMouseout')
     ;
 
@@ -107,6 +109,7 @@ nv.models.bullet = function() {
 
       measure.enter().append('rect')
           .attr('class', function(d, i) { return 'nv-measure nv-s' + i; })
+          .style('fill', function(d,i) { return color(d,i ) })
           .attr('width', w0)
           .attr('height', availableHeight / 3)
           .attr('x', reverse ? x0 : 0)
@@ -204,6 +207,12 @@ nv.models.bullet = function() {
     return chart;
   };
 
+  chart.forceX = function(_) {
+    if (!arguments.length) return forceX;
+    forceX = _;
+    return chart;
+  };
+
   chart.width = function(_) {
     if (!arguments.length) return width;
     width = _;
@@ -218,13 +227,22 @@ nv.models.bullet = function() {
 
   chart.margin = function(_) {
     if (!arguments.length) return margin;
-    margin = _;
+    margin.top    = typeof _.top    != 'undefined' ? _.top    : margin.top;
+    margin.right  = typeof _.right  != 'undefined' ? _.right  : margin.right;
+    margin.bottom = typeof _.bottom != 'undefined' ? _.bottom : margin.bottom;
+    margin.left   = typeof _.left   != 'undefined' ? _.left   : margin.left;
     return chart;
   };
 
   chart.tickFormat = function(_) {
     if (!arguments.length) return tickFormat;
     tickFormat = _;
+    return chart;
+  };
+
+  chart.color = function(_) {
+    if (!arguments.length) return color;
+    color = nv.utils.getColor(_);
     return chart;
   };
 
