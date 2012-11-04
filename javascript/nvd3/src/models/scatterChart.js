@@ -20,6 +20,8 @@ nv.models.scatterChart = function() {
     , color        = nv.utils.defaultColor()
     , x            = d3.fisheye ? d3.fisheye.scale(d3.scale.linear).distortion(0) : scatter.xScale()
     , y            = d3.fisheye ? d3.fisheye.scale(d3.scale.linear).distortion(0) : scatter.yScale()
+    , xPadding     = 0
+    , yPadding     = 0
     , showDistX    = false
     , showDistY    = false
     , showLegend   = true
@@ -100,21 +102,29 @@ nv.models.scatterChart = function() {
           availableHeight = (height || parseInt(container.style('height')) || 400)
                              - margin.top - margin.bottom;
 
+      chart.update = function() { chart(selection) };
+      chart.container = this;
+
 
       //------------------------------------------------------------
       // Display noData message if there's nothing to show.
 
       if (!data || !data.length || !data.filter(function(d) { return d.values.length }).length) {
-        container.append('text')
+        var noDataText = container.selectAll('.nv-noData').data([noData]);
+
+        noDataText.enter().append('text')
           .attr('class', 'nvd3 nv-noData')
-          .attr('x', availableWidth / 2)
-          .attr('y', availableHeight / 2)
           .attr('dy', '-.7em')
-          .style('text-anchor', 'middle')
-          .text(noData);
-          return chart;
+          .style('text-anchor', 'middle');
+
+        noDataText
+          .attr('x', margin.left + availableWidth / 2)
+          .attr('y', margin.top + availableHeight / 2)
+          .text(function(d) { return d });
+
+        return chart;
       } else {
-        container.select('.nv-noData').remove();
+        container.selectAll('.nv-noData').remove();
       }
 
       //------------------------------------------------------------
@@ -122,9 +132,6 @@ nv.models.scatterChart = function() {
 
       //------------------------------------------------------------
       // Setup Scales
-
-      x = scatter.xScale();
-      y = scatter.yScale();
 
       x0 = x0 || x;
       y0 = y0 || y;
@@ -149,8 +156,6 @@ nv.models.scatterChart = function() {
       gEnter.append('g').attr('class', 'nv-distWrap');
       gEnter.append('g').attr('class', 'nv-legendWrap');
       gEnter.append('g').attr('class', 'nv-controlsWrap');
-
-      wrap.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
       //------------------------------------------------------------
 
@@ -192,6 +197,9 @@ nv.models.scatterChart = function() {
       //------------------------------------------------------------
 
 
+      wrap.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+
       //------------------------------------------------------------
       // Main Chart Component(s)
 
@@ -206,6 +214,18 @@ nv.models.scatterChart = function() {
           .datum(data.filter(function(d) { return !d.disabled }))
           .call(scatter);
 
+
+      //Adjust for x and y padding
+      if (xPadding) {
+        var xRange = x.domain()[1] - x.domain()[0];
+        x.domain([x.domain()[0] - (xPadding * xRange), x.domain()[1] + (xPadding * xRange)]);
+      }
+
+      if (yPadding) {
+        var yRange = y.domain()[1] - y.domain()[0];
+        y.domain([y.domain()[0] - (yPadding * yRange), y.domain()[1] + (yPadding * yRange)]);
+      }
+
       //------------------------------------------------------------
 
 
@@ -214,7 +234,7 @@ nv.models.scatterChart = function() {
 
       xAxis
           .scale(x)
-          .ticks( xAxis.ticks() ? xAxis.ticks() : availableWidth / 100 )
+          .ticks( xAxis.ticks() && xAxis.ticks().length ? xAxis.ticks() : availableWidth / 100 )
           .tickSize( -availableHeight , 0);
 
       g.select('.nv-x.nv-axis')
@@ -224,7 +244,7 @@ nv.models.scatterChart = function() {
 
       yAxis
           .scale(y)
-          .ticks( yAxis.ticks() ? yAxis.ticks() : availableHeight / 36 )
+          .ticks( yAxis.ticks() && yAxis.ticks().length ? yAxis.ticks() : availableHeight / 36 )
           .tickSize( -availableWidth, 0);
 
       g.select('.nv-y.nv-axis')
@@ -240,9 +260,9 @@ nv.models.scatterChart = function() {
               return d.color || color(d, i);
             }).filter(function(d,i) { return !data[i].disabled }));
         gEnter.select('.nv-distWrap').append('g')
-            .attr('class', 'nv-distributionX')
-            .attr('transform', 'translate(0,' + y.range()[0] + ')');
+            .attr('class', 'nv-distributionX');
         g.select('.nv-distributionX')
+            .attr('transform', 'translate(0,' + y.range()[0] + ')')
             .datum(data.filter(function(d) { return !d.disabled }))
             .call(distX);
       }
@@ -256,9 +276,9 @@ nv.models.scatterChart = function() {
               return d.color || color(d, i);
             }).filter(function(d,i) { return !data[i].disabled }));
         gEnter.select('.nv-distWrap').append('g')
-            .attr('class', 'nv-distributionY')
-            .attr('transform', 'translate(-' + distY.size() + ',0)');
+            .attr('class', 'nv-distributionY');
         g.select('.nv-distributionY')
+            .attr('transform', 'translate(-' + distY.size() + ',0)')
             .datum(data.filter(function(d) { return !d.disabled }))
             .call(distY);
       }
@@ -294,8 +314,8 @@ nv.models.scatterChart = function() {
         y.distortion(fisheye).focus(mouse[1]);
 
         g.select('.nv-scatterWrap')
-            .datum(data.filter(function(d) { return !d.disabled }))
             .call(scatter);
+
         g.select('.nv-x.nv-axis').call(xAxis);
         g.select('.nv-y.nv-axis').call(yAxis);
         g.select('.nv-distributionX')
@@ -381,9 +401,6 @@ nv.models.scatterChart = function() {
       y0 = y.copy();
 
 
-      chart.update = function() { chart(selection) };
-      chart.container = this;
-
     });
 
     return chart;
@@ -427,7 +444,10 @@ nv.models.scatterChart = function() {
 
   chart.margin = function(_) {
     if (!arguments.length) return margin;
-    margin = _;
+    margin.top    = typeof _.top    != 'undefined' ? _.top    : margin.top;
+    margin.right  = typeof _.right  != 'undefined' ? _.right  : margin.right;
+    margin.bottom = typeof _.bottom != 'undefined' ? _.bottom : margin.bottom;
+    margin.left   = typeof _.left   != 'undefined' ? _.left   : margin.left;
     return chart;
   };
 
@@ -479,6 +499,18 @@ nv.models.scatterChart = function() {
   chart.fisheye = function(_) {
     if (!arguments.length) return fisheye;
     fisheye = _;
+    return chart;
+  };
+
+  chart.xPadding = function(_) {
+    if (!arguments.length) return xPadding;
+    xPadding = _;
+    return chart;
+  };
+
+  chart.yPadding = function(_) {
+    if (!arguments.length) return yPadding;
+    yPadding = _;
     return chart;
   };
 
