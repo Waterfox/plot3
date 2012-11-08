@@ -65,16 +65,23 @@
 				$('.handsontable .htBorder.selection').css('background-color', rand_color);
 				$('.handsontable .htFillHandle').css('background-color', rand_color);
 
+				var cat_str = '';
 				$('#catbutton').click(function() {
 					if($('#cats').val() != '' && $('#cats').val() != ' ') {
+						cat_str = cat_str + $('#cats').val() + ',';
 						$('#catholder').append('<div id="catadded">' + $('#cats').val() + '<input type="button" class="button inline removecat" value="X" /></div> ');
 						$('#cats').attr('value', '');
+						 //find the form input and append to it
 					}
 
 					$('.removecat').click(function() {
 						$(this).closest('#catadded').remove();
 					});
 				});
+
+				$('#subBtn').click(function(){
+					$("#dataForm").find('input[name="cats"]').val() = cat_str;
+				})
 
 				$('#upload_in').click(function() {
 					state = "upload";
@@ -121,7 +128,7 @@
 			</header>
 			<article>
 				<h1>Add New Data</h1>
-				<form method="post">
+				<form id="dataForm"  method="post">
 					<div class="col_one">
 						{% if loggedIn == True %}
 						<label>Categories</label>
@@ -211,7 +218,7 @@
 						<input name="YF" type ="radio" value ="3d" /> 9876.543
 						<br />
 						<br />
-						<input type="submit" name="submit" value="Add Data" class="button" />
+						<input type="submit" name="submit" value="Add Data" class="button" id="subBtn"/>
 						<input type="button" name="cancel" value="Cancel" onmouseup="window.location = '/'" class="button" />
 
 						<br />
