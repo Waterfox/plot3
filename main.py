@@ -320,9 +320,8 @@ class MainHandler(Plot3Handler):
 		
 		#Check if the user is logged in, set flags
 		UNstr=''
-		if loggedIn==True:
-			UNstr = UN+'\'s Database' 
-		else:
+		if loggedIn is not True:
+			#UNstr = UN+'\'s Database' 
 			self.redirect('/landing')
 			return
 		
@@ -347,7 +346,7 @@ class MainHandler(Plot3Handler):
 		if not vtype:
 			vtype = 'sankey'
 		if vtype == 'sankey':
-			self.render('main_Sankey.html',dataset=JSankey,Title=UNstr,loggedIn=loggedIn,colorset=colorDict[cSetMain])
+			self.render('main_Sankey.html',dataset=JSankey,UN=UN,loggedIn=loggedIn,colorset=colorDict[cSetMain])
 
 		# else:
 			# self.response.out.write(JTree)
@@ -399,7 +398,7 @@ class AddDataHandler(Plot3Handler):
 		#Get and check the cookie, find the UN
 		[loggedIn,admin,UN] = self.checkCookies()
 		if loggedIn:
-			self.render('add_data_form.html',loggedIn=loggedIn)
+			self.render('add_data_form.html',loggedIn=loggedIn,UN=UN)
 		else:
 			self.redirect('logout')
 			return
@@ -867,7 +866,7 @@ class Dashboard(Plot3Handler):
 				sLeft = item[2]
 				sTop = item[1]
 				
-		self.render('dashboard.html',dashObjList=dashObjList,sTop=sTop,sLeft=sLeft,dashList=UNdb.DASH,cSet=colorDict[cSet])
+		self.render('dashboard.html',dashObjList=dashObjList,sTop=sTop,sLeft=sLeft,dashList=UNdb.DASH,cSet=colorDict[cSet],UN=UN)
 		
 	def post(self):
 		[loggedIn,admin,UN] = self.checkCookies() # check cookies / memcached
