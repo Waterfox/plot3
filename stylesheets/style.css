@@ -255,8 +255,9 @@ svg {
 }
 
 .col_one {
+	position: relative;
 	vertical-align: top;
-
+	float: left;
 	width: 49.9%;
 	display: inline-block;
 }
@@ -267,8 +268,9 @@ svg {
 	display: inline-block;
 }
 .col_two {
+	position: relative;
 	vertical-align: top;
-
+	float: right;
 	width: 49.9%;
 	display: inline-block;
 }

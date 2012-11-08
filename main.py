@@ -641,9 +641,9 @@ class PlotSettingHandler(Plot3Handler):
 				dS=PERSONAL3DB.get_by_id(int(entry_id))
 				logging.error("DB QUERY")
 			if dS and dS.UN==UN:	#only save if the post ID is the user's
-				dS.CSET = cSet
-				dS.XF=xf
-				dS.YF=yf
+				if cSet: dS.CSET = cSet
+				if xf: dS.XF=xf
+				if yf: dS.YF=yf
 				dS.put()
 				memcache.set(key,dS)
 			else: self.response.out.write('nice try')
@@ -915,7 +915,8 @@ class LandingHandler(Plot3Handler):
 
 class ContactHandler(Plot3Handler):
 	def get(self):
-		self.render('contact.html')
+		[loggedIn,admin,UN] = self.checkCookies()
+		self.render('contact.html',UN=UN)
 		
 	def post(self):
 		input_name = self.request.get('name')

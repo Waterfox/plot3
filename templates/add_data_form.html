@@ -28,7 +28,7 @@
 
 			$(document).ready(function() {
 				var rand_color = get_random_color().toString();
-				var state = "upload";
+				var state = "input";
 
 				$('#title_num').css('color', rand_color);
 				$('.emph').css('color', rand_color);
@@ -137,7 +137,7 @@
 						<input name="title" type="text" class="textbox" />
 						
 						<label for="description">Description</label>
-						<textarea name="description" rows="5" cols="30" class="textarea"></textarea>
+						<textarea name="description" rows="2" class="textbox"></textarea>
 
 						<label for="xlabel">Label for X Axis</label>
 						<input name="xlabel" type="text" class="textbox" />
@@ -146,15 +146,15 @@
 						<input name="ylabel" type="text" class="textbox" />
 
 						<label>Do you want to:</label>
-						<input type="radio" name="inputtype" id="upload_in" value="upload" checked/> Upload CSV File
-						<input type="radio" name="inputtype" id="input_in" value="input" /> Input Data Manually
+						<input type="radio" name="inputtype" id="upload_in" value="upload" /> Upload CSV File
+						<input type="radio" name="inputtype" id="input_in" value="input" checked/> Input Data Manually
 
-						<div id="csv_fileupload">
+						<div id="csv_fileupload" style="visibility: hidden; height: 0px;">
 							<label>Upload CSV</label>
 							<input type="file" name="csvfile" id="csvfile" />
 						</div>
 
-						<div id="csv_maninput" style="visibility: hidden; height: 0px;">
+						<div id="csv_maninput" >
 							<label>Input Data</label>
 							<div id="inputdata_man">
 
@@ -217,7 +217,7 @@
 						<br />
 						<br />
 
-						<div id="preview_sh" style="visibility: hidden;"><label>Preview</label>
+						<div id="preview_sh" style="visibility: inherhit;"><label>Preview</label>
 							<div id="preview_chart">
 								<svg id="preview_chart_svg" />
 							</div>
