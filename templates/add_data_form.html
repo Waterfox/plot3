@@ -65,22 +65,29 @@
 				$('.handsontable .htBorder.selection').css('background-color', rand_color);
 				$('.handsontable .htFillHandle').css('background-color', rand_color);
 
-				var cat_str = '';
+				var catList = '';
 				$('#catbutton').click(function() {
+
 					if($('#cats').val() != '' && $('#cats').val() != ' ') {
-						cat_str = cat_str + $('#cats').val() + ',';
+						catList = catList + $('#cats').val() + ',';
 						$('#catholder').append('<div id="catadded">' + $('#cats').val() + '<input type="button" class="button inline removecat" value="X" /></div> ');
 						$('#cats').attr('value', '');
 						 //find the form input and append to it
 					}
 
 					$('.removecat').click(function() {
+						//alert($(this).closest('#catadded').text())
+						catList = catList.replace(','+ $(this).closest('#catadded').text(),'');
 						$(this).closest('#catadded').remove();
 					});
 				});
 
-				$('#subBtn').click(function(){
-					$("#dataForm").find('input[name="cats"]').val() = cat_str;
+				$('#subBtn').click(function(){			//When form is submitted make final changes
+					strLen = catList.length;
+					catList = catList.slice(0,strLen-1); //remove the last comma
+					if (catList != '' && catList != ' ') {
+					$("#cats").attr('value', catList); } //put the categories back in the field
+					
 				})
 
 				$('#upload_in').click(function() {
@@ -152,6 +159,8 @@
 						<label for="ylabel">Label for Y Axis</label>
 						<input name="ylabel" type="text" class="textbox" />
 
+						<input type="hidden" name="plotData" id="plotData">
+							
 						<label>Do you want to:</label>
 						<input type="radio" name="inputtype" id="upload_in" value="upload" /> Upload CSV File
 						<input type="radio" name="inputtype" id="input_in" value="input" checked/> Input Data Manually
@@ -230,11 +239,12 @@
 							</div>
 
 							<br />
-
+							<!--
 							<input type="radio" name="charttype" id="ct_line" value="line" checked/> Line Chart <br />
 							<input type="radio" name="charttype" id="ct_bar" value="bar" /> Bar Graph <br />
 							<input type="radio" name="charttype" id="ct_scatter" value="scatter" /> Scatter Chart <br />
 							<input type="radio" name="charttype" id="ct_pie" value="pie" /> Pie Chart <br />
+							-->
 						</div>
 						<script type="text/javascript">
 							function getParameterByName(name) {
@@ -393,6 +403,7 @@
 
 									redraw();
 								}, 500);
+								$('#plotData').attr('value',g_data);
 							});//]]>
 						</script>
 					</div>

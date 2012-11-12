@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link href="javascript/nvd3/src/nv.d3.css" rel="stylesheet" type="text/css">
+		
+		<link href="stylesheets/rstyle.css" rel="stylesheet" type="text/css">
+		<link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" href="stylesheets/global_style.css" />
+		<link rel="stylesheet" href="stylesheets/style.css" />
+
+		<title>Plot3</title>
+		<script type="text/javascript" src="javascript/d3.v2.js"> </script>
+		<script type="text/javascript" src="javascript/nv.d3.js"> </script>
+		<script type="text/javascript" src="javascript/jquery.js"></script>
+		<script>
+			function getParameterByName(name)
+			{
+			  name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+			  var regexS = "[\\?&]" + name + "=([^&#]*)";
+			  var regex = new RegExp(regexS);
+			  var results = regex.exec(window.location.search);
+			  if(results == null)
+				return "";
+			  else
+				return decodeURIComponent(results[1].replace(/\+/g, " "));
+			}
+		</script>
+		<script type="text/javascript">
+			function get_random_color() {
+				var letters = '0123456789ABCDEF'.split('');
+				var color = '#';
+				for (var i = 0; i < 6; i++ ) {
+					color += letters[Math.round(Math.random() * 15)];
+				}
+				return color;
+			}
+
+			$(document).ready(function() {
+				var rand_color = get_random_color().toString()
+
+				$('#title_num').css('color', rand_color);
+				$('.emph').css('color', rand_color);
+
+				$('article a').css('color', rand_color);
+				$('article a').hover(function() {
+					$(this).css('color', '#666');
+				}, function() {
+					$(this).css('color', rand_color);
+				});
+
+				$('footer a').css('color', rand_color);
+				$('footer a').hover(function() {
+					$(this).css('color', '#666');
+				}, function() {
+					$(this).css('color', rand_color);
+				});
+
+				$('.textbox').focus(function() {
+					$(this).css('border-color', rand_color);
+				});
+				$('.textbox').blur(function() {
+					$(this).css('border-color', '#111');
+				});
+
+				$('.textarea').focus(function() {
+					$(this).css('border-color', rand_color);
+				});
+				$('.textarea').blur(function() {
+					$(this).css('border-color', '#111');
+				});
+			});
+		</script>
+	</head>
+
+	<body>
+		<div class="wrapper">
+			
+			
+			<div id="Chart">
+			  <svg>
+			  </svg>
+			</div>
+
+			<!-- <div id ="info">
+				Title: {{title}} | 
+				Catergories: {{cats}} | 
+				Number of Datapoints: {{size}} |
+				Description: {{description}} 
+			</div> -->
+			<nav>
+			
+			<div id="buttons">
+				{{buttonSet}}
+			</div>
+
+			<div id="settings">
+				{% if globe==True %}
+				<input type="button" class="button"  value="Settings" id="globalset" onmouseup="window.location = '/globalsettings'" >
+				<script>
+					var link = document.getElementById("globalset");
+					loc = document.location.href;
+					var numb = loc.match(/\d+/g);
+					link.setAttribute("onmouseup","window.location ='/globalsettings?id="+numb.pop().toString()+"'");
+					//link.href = 'globalsettings?id='+numb.pop();
+				</script>
+				{% elif randplot==True %}
+				<input type="button" class="button"  value="Settings" id="set" onmouseup="window.location = '/randomssettings'" >
+				<script>
+					var link = document.getElementById("set");
+					loc = document.location.href;
+					var numb = loc.match(/\d+/g);
+					link.setAttribute('onmouseup',"window.location ='/randomsettings?id="+numb.pop().toString()+"'");
+					//link.href = 'settings?id='+numb.pop();
+				</script>			
+				{% else %}
+				<input type="button" class="button"  value="Settings" id="set" onmouseup="window.location = '/settings'" >
+				<script>
+					var link = document.getElementById("set");
+					loc = document.location.href;
+					var numb = loc.match(/\d+/g);
+					link.setAttribute('onmouseup',"window.location ='/settings?id="+numb.pop().toString()+"'");
+					//link.href = 'settings?id='+numb.pop();
+				</script>
+				{% endif %}
+				<input type="button" class="button"  value="Home" id="home" onmouseup="window.location = '/'" >
+				{% if loggedIn==True %}
+				<input type="button" class="button"  value="Delete" id="del" onmouseup="window.location = '/delete'">
+				<script>
+					var link = document.getElementById("del");
+					loc = document.location.href;
+					var numb = loc.match(/\d+/g);
+					link.setAttribute('onmouseup',"if (confirm('Are you sure you want to delete?')) window.location ='/delete?id="+numb.pop().toString()+"';return false");
+				</script>
+					
+				<input type="button" class="button"  value="Add Dash" id="dash" onmouseup="window.location = '/addDash'" >
+				<script>
+					var link = document.getElementById("dash");
+					loc = document.location.href;
+					var numb = loc.match(/\d+/g);
+					ptype=getParameterByName('ptype');
+					link.setAttribute('onmouseup',"window.location='addDash?id="+numb.pop().toString()+'&ptype='+ptype.toString()+"'");
+				</script>	
+				{% endif %}
+			</div>
+			
+			</nav>
+		</div>
+	{% if ptype == 'line' %}
+	<script type="text/javascript">
+		var data = {{plotData}};
+		var d3_colorset = {{colorset}};
+		
+		d3.scale.colorset = function() {
+		return d3.scale.ordinal().range(d3_colorset);
+		};	
+		
+		nv.addGraph(function() {
+	     var chart = nv.models.lineChart()
+	                   .x(function(d) { return d[0] })
+	                   .y(function(d) { return d[1] }) 
+	                   .color(d3.scale.colorset().range());
+	 
+	      chart.xAxis
+	         .axisLabel('{{xlabel}}')
+			 .tickFormat({{XF}});
+			 //.tickFormat(d3.format('0.1f'));
+			 //.tickFormat(function(d) { return d3.time.format('%x')(new Date(d)) });
+	 
+	     chart.yAxis
+			 .axisLabel('{{ylabel}}')
+	         .tickFormat({{YF}});
+	 
+	     d3.select('#Chart svg')
+	         .datum(data)
+	       .transition().duration(500)
+	         .call(chart);
+	 
+	     //TODO: Figure out a good way to do this automatically
+	     nv.utils.windowResize(chart.update);
+	     return chart;
+	   });
+	</script>
+	{% elif ptype == 'area' %}
+	<script type="text/javascript">
+		var data = {{plotData}};	
+		var d3_colorset = {{colorset}};
+		
+		d3.scale.colorset = function() {
+		return d3.scale.ordinal().range(d3_colorset);
+		};	
+		
+
+		nv.addGraph(function() {
+		  var chart = nv.models.stackedAreaChart()
+						.x(function(d) { return d[0] })
+						.y(function(d) { return d[1] })
+						.color(d3.scale.colorset().range())
+						//.clipEdge(true);
+
+		  chart.xAxis
+			  .axisLabel('{{xlabel}}')
+			  .tickFormat({{XF}});
+			  //.tickFormat(function(d) { return d3.time.format('%x')(new Date(d)) });
+
+		  chart.yAxis
+			  .tickFormat({{YF}})
+			  .axisLabel('{{ylabel}}');
+
+		  d3.select('#Chart svg')
+			.datum(data)
+			  .transition().duration(500).call(chart);
+
+		  nv.utils.windowResize(chart.update);
+
+		  return chart;
+		});
+	</script>
+	{% elif ptype == 'bar' %}
+	<script type="text/javascript">
+		var data = {{plotData}};
+		var d3_colorset = {{colorset}};
+			
+		d3.scale.colorset = function() {
+		return d3.scale.ordinal().range(d3_colorset);
+		};	
+		nv.addGraph(function() { 
+
+			  var chart = nv.models.multiBarChart()
+			   .x(function(d) { return d[0] })
+			   .y(function(d) { return d[1] })
+			   .color(d3.scale.colorset().range());
+			   
+				{% if xflag %}
+				
+				{% else %}
+				chart.xAxis
+				.axisLabel('{{xlabel}}')
+			    .tickFormat({{XF}});
+				{% endif %}
+
+				chart.yAxis
+				.tickFormat({{YF}})
+				.axisLabel('{{ylabel}}');
+
+			  d3.select('#Chart svg')
+				  .datum(data)
+				.transition().duration(500)
+				  .call(chart);
+
+			  nv.utils.windowResize(chart.update);
+
+			  return chart;
+			});
+	</script>
+	{% elif ptype == 'scatter' %}
+	<script type="text/javascript">
+		var data = {{plotData}};
+		var d3_colorset = {{colorset}};
+		
+		var shapes = ['circle', 'cross', 'triangle-up', 'triangle-down', 'diamond', 'square'];
+		var set_len = data[0].values.length;
+		
+		//document.write(shapes[Math.floor(260/set_len)]);
+		d3.scale.colorset = function() {
+		return d3.scale.ordinal().range(d3_colorset);
+		};	
+		var k=0,
+			j=0;
+		nv.addGraph(function() {
+		  var chart = nv.models.scatterChart()
+						.showDistX(true)
+						.showDistY(true)
+						//.height(500)
+						.color(d3.scale.colorset().range())
+						.x(function(d) { return d[0] })
+						.y(function(d) { return d[1] }) 
+						.size(1)
+						//.size(function(d,i) { if (i>0) return 10; else return 1;})
+						.shape(function(d,i) {if (k==123){k=0; j++;} k++; return shapes[j % 6];});
+						
+		  chart.xAxis
+		  .tickFormat({{XF}})
+		  .axisLabel('{{xlabel}}');
+		  
+		  chart.yAxis
+		  .tickFormat({{YF}})
+		  .axisLabel('{{ylabel}}');
+
+		  d3.select('#Chart svg')
+			  .datum(data)
+			.transition().duration(500)
+			 .call(chart);
+
+		  nv.utils.windowResize(chart.update);
+
+		  return chart;
+		});
+	</script>
+	{% elif ptype == 'pie' %}
+	<script type="text/javascript">
+		var data = {{plotData}};
+
+		var d3_colorset = {{colorset}};
+		
+		d3.scale.colorset = function() {
+		return d3.scale.ordinal().range(d3_colorset);
+		};	
+
+		nv.addGraph(function() {
+			var width = 400,
+				height = 400;
+
+			var chart = nv.models.pieChart()
+				.x(function(d) { return d[0] })
+				.y(function(d) { return d[1] })
+				//.showLabels(false)
+				.color(d3.scale.colorset().range())
+				.width(width)
+				.height(height);
+
+			  d3.select("#Chart svg")
+				  .datum(data)
+				  //.datum(testdata)
+				.transition().duration(500)
+				  .attr('width', width)
+				  .attr('height', height)
+				  .call(chart);
+
+			return chart;
+		});
+	</script>
+	{% endif %}
+
+	</body>
+</html>

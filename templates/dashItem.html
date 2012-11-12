@@ -17,8 +17,11 @@
 		border-width:5px;
 		border-color:{{color}};
 		opacity:1.0;
-		background-color: #FFFFFF;}
-
+		background-color:rgba(0,0,0,0.5);
+	}
+	#Chart{{id}} svg text {
+		color:white;
+	}
 	#titlebox {
 		margin-top: 2px;
 		display: inline-block;
@@ -28,6 +31,7 @@
 	.ui-resizable-helper {
 		border: 2px dotted #00F;
 	}
+
 </style>
 <script type="text/javascript">
 	$(document).ready(function() {
@@ -55,7 +59,7 @@
 	});
 </script>
 
-<div id="Chart{{id}}">
+<div id="Chart{{id}}" class="dashChart">
 	<span id="titlebox">{{title}}</span> 
 	<svg></svg>
 </div>
@@ -181,21 +185,24 @@
 	data{{id}} = {{plotData}};
 
 	var d3_colorset{{id}} = {{colorset}};
+	var shapes = ['circle', 'cross', 'triangle-up', 'triangle-down', 'diamond', 'square'];
+	var set_len = data{{id}}[0].values.length;
 	
 	d3.scale.colorset{{id}} = function() {
 		return d3.scale.ordinal().range(d3_colorset{{id}});
 	};	
-	
+
 	nv.addGraph(function() {
+		var k=0,
+			j=0;
 	  var chart = nv.models.scatterChart()
 					.showDistX(true)
 					.showDistY(true)
-					//.height(500)
 					.color(d3.scale.colorset{{id}}().range())
 					.x(function(d) { return d[0] })
 					.y(function(d) { return d[1] }) 
-					.size(function(d){ return d[1]})
-					.shape('diamond');
+					.size(function(d){ return d[1]});
+					//.shape(function(d,i) {if (k==set_len){k=0; j++;} k++; return shapes[j % 6];});
 
 	  chart.xAxis
 	  .tickFormat({{XF}})
@@ -228,8 +235,9 @@
 	};	
 
 	nv.addGraph(function() {
-		var width = 400,
-			height = 400;
+		var width = window.height,
+			height = window.width;
+
 
 		var chart = nv.models.pieChart()
 			.x(function(d) { return d[0] })
@@ -246,7 +254,7 @@
 			  .attr('width', width)
 			  .attr('height', height)
 			  .call(chart);
-
+		nv.utils.windowResize(chart.update);	  
 		return chart;
 	});
 </script>

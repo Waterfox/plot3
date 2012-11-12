@@ -226,7 +226,8 @@ class Plot3Handler(webapp2.RequestHandler):
 				
 		
 	def checkDataFormat(self,dS,entry_id,GlobeRandom=''):
-		firstEl = json.loads(dS.PLOTDATA)[0].values()[0][0][0]
+		self.response.out.write(ds.PLOTDATA[0])
+		firstEl = dS.PLOTDATA[0].values()[0][0][0]
 		#First Element a string?
 		if isinstance(firstEl,str) or isinstance(firstEl,unicode) and (len(json.loads(dS.PLOTDATA))==1):
 			buttonSet = BP %{"id":GlobeRandom+str(entry_id)}
@@ -416,9 +417,9 @@ class AddDataHandler(Plot3Handler):
 		xlabel = cgi.escape(xlabel)
 		ylabel = self.request.get('ylabel')
 		ylabel = cgi.escape(ylabel)
-		plotdata = self.request.get('plotdata')
-		plotdata = cgi.escape(plotdata)
-		plotdata_js,size = tab2json(plotdata,title)
+		plotData = self.request.get('plotData')
+		#plotdata = cgi.escape(plotdata)
+		#plotdata_js,size = tab2json(plotdata,title)
 		
 		xf = self.request.get('XF')		
 		yf = self.request.get('YF')
@@ -426,6 +427,7 @@ class AddDataHandler(Plot3Handler):
 		cSet = self.getPlotColour() #set the user's default colour when adding data
 		if cSet=='0':
 			cSet='d3set20'
+
 		#check there isn't an identical entry
 		TITLEcheck = db.GqlQuery("SELECT * FROM PERSONAL3DB WHERE TITLE = :titlecheck", titlecheck = title).fetch(100)
 		for match in TITLEcheck:
@@ -434,7 +436,7 @@ class AddDataHandler(Plot3Handler):
 				self.render('add_data_form.html',loggedIn=loggedIn,warn=w1)
 				return
 
-		entry = PERSONAL3DB(UN=UN,CATS=cats,PLOTDATA=plotdata_js,TITLE=title,DESC=description,XL=xlabel,YL=ylabel,SZ=size,CSET=cSet,XF=xf,YF=yf)
+		entry = PERSONAL3DB(UN=UN,CATS=cats,PLOTDATA=plotData,TITLE=title,DESC=description,XL=xlabel,YL=ylabel,CSET=cSet,XF=xf,YF=yf)
 		entry.put()
 		entry_id=str(entry.key().id())
 		memcache.set(entry_id,entry) #put in memcache
