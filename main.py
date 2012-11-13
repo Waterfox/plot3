@@ -35,7 +35,6 @@ FOOTER = """
 	
 def tab2json(plotdata,title):
     #Simple, accomodates direct paste from excel. No 1E-7 input.
-    #Next, add more than one column
     pd = plotdata.split('\r\n') #split on each line
 
     Y2=[]
@@ -226,8 +225,7 @@ class Plot3Handler(webapp2.RequestHandler):
 				
 		
 	def checkDataFormat(self,dS,entry_id,GlobeRandom=''):
-		self.response.out.write(ds.PLOTDATA[0])
-		firstEl = dS.PLOTDATA[0].values()[0][0][0]
+		firstEl = json.loads(dS.PLOTDATA)[0].values()[0][0][0]
 		#First Element a string?
 		if isinstance(firstEl,str) or isinstance(firstEl,unicode) and (len(json.loads(dS.PLOTDATA))==1):
 			buttonSet = BP %{"id":GlobeRandom+str(entry_id)}
@@ -418,6 +416,7 @@ class AddDataHandler(Plot3Handler):
 		ylabel = self.request.get('ylabel')
 		ylabel = cgi.escape(ylabel)
 		plotData = self.request.get('plotData')
+		#plotData = json.loads(plotData)
 		#plotdata = cgi.escape(plotdata)
 		#plotdata_js,size = tab2json(plotdata,title)
 		

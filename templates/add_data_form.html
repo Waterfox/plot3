@@ -161,11 +161,12 @@
 
 						<input type="hidden" name="plotData" id="plotData">
 							
-						<label>Do you want to:</label>
-						<input type="radio" name="inputtype" id="upload_in" value="upload" /> Upload CSV File
-						<input type="radio" name="inputtype" id="input_in" value="input" checked/> Input Data Manually
+						
+						<!--<input type="radio" name="inputtype" id="upload_in" value="upload" /> Upload CSV File 
 
-						<div id="csv_fileupload" style="visibility: hidden; height: 0px;">
+						<input type="radio" name="inputtype" id="input_in" value="input" checked/> Input Data Manually -->
+
+						<div type="hidden" id="csv_fileupload" style="visibility: hidden; height: 0px;">
 							<label>Upload CSV</label>
 							<input type="file" name="csvfile" id="csvfile" />
 						</div>
@@ -183,7 +184,8 @@
 									rowHeaders: true,
 									colHeaders: true,
 									minSpareRows: 1,
-									fillHandle: true //possible values: true, false, "horizontal", "vertical"
+									fillHandle: true,
+									//possible values: true, false, "horizontal", "vertical"
 								});
 
 								var data = [
@@ -196,6 +198,96 @@
 								];
 
 								$("#inputdata_man").handsontable("loadData", data);
+								$(document).ready(function() {
+								var g_data = [{"key": "set1", "values": [[1.0, 100], [2.0, 200], [3.0, 400]]},
+								{"key": "set2", "values": [[1.0, 110], [2.0, 310], [3.0, 150]]},
+								{"key": "set3", "values": [[1.0, 220], [2.0, 140], [3.0, 320]]},
+								{"key": "set4", "values": [[1.0, 330], [2.0, 130], [3.0, 270]]}];
+
+								var chart;
+
+								var d3_colorset = ['#A7CEE2', '#2078B4', '#B4D88B', '#34A048', '#F69999', '#E21F26', '#FDBF6E', '#F57E20'];
+				
+								d3.scale.colorset = function() {
+									return d3.scale.ordinal().range(d3_colorset);
+								};
+			
+								nv.addGraph(function() {
+									chart = nv.models.lineChart()
+												.x(function(d) { return d[0] })
+												.y(function(d) { return d[1] }) 
+												.color(d3.scale.colorset().range());
+		 
+									chart.xAxis
+										.axisLabel('')
+										.tickFormat(d3.format(',r'));
+										//.tickFormat(d3.format('0.1f'));
+										//.tickFormat(function(d) { return d3.time.format('%x')(new Date(d)) });
+			 
+									chart.yAxis
+										.axisLabel('')
+										.tickFormat(d3.format(',r'));
+			 
+									d3.select('#preview_chart svg')
+										.datum(g_data)
+										.transition().duration(500)
+										.call(chart);
+				 
+										//TODO: Figure out a good way to do this automatically
+									nv.utils.windowResize(chart.update);
+									return chart;
+								});
+
+								function redraw() {
+									d3.select('#preview_chart svg')
+										.datum(g_data)
+										//.transition().duration(500)
+										.call(chart);
+
+									nv.utils.windowResize(chart.update);
+								}
+
+								setInterval(function() {
+									data = $("#inputdata_man").data('handsontable').getData();
+
+									g_data = Array();
+
+									numcols = 4;
+									curcol = 1;
+
+									while(curcol <= numcols) {
+										if(data[0][curcol] != "") {
+											data_col = {
+												"key": data[0][curcol],
+												"values": []
+											};
+
+											var rows_down = 1;
+
+											while(data[rows_down][curcol] != undefined && data[rows_down][curcol] != '') {
+												data_col.values.push([
+													data[rows_down][0],
+													data[rows_down][curcol]
+												]);
+
+												rows_down++;
+											}
+											g_data.push(data_col);
+										}
+
+										curcol++;
+									}
+
+									redraw();
+
+								},500)
+
+								$('#subBtn').click(function(){			//When form is submitted make final changes	
+									var g_data_out = JSON.stringify(g_data);
+									$('#plotData').attr('value',g_data_out);
+								});
+							});//]]>	
+
 							</script>
 						</div>
 
@@ -261,150 +353,7 @@
 
 						<script type="text/javascript">
 							//<![CDATA[ 
-							$(document).ready(function() {
-								var g_data = [{
-									"key": "set1", 
-									"values": [
-										[
-											1.0, 
-											100
-										], 
-										[
-											2.0, 
-											200
-										], 
-										[
-											3.0, 
-											400
-										]
-									]
-								},{
-									"key": "set2", 
-									"values": [
-										[
-											1.0, 
-											110
-										], 
-										[
-											2.0, 
-											310
-										], 
-										[
-											3.0, 
-											150
-										]
-									]
-								},{
-									"key": "set3", 
-									"values": [
-										[
-											1.0, 
-											220
-										], 
-										[
-											2.0, 
-											140
-										], 
-										[
-											3.0, 
-											320
-										]
-									]
-								},{
-									"key": "set4", 
-									"values": [
-										[
-											1.0, 
-											330
-										], 
-										[
-											2.0, 
-											130
-										], 
-										[
-											3.0, 
-											270
-										]
-									]
-								}];
-								var chart;
-
-								var d3_colorset = ['#A7CEE2', '#2078B4', '#B4D88B', '#34A048', '#F69999', '#E21F26', '#FDBF6E', '#F57E20'];
-				
-								d3.scale.colorset = function() {
-									return d3.scale.ordinal().range(d3_colorset);
-								};
-			
-								nv.addGraph(function() {
-									chart = nv.models.lineChart()
-												.x(function(d) { return d[0] })
-												.y(function(d) { return d[1] }) 
-												.color(d3.scale.colorset().range());
-		 
-									chart.xAxis
-										.axisLabel('')
-										.tickFormat(d3.format(',r'));
-										//.tickFormat(d3.format('0.1f'));
-										//.tickFormat(function(d) { return d3.time.format('%x')(new Date(d)) });
-			 
-									chart.yAxis
-										.axisLabel('')
-										.tickFormat(d3.format(',r'));
-			 
-									d3.select('#preview_chart svg')
-										.datum(g_data)
-										.transition().duration(500)
-										.call(chart);
-				 
-										//TODO: Figure out a good way to do this automatically
-									nv.utils.windowResize(chart.update);
-									return chart;
-								});
-
-								function redraw() {
-									d3.select('#preview_chart svg')
-										.datum(g_data)
-										//.transition().duration(500)
-										.call(chart);
-
-									nv.utils.windowResize(chart.update);
-								}
-
-								setInterval(function () {
-									data = $("#inputdata_man").data('handsontable').getData();
-
-									g_data = Array();
-
-									numcols = 4;
-									curcol = 1;
-
-									while(curcol <= numcols) {
-										if(data[0][curcol] != "") {
-											data_col = {
-												"key": data[0][curcol],
-												"values": []
-											};
-
-											var rows_down = 1;
-
-											while(data[rows_down][curcol] != undefined && data[rows_down][curcol] != '') {
-												data_col.values.push([
-													data[rows_down][0],
-													data[rows_down][curcol]
-												]);
-
-												rows_down++;
-											}
-											g_data.push(data_col);
-										}
-
-										curcol++;
-									}
-
-									redraw();
-								}, 500);
-								$('#plotData').attr('value',g_data);
-							});//]]>
+							
 						</script>
 					</div>
 				</form>
