@@ -32,6 +32,17 @@ FOOTER = """
 # cSet = 'Rset2'
 # axisdict = {'0d':'d3.format(\',r\')','1d':'d3.format(\',.1f\')','2d':'d3.format(\',.2f\')','3d':'d3.format(\',.3f\')','strf':'function(d) { return d3.time.format(\'%x\')(new Date(d))}'}
 
+def modJson(inData):	# change the strings into numbers
+	plotData = json.loads(inData)
+	for i in xrange(len(plotData)):
+		for j in xrange(len(plotData[i]['values'])):
+			try:
+				plotData[i]['values'][j][1] = float(plotData[i]['values'][j][1])
+			except:
+				plotData[i]['values'][j+1] = plotData[i]['values'][j+1]
+	plotData = json.dumps(plotData)
+	return plotData
+
 	
 def tab2json(plotdata,title):
     #Simple, accomodates direct paste from excel. No 1E-7 input.
@@ -416,7 +427,8 @@ class AddDataHandler(Plot3Handler):
 		ylabel = self.request.get('ylabel')
 		ylabel = cgi.escape(ylabel)
 		plotData = self.request.get('plotData')
-		#plotData = json.loads(plotData)
+		plotData = modJson(plotData)
+		#self.response.out.write(json.loads(plotData)[1]['values'])
 		#plotdata = cgi.escape(plotdata)
 		#plotdata_js,size = tab2json(plotdata,title)
 		

@@ -212,6 +212,7 @@
 									return d3.scale.ordinal().range(d3_colorset);
 								};
 			
+
 								nv.addGraph(function() {
 									chart = nv.models.lineChart()
 												.x(function(d) { return d[0] })
@@ -223,8 +224,22 @@
 										.tickFormat(d3.format(',r'));
 										//.tickFormat(d3.format('0.1f'));
 										//.tickFormat(function(d) { return d3.time.format('%x')(new Date(d)) });
-			 
+
+
 									chart.yAxis
+										.axisLabel('')
+										.tickFormat(d3.format(',r'));
+
+									chartBar = nv.models.multiBarChart()
+												.x(function(d) { return d[0] })
+												.y(function(d) { return d[1] }) 
+												.color(d3.scale.colorset().range());
+
+			 						chartBar.xAxis
+										.axisLabel('')
+										.tickFormat(d3.format(',r'));
+
+									chartBar.yAxis
 										.axisLabel('')
 										.tickFormat(d3.format(',r'));
 			 
@@ -239,13 +254,26 @@
 								});
 
 								function redraw() {
-									d3.select('#preview_chart svg')
-										.datum(g_data)
-										//.transition().duration(500)
-										.call(chart);
+									
+										if (typeof g_data[0].values[0][0] ==='number')
+										{	//$('#preview_chart svg').empty()
+											d3.select('#preview_chart svg')
+											.datum(g_data)
+											//.transition().duration(500)
+											.call(chart);
+											nv.utils.windowResize(chart.update);
+										}
+										else
+										{	//$('#preview_chart svg').empty()
+											d3.select('#preview_chart svg')
+											.datum(g_data)
+											.call(chartBar);
+											nv.utils.windowResize(chartBar.update);
+										}
 
-									nv.utils.windowResize(chart.update);
 								}
+
+
 
 								setInterval(function() {
 									data = $("#inputdata_man").data('handsontable').getData();
