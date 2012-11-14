@@ -65,9 +65,11 @@
 				<h1 id="header_title"><a href="/">Plot<span id="title_num">3</a></span></h1>
 
 				<nav>
+					{% if loggedIn==True %}
 					<ul>
 						<li><a href="/logout" class="emph">Log Out ({{UN}})</a></li>
 					</ul>
+					{% endif %}
 				</nav>
 			</header>
 			<article>
@@ -75,13 +77,19 @@
 
 				<br />
 
-				<p>You can contact us at <a href="mailto:info@plot3.com">info@plot3.com</a> or fill out this form:</p>
+				<!--<p>You can contact us at <a href="mailto:info@plot3.com">info@plot3.com</a> or fill out this form:</p>-->
 
 				<form method="post">
-					<label for="name">Your Name</label> <input type="text" class="textbox" name="name" />
-					<label for="email">Your E-mail</label> <input type="text" class="textbox long" name="email" />
+					<label for="name">Your Name</label>
+					 <input type="text" class="textbox" name="name" value={{name}}>
+
+					<label for="email">Your E-mail</label>
+					<span style="color: red">{{w2}}</span>
+					 <input type="text" class="textbox long" name="email" value={{em}}>
+
 					<label for="comm">Comments/Feedback</label>
-					<textarea name="comm" class="textarea"></textarea>
+					<span style="color: red">{{w1}}</span>
+					<textarea name="comm" class="textarea" >{{comm}}</textarea>
 
 					<label></label>
 

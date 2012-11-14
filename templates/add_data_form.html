@@ -129,7 +129,9 @@
 				<nav>
 					<ul>
 						<li><a href="/contact">Contact</a></li>
+						{% if loggedIn == True %}
 						<li><a href="/logout" class="emph">Log Out ({{UN}})</a></li>
+						{% endif %}
 					</ul>
 				</nav>
 			</header>
@@ -143,11 +145,11 @@
 
 						</div>
 
-						<label for="cats">Add New Category</label> <span style="color: red">{{warn2}}</span>
+						<label for="cats">*Add New Category</label> <span style="color: red">{{warn2}}</span>
 						<input name="cats" id="cats" type="text" class="textbox" /> <input id="catbutton" type="button" class="button inline" value="+" />
 						{% endif %}
 
-						<label for="title">Title</label><span style="color: red">{{warn1}}</span>
+						<label for="title">*Title</label><span style="color: red">{{warn1}}</span>
 						<input name="title" type="text" class="textbox" />
 						
 						<label for="description">Description</label>

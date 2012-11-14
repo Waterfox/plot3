@@ -2,7 +2,7 @@
 import webapp2
 import jinja2, os, logging, cgi ,json, random
 from google.appengine.ext import db
-from google.appengine.api import memcache
+from google.appengine.api import memcache, mail
 from webfunctions import validate_name, validate_pass, validate_match, validate_email, make_salt, make_pw_hash, valid_pw, make_secure_val, check_secure_val, validate_cats, validate_title
 from colors import *
 jinja_environment = jinja2.Environment(autoescape=False,loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__),'templates')))
@@ -319,7 +319,7 @@ class COMMENTS(db.Model):
 	UN = db.StringProperty()
 	COMM = db.TextProperty(required = True)
 	TS = db.DateTimeProperty(auto_now_add=True)
-	EM = db.StringProperty(required = True)
+	EM = db.StringProperty()
 	
 # *******************************************SANKEY DIAGRAMS**********************************************************************		
 	
@@ -792,12 +792,15 @@ class LandingHandler(Plot3Handler):
 		self.render('LandingFront.html',colorset=colorDict[cSet])
 
 class ContactHandler(Plot3Handler):
-	def get(self):
+	def write_contact(self,name="",email="",comm="",w1="",w2=""):
 		[loggedIn,admin,UN] = self.checkCookies()
-		self.render('contact.html',UN=UN)
+		self.render('contact.html',UN=UN,loggedIn=loggedIn,name=name,em=email,comm=comm,w1=w1,w2=w2)
+
+	def get(self):
+		self.write_contact()
 		
 	def post(self):
-		[loggedIn,admin,UN] = self.checkCookies()
+		
 		input_name = self.request.get('name')
 		name = cgi.escape(input_name)
 
@@ -807,15 +810,32 @@ class ContactHandler(Plot3Handler):
 		input_comm = self.request.get('comm')
 		comm = cgi.escape(input_comm)
 
-		if len(str(comm)) > 3:
-			w1='Please leave a message </br>'
-			self.render('contact.html',UN=UN,warn1=w1)
+		if not len(str(comm)) > 3:
+			w1="Please leave a message </br>"
+			self.write_contact(name,em,'',w1,'')
 			return
 
+		if not validate_email(em):
+			w2="Valid email required </br>"
+			self.write_contact(name,'',comm,'',w2)
+			return
+
+		[loggedIn,admin,UN] = self.checkCookies()
 		newComm = COMMENTS(UN=name,EM=em,COMM=comm)
 		newComm.put()
+
+		message = mail.EmailMessage(sender="info@plot3.com",
+                            subject="Contact from P3")
+		message.to = 'rob.a.edwards@gmail.com'
+		message.body=(name+'has conacted your from PLOT3.com \n' +
+					'Email: ' + em + '\n' +
+					'Logged in as: ' + UN + '\n' +
+					'Message: \n ' + comm )
+		message.send
+
 		recvd = 'Thank you for your Feedback!'
-		self.render('contact.html',recvd=recvd)
+		
+		self.render('contact.html',UN=UN,loggedIn=loggedIn,recvd=recvd)
 		
 		
 # (((((((((((((((((((((((((((((((((((RANDOM PLOT)))))))))))))))))))))))))))))))))))		
