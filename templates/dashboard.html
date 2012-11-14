@@ -4,6 +4,8 @@
 		<title>Plot3 Dashboard</title>
 		<meta charset="utf-8">
 
+		<link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic' rel='stylesheet' type='text/css'>
+
 		<link href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
 		<link rel="stylesheet" href="javascript/nvd3/src/nv.d3.dash.css"  type="text/css">
 		<link rel="stylesheet" href="stylesheets/global_style.css" />
@@ -13,6 +15,18 @@
 		<script type="text/javascript" src="javascript/nv.d3.js"> </script>
 		<script src="javascript/jquery.js"></script>
 		<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+		<!--[if lt IE 9]>
+			<script src="javascript/html5shiv.js"></script>
+		<![endif]-->
+		<script type="text/javascript">
+			document.createElement("header");
+			document.createElement("nav");
+			document.createElement("article");
+			document.createElement("aside");
+			document.createElement("section");
+			document.createElement("svg");
+			document.createElement("footer");
+		</script>
 
 		<script type="text/css">
 			function get_random_color() {
@@ -98,6 +112,7 @@
 
 				$("#posForm").draggable({
 					containment: [0, 0, window_width, window_height],
+					containment: [0, 0, window_width, window_height], //1910, 1190
 					stop: function(event,ui){
 							var pos ='';
 							pos = ui.position;

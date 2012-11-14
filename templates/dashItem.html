@@ -51,6 +51,7 @@
 
 		$("#Chart{{id}}").draggable({
 			containment: [0, 0, window_width, window_height],
+			containment: [0, 0, window_width, window_height], //1910, 1190
 			stop: function(event, ui) {
 				var pos ='';
 				pos = ui.position;
