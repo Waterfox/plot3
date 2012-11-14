@@ -824,10 +824,10 @@ class ContactHandler(Plot3Handler):
 		newComm = COMMENTS(UN=name,EM=em,COMM=comm)
 		newComm.put()
 
-		message = mail.EmailMessage(sender="info@plot3.com",
+		message = mail.EmailMessage(sender="Robot@plot-3.appspotmail.com",
                             subject="Contact from P3")
 		message.to = 'rob.a.edwards@gmail.com'
-		message.body=(name+'has conacted your from PLOT3.com \n' +
+		message.body=(name+' has conacted your from PLOT3.com \n' +
 					'Email: ' + em + '\n' +
 					'Logged in as: ' + UN + '\n' +
 					'Message: \n ' + comm )
