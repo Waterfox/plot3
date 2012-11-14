@@ -93,8 +93,11 @@
 			cSet={{cSet}};
 		
 			$(document).ready(function() {
+				var window_width = $(window).width();
+				var window_height = $(window).height();
+
 				$("#posForm").draggable({
-					containment: [0,0,1910,1190],
+					containment: [0, 0, window_width, window_height],
 					stop: function(event,ui){
 							var pos ='';
 							pos = ui.position;

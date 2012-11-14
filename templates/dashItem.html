@@ -35,6 +35,9 @@
 </style>
 <script type="text/javascript">
 	$(document).ready(function() {
+		var window_width = $(window).width();
+		var window_height = $(window).height();
+
 		$("#Chart{{id}}").resizable({
 			//helper: "ui-resizable-helper",
 			stop: function(event, ui) {
@@ -47,7 +50,7 @@
 		});
 
 		$("#Chart{{id}}").draggable({
-			containment: [0,0,1910,1190],
+			containment: [0, 0, window_width, window_height],
 			stop: function(event, ui) {
 				var pos ='';
 				pos = ui.position;
