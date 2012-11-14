@@ -43,3 +43,12 @@ def validate_email(input_em):
 	else:
 		EM_RE = re.compile(r"^[\S]+@[\S]+\.[\S]+$")
 		return EM_RE.match(input_em)
+
+def validate_cats(cats):
+	CATS_RE = re.compile("(\d+)(,\s*\d+)*")
+	if (cats != ''):
+		return True
+	#return CATS_RE.match(cats)
+
+def validate_title(title):
+	return validate_name(title)

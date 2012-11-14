@@ -3,7 +3,7 @@ import webapp2
 import jinja2, os, logging, cgi ,json, random
 from google.appengine.ext import db
 from google.appengine.api import memcache
-from webfunctions import validate_name, validate_pass, validate_match, validate_email, make_salt, make_pw_hash, valid_pw, make_secure_val, check_secure_val
+from webfunctions import validate_name, validate_pass, validate_match, validate_email, make_salt, make_pw_hash, valid_pw, make_secure_val, check_secure_val, validate_cats, validate_title
 from colors import *
 jinja_environment = jinja2.Environment(autoescape=False,loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__),'templates')))
 
@@ -27,6 +27,11 @@ FOOTER = """
 	Powererd by  <a href="https://github.com/mbostock/d3/wiki">D3</a> and <a href="http://nvd3.com/">NVD3</a>.
 </footer>
 """
+
+g_data =([{"key": "set1", "values": [[1.0, 100], [2.0, 200], [3.0, 400]]},
+		{"key": "set2", "values": [[1.0, 110], [2.0, 310], [3.0, 150]]},
+		{"key": "set3", "values": [[1.0, 220], [2.0, 140], [3.0, 320]]},
+		{"key": "set4", "values": [[1.0, 330], [2.0, 130], [3.0, 270]]}])
 
 #colorDict ={'Rset1': ["#FFF200", "#7065AD", "#EE2971", "#51B848"],'Rset2':["#297fff", "#7137f8", "#00d400", "#ff7f2a", "#ff0000","#808080", "#000000", "#ffcc00", "#37c8ab", "#ff2ad4"],'CBset3':["#A7CEE2","#2078B4", "#B4D88B", "#34A048", "#F69999", "#E21F26","#FDBF6E", "#F57E20"],'d3set10':["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd","#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"],'d3set20' : ["#1f77b4", "#aec7e8","#ff7f0e", "#ffbb78","#2ca02c", "#98df8a","#d62728", "#ff9896","#9467bd", "#c5b0d5","#8c564b", "#c49c94","#e377c2", "#f7b6d2","#7f7f7f", "#c7c7c7","#bcbd22", "#dbdb8d","#17becf", "#9edae5"],'d3set20b':["#393b79", "#5254a3", "#6b6ecf", "#9c9ede","#637939", "#8ca252", "#b5cf6b", "#cedb9c","#8c6d31", "#bd9e39", "#e7ba52", "#e7cb94","#843c39", "#ad494a", "#d6616b", "#e7969c","#7b4173", "#a55194", "#ce6dbd", "#de9ed6"],'d3set20c':["#3182bd", "#6baed6", "#9ecae1", "#c6dbef","#e6550d", "#fd8d3c", "#fdae6b", "#fdd0a2","#31a354", "#74c476", "#a1d99b", "#c7e9c0","#756bb1", "#9e9ac8", "#bcbddc", "#dadaeb","#636363", "#969696", "#bdbdbd", "#d9d9d9"],'Rset3':["#ff6600", "#2a7fff", "#6f7c91", "#37c871","#00ffff", "#ffff00", "#ff7f2a", "#ff2a2a","#5f5fd3", "#8a6f91", "#37c871", "#8d5fd3","#87aade", "#d3bc5f", "#918a6f", "#d35f5f","#8dd35f", "#ff80b2", "#93aca7", "#37c871"]}
 # cSet = 'Rset2'
@@ -362,44 +367,7 @@ class MainHandler(Plot3Handler):
 			# self.response.out.write(JTree)
 			# self.render('main_Tree.html',dataset=JTree)
 			
-class GlobalHandler(Plot3Handler):
-	    def get(self):
-		
-		Feature = self.getState()
-		#Get and check the cookie, find the UN
-		[loggedIn,admin,UN] = self.checkCookies()
-		
-		vtype = self.request.get("vtype")
-	
-		dbTCg = memcache.get('dbTCg')
-		if dbTCg is None: #in memcache?
-			dbTCg = db.GqlQuery("SELECT TITLE,CATS,SZ FROM GLOBAL3DB WHERE SERIES = :FEATURE ORDER BY TS DESC",FEATURE=Feature).fetch(40)
-			logging.error("DB QUERY")
-			if dbTCg: memcache.set('dbTCg',dbTCg) #in DB?
-			else:
-				if admin==True: self.redirect('/addNewGlobal')
-				else: 
-					self.response.out.write('The Website had not been initialized')
-					# self.redirect('/login')
-					return
-				
-		#self.response.out.write(dbtype)
-		JSankey = SankeyNodesLinks(dbTCg)
-		# JTree = TreeNodesLinks(dbTC)
-		cSetMain = self.getUserColour(UN)
-		
-		global lastID
-		global lastptype
-		lastID=None
-		lastptype=None
-		
-		PageTitle = 'PLOT3.com'
-		
-		if not vtype:
-			vtype = 'sankey'
 
-		if vtype == 'sankey':
-			self.render('main_Sankey_Global.html',dataset=JSankey,Title=PageTitle,loggedIn=loggedIn,admin=admin,colorset=colorDict[cSetMain])
 
 # *******************************************ADD-DATA**********************************************************************	
 	 
@@ -431,6 +399,18 @@ class AddDataHandler(Plot3Handler):
 		#self.response.out.write(json.loads(plotData)[1]['values'])
 		#plotdata = cgi.escape(plotdata)
 		#plotdata_js,size = tab2json(plotdata,title)
+		#print validate_cats(cats)
+		#print validate_title(title)
+		#return
+		if not validate_cats(cats):
+			w2 = 'Category string must included and be CSV </br>'
+			self.render('add_data_form.html',loggedIn=loggedIn,warn2=w2,data=plotData)
+			return
+		if not validate_title(title):
+			w1 = 'Title must be included </br>'
+			self.render('add_data_form.html',loggedIn=loggedIn,warn1=w1,data=plotData)
+			return
+
 		
 		xf = self.request.get('XF')		
 		yf = self.request.get('YF')
@@ -444,7 +424,7 @@ class AddDataHandler(Plot3Handler):
 		for match in TITLEcheck:
 			if match.CATS==cats:
 				w1="There is already an identical entry in your database"
-				self.render('add_data_form.html',loggedIn=loggedIn,warn=w1)
+				self.render('add_data_form.html',loggedIn=loggedIn,warn1=w1,data=plotData)
 				return
 
 		entry = PERSONAL3DB(UN=UN,CATS=cats,PLOTDATA=plotData,TITLE=title,DESC=description,XL=xlabel,YL=ylabel,CSET=cSet,XF=xf,YF=yf)
@@ -455,47 +435,7 @@ class AddDataHandler(Plot3Handler):
 		ptype,buttonSet,noXlabels = self.checkDataFormat(entry,entry_id)
 		self.redirect('/%s?ptype=%s' %(entry_id,ptype))
 		
-class GlobalAddDataHandler(Plot3Handler):
-	def get(self):
-		#Get and check the cookie, find the UN
-		[loggedIn,admin,UN] = self.checkCookies()
-		
-		if admin:
-			self.render('add_data_global.html',loggedIn=loggedIn)
-		else:
-			self.response.out.write('Your not an admin Joe!')
-			return
-		
-	def post(self):
-		[loggedIn,admin,UN] = self.checkCookies()
-		series = self.request.get('series')
-		series = (cgi.escape(series)).lower()
-		cats = self.request.get('cats')
-		cats = cgi.escape(cats)
-		title = self.request.get('title')
-		title = cgi.escape(title)
-		description = self.request.get('description')
-		description = cgi.escape(description)
-		xlabel = self.request.get('xlabel')
-		xlabel = cgi.escape(xlabel)
-		ylabel = self.request.get('ylabel')
-		ylabel = cgi.escape(ylabel)
-		plotdata = self.request.get('plotdata')
-		plotdata = cgi.escape(plotdata)
-		plotdata_js,size = tab2json(plotdata,title)
-		
-		xf = self.request.get('XF')		
-		yf = self.request.get('YF')
-		
-		cSet = self.request.cookies.get('cSet','0')
-		if cSet=='0':
-			cSet='d3set20'
-		entry = GLOBAL3DB(SERIES=series,UN=UN,CATS=cats,PLOTDATA=plotdata_js,TITLE=title,DESC=description,XL=xlabel,YL=ylabel,SZ=size,CSET=cSet,XF=xf,YF=yf)
-		entry.put()
-		entry_id=str(entry.key().id())
-		memcache.set(entry_id+'g',entry) #put in memcache
-		memcache.delete('dbTCg')
-		self.redirect('/global%s' %entry_id)
+
 # *******************************************PLOTS**********************************************************************		
 class PlotSet(Plot3Handler):
 		
@@ -533,39 +473,6 @@ class PlotSet(Plot3Handler):
 		self.render('PlotSet.html',ptype=ptype,plotData=dS.PLOTDATA,UN=dS.UN,cats=dS.CATS,title=dS.TITLE,description=dS.DESC,xlabel=dS.XL,ylabel=dS.YL,size=dS.SZ,id=int(entry_id),buttonSet=buttonSet,colorset=colorDict[cSet],XF=axisdict[dS.XF],YF=axisdict[dS.YF],xflag=noXlabels,loggedIn=loggedIn)
 
 			
-class GlobalPlotSet(Plot3Handler):
-		
-	def get(self,entry_id):
-		[loggedIn,admin,UN] = self.checkCookies()	
-		
-		key = str(entry_id)+'g'
-		dS = memcache.get(key)
-		if dS is None:
-			dS=GLOBAL3DB.get_by_id(int(entry_id))
-			logging.error("DB QUERY")
-			if dS: memcache.set(key,dS)
-			else:
-				self.response.out.write('There\'s nothing here Bob!')
-				return
-		ptype = self.request.get("ptype")
-		logging.error("DB QUERY!")
-		
-		cSet = self.getPlotColourGlobe(dS)
-		
-		ptype2,buttonSet,noXlabels = self.checkDataFormat(dS,entry_id,'global')
-		if not ptype: ptype=ptype2
-				
-		global lastID
-		global lastptype
-		lastID = entry_id
-		lastptype = ptype
-		
-		if not dS.XF:	#set the axis if there is no default
-			dS.XF = '1d'
-		if not dS.YF:
-			dS.YF = '1d'
-			
-		self.render('PlotSet.html',ptype=ptype,plotData=dS.PLOTDATA,UN=dS.UN,cats=dS.CATS,title=dS.TITLE,description=dS.DESC,xlabel=dS.XL,ylabel=dS.YL,size=dS.SZ,id=int(entry_id),buttonSet=buttonSet,colorset=colorDict[cSet],XF=axisdict[dS.XF],YF=axisdict[dS.YF],globe=True,xflag=noXlabels)
 
 class DeleteSet(Plot3Handler):
 	def get(self):
@@ -615,19 +522,6 @@ class MainSettingHandler(Plot3Handler):
 
 		self.redirect('/')
 		
-class GlobalMainSettingHandler(Plot3Handler):
-	def get(self):
-		self.render('settings_main.html')	
-
-	def post(self):
-		#get the color set, add it to cookie, if USER, set to user default in UNPW DB
-		cSetMain = self.request.get('cSet')
-		if cSetMain is None:
-			cSetMain = 'Rset2'
-		#self.response.headers.add_header('Set-Cookie', 'cSetMain=%s' %str(cSetMain))
-		self.secureCookie('cSetMain',cSetMain)
-		self.redirect('/global')
-		
 
 		
 class PlotSettingHandler(Plot3Handler):
@@ -662,35 +556,6 @@ class PlotSettingHandler(Plot3Handler):
 			else: self.response.out.write('nice try')
 		self.redirect('/'+entry_id)
 		
-class GlobalPlotSettingHandler(Plot3Handler):
-	def get(self):
-		[loggedIn,admin,UN] = self.checkCookies()
-		self.render('settings.html',admin=admin)
-		
-		
-	def post(self):
-		#get the color set, add it to the PLOT's entry in the database
-		cSet = self.request.get('cSet')
-		xf = self.request.get('XF')
-		yf = self.request.get('YF')
-		entry_id = self.request.get("id")
-		
-		[loggedIn,admin,UN] = self.checkCookies()
-		self.response.headers.add_header('Set-Cookie', 'cSet=%s' %str(cSet))
-		self.secureCookie('cSet',cSet)
-		
-		if admin == True:
-			key = str(entry_id)+'g'
-			dS = memcache.get(key)
-			if dS is None:
-				dS=GLOBAL3DB.get_by_id(int(entry_id))
-				logging.error("DB QUERY")
-			if cSet: dS.CSET = cSet
-			if xf: dS.XF=xf
-			if yf: dS.YF=yf
-			dS.put()
-			memcache.set(key,dS)
-		self.redirect('/global'+str(entry_id))
 
 # -----------------------------------USER LOGIN---------------------------------------------------------------------------------------------	
 		
@@ -932,6 +797,7 @@ class ContactHandler(Plot3Handler):
 		self.render('contact.html',UN=UN)
 		
 	def post(self):
+		[loggedIn,admin,UN] = self.checkCookies()
 		input_name = self.request.get('name')
 		name = cgi.escape(input_name)
 
@@ -940,6 +806,11 @@ class ContactHandler(Plot3Handler):
 		
 		input_comm = self.request.get('comm')
 		comm = cgi.escape(input_comm)
+
+		if len(str(comm)) > 3:
+			w1='Please leave a message </br>'
+			self.render('contact.html',UN=UN,warn1=w1)
+			return
 
 		newComm = COMMENTS(UN=name,EM=em,COMM=comm)
 		newComm.put()
@@ -1037,16 +908,12 @@ class RandomPlotSettingHandler(Plot3Handler):
 		self.redirect('/random'+str(entry_id))
 		
 app = webapp2.WSGIApplication([('/', MainHandler),
-								('/global', GlobalHandler),
+								
 								('/addNew',AddDataHandler),
-								#('/addNewGlobal',GlobalAddDataHandler),
 								('/settings_main',MainSettingHandler),
-								#('/settings_main_global',GlobalMainSettingHandler),
-								('/settings',PlotSettingHandler),
-								#('/globalsettings',GlobalPlotSettingHandler),
+								('/settings',PlotSettingHandler),							
 								('/delete',DeleteSet),
-								('/([0-9]+)',PlotSet),
-								#('/global([0-9]+)',GlobalPlotSet),
+								('/([0-9]+)',PlotSet),								
 								('/login',Login),
 								('/logout',Logout),
 								('/signup',Signup),
@@ -1054,6 +921,10 @@ app = webapp2.WSGIApplication([('/', MainHandler),
 								('/dash',Dashboard),
 								('/landing',LandingHandler),
 								('/contact',ContactHandler),
+								#('/addNewGlobal',GlobalAddDataHandler),
+								#('/settings_main_global',GlobalMainSettingHandler),
+								#('/globalsettings',GlobalPlotSettingHandler),
+								#('/global([0-9]+)',GlobalPlotSet),
 								('/plotSomething',RandomAddData),
 								('/random([0-9]+)',RandomPlotSet),
 								('/randomsettings',RandomPlotSettingHandler)],

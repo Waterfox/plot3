@@ -143,11 +143,11 @@
 
 						</div>
 
-						<label for="cats">Add New Category</label> <span style="color: red">{{warn2}}</span>
+						<label for="cats">Add New Category</label> 
 						<input name="cats" id="cats" type="text" class="textbox" /> <input id="catbutton" type="button" class="button inline" value="+" />
 						{% endif %}
 
-						<label for="title">Title</label><span style="color: red">{{warn1}}</span>
+						<label for="title">Title</label><span style="color: red">{{warn}}</span>
 						<input name="title" type="text" class="textbox" />
 						
 						<label for="description">Description</label>
@@ -202,13 +202,10 @@
 								$(document).ready(function() {
 
 								
-
-							
-								var	g_data = [{"key": "set1", "values": [[1.0, 100], [2.0, 200], [3.0, 400]]},
+								var g_data = [{"key": "set1", "values": [[1.0, 100], [2.0, 200], [3.0, 400]]},
 								{"key": "set2", "values": [[1.0, 110], [2.0, 310], [3.0, 150]]},
 								{"key": "set3", "values": [[1.0, 220], [2.0, 140], [3.0, 320]]},
 								{"key": "set4", "values": [[1.0, 330], [2.0, 130], [3.0, 270]]}];
-								
 
 								var chart;
 
@@ -218,10 +215,8 @@
 									return d3.scale.ordinal().range(d3_colorset);
 								};
 			
-								function addChart(newState){
-									if (newState == 'line')
-									{	$('#preview_chart').empty();
-
+								function initChart(){
+										//$('#preview_chart svg').empty();
 										//$('#preview_chart').append('svg');
 										nv.addGraph(function() {
 										chart = nv.models.lineChart()
@@ -237,19 +232,17 @@
 											.tickFormat(d3.format(',r'));
 
 				 
-										d3.select('#preview_chart').append('svg')
+										d3.select('#preview_chart svg')
 											.datum(g_data)
 											.transition().duration(300)
 											.call(chart);
 					 
 										nv.utils.windowResize(chart.update);
-
 										return chart;
 										});
-									}
-									else if (newState =='bar')
-									{	$('#preview_chart').empty();
+									
 
+										//$('#preview_chart svg').empty();
 										//$('#preview_chart').append('svg');
 										nv.addGraph(function() {
 											chart2 = nv.models.multiBarChart()
@@ -261,7 +254,7 @@
 												//.axisLabel('')
 												.tickFormat(d3.format(',r'));
 
-												d3.select('#preview_chart').append('svg')
+												d3.select('#preview_chart svg')
 												.datum(g_data)
 												.transition().duration(300)
 												.call(chart2);
@@ -269,32 +262,54 @@
 											nv.utils.windowResize(chart2.update);
 											return chart2;
 										});
-									}
-									else if (newState =='noPreview')
-									{	$('#preview_chart').empty(); }
+
 										
 									}
 
+								function addChart(state){
+									if (state == 'line')
+									{	$('#preview_chart svg').empty();
+										//$('#preview_chart').append('svg')
+				 
+										d3.select('#preview_chart svg')
+											.datum(g_data)
+											.transition().duration(300)
+											.call(chart);
+					 
+										nv.utils.windowResize(chart.update);
+										
+									}
 
-								state ='line';	// add the initial plot				
+									else if (state =='bar')
+									{	$('#preview_chart svg').empty();
+										//$('#preview_chart').append('svg');
+
+
+										d3.select('#preview_chart svg')
+											.datum(g_data)
+											.transition().duration(300)
+											.call(chart2);
+
+										nv.utils.windowResize(chart2.update);
+										
+									}
+									else if (state =='noPreview')
+									{	$('#preview_chart svg').empty(); }
+								}
+
+								state ='line';	// add the initial plot
+								initChart();
+								$('#preview_chart svg').empty();
 								addChart(state);
-
 
 								function previewState() {
 									cur_state = $('input[name="charttype"]:checked').val();
-
-									if (typeof g_data[0].values[0][0] ==='string' && cur_state =='line')
-									{
-										cur_state = 'bar';
-										$('#ct_bar').attr('checked',true);
-									}
-
-									if (cur_state != state) // change the plot if the new state is diff
+									if (cur_state != state)
 									{
 										addChart(cur_state);
 										state = cur_state;
 									}
-									
+									//(typeof g_data[0].values[0][0] ==='number')
 									return cur_state
 								}
 
@@ -303,19 +318,19 @@
 									
 										if (state == 'line')
 										{	//$('#preview_chart svg').remove()
-										 	d3.select('#preview_chart svg')
+										 	d3.select('#preview_chart')
 										 	.datum(g_data)
 										 	.transition().duration(300)
 										 	.call(chart);
-										 	//nv.utils.windowResize(chart.update);
+										 	nv.utils.windowResize(chart.update);
 										}
-										else if (state =='bar')
+										if (state =='bar')
 										  {	
-											d3.select('#preview_chart svg')//.append('svg')
+											d3.select('#preview_chart')//.append('svg')
 											.datum(g_data)
 											.transition().duration(300)
 											.call(chart2);
-										 	//nv.utils.windowResize(chart2.update);
+										 	nv.utils.windowResize(chart2.update);
 										 }
 
 								}
@@ -340,13 +355,8 @@
 											var rows_down = 1;
 
 											while(data[rows_down][curcol] != undefined && data[rows_down][curcol] != '') {
-												if (isNaN(parseFloat(data[rows_down][0])))
-													{ x = data[rows_down][0]; }
-												else
-													{ x = parseFloat(data[rows_down][0]); }
-												
 												data_col.values.push([
-													x,
+													data[rows_down][0],
 													parseFloat(data[rows_down][curcol])
 												]);
 
