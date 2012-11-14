@@ -37,6 +37,7 @@
 	$(document).ready(function() {
 		$("#Chart{{id}}").resizable({
 			//helper: "ui-resizable-helper",
+			//ghost:true,
 			stop: function(event, ui) {
 				var res ='';
 				res = ui.size;

@@ -831,7 +831,7 @@ class ContactHandler(Plot3Handler):
 					'Email: ' + em + '\n' +
 					'Logged in as: ' + UN + '\n' +
 					'Message: \n ' + comm )
-		message.send
+		message.send()
 
 		recvd = 'Thank you for your Feedback!'
 		
