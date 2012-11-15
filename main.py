@@ -281,7 +281,7 @@ class PERSONAL3DB(db.Model,Plot3Handler):
 class RANDOM3DB(db.Model,Plot3Handler):
 	TS = db.DateTimeProperty(auto_now_add = True)
 	PLOTDATA = db.TextProperty(required = True)
-	TITLE = db.StringProperty(required = True)
+	TITLE = db.StringProperty()
 	DESC = db.TextProperty()	#description
 	XL = db.StringProperty()	#y-axis Label
 	YL = db.StringProperty()	#x-axis Label
@@ -290,21 +290,6 @@ class RANDOM3DB(db.Model,Plot3Handler):
 	YF = db.StringProperty()	#y-axis format
 	CSET = db.StringProperty()	#color format
 	
-	
-class GLOBAL3DB(db.Model):
-	UN = db.StringProperty(required = True)
-	TS = db.DateTimeProperty(auto_now_add = True)
-	CATS = db.StringProperty(required = True)
-	PLOTDATA = db.TextProperty(required = True)
-	TITLE = db.StringProperty(required = True)
-	DESC = db.TextProperty()	#description
-	XL = db.StringProperty()	#y-axis Label
-	YL = db.StringProperty()	#x-axis Label
-	SZ = db.StringProperty()	#number of datapoints in the set
-	XF = db.StringProperty()	#x-axis format
-	YF = db.StringProperty()	#y-axis format
-	CSET = db.StringProperty()	#color format
-	SERIES = db.StringProperty()	#data series name, used to feature datasets
 	
 class UNPW(db.Model):
 	UN = db.StringProperty(required = True)
@@ -858,9 +843,8 @@ class RandomAddData(Plot3Handler):
 		xlabel = cgi.escape(xlabel)
 		ylabel = self.request.get('ylabel')
 		ylabel = cgi.escape(ylabel)
-		plotdata = self.request.get('plotdata')
-		plotdata = cgi.escape(plotdata)
-		plotdata_js,size = tab2json(plotdata,title)
+		plotData = self.request.get('plotData')
+		plotData = modJson(plotData)
 		
 		xf = self.request.get('XF')		
 		yf = self.request.get('YF')
@@ -868,7 +852,7 @@ class RandomAddData(Plot3Handler):
 		cSet = self.getPlotColour() #set the user's default colour when adding data
 		if cSet=='0':
 			cSet='d3set20'
-		entry = RANDOM3DB(PLOTDATA=plotdata_js,TITLE=title,DESC=description,XL=xlabel,YL=ylabel,SZ=size,CSET=cSet,XF=xf,YF=yf)
+		entry = RANDOM3DB(PLOTDATA=plotData,loggedIn=loggedIn,UN=UN,TITLE=title,DESC=description,XL=xlabel,YL=ylabel,CSET=cSet,XF=xf,YF=yf)
 		entry.put()
 		entry_id=str(entry.key().id())
 		memcache.set(entry_id+'r',entry) #put in memcache

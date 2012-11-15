@@ -241,7 +241,7 @@
 				 
 										d3.select('#preview_chart').append('svg')
 											.datum(g_data)
-											.transition().duration(300)
+											.transition().duration(200)
 											.call(chart);
 					 
 										nv.utils.windowResize(chart.update);
@@ -265,7 +265,7 @@
 
 												d3.select('#preview_chart').append('svg')
 												.datum(g_data)
-												.transition().duration(300)
+												.transition().duration(50)
 												.call(chart2);
 
 											nv.utils.windowResize(chart2.update);
@@ -307,7 +307,7 @@
 										{	//$('#preview_chart svg').remove()
 										 	d3.select('#preview_chart svg')
 										 	.datum(g_data)
-										 	.transition().duration(300)
+										 	.transition().duration(200)
 										 	.call(chart);
 										 	//nv.utils.windowResize(chart.update);
 										}
@@ -315,7 +315,7 @@
 										  {	
 											d3.select('#preview_chart svg')//.append('svg')
 											.datum(g_data)
-											.transition().duration(300)
+											.transition().duration(50)
 											.call(chart2);
 										 	//nv.utils.windowResize(chart2.update);
 										 }

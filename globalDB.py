@@ -1,3 +1,18 @@
+class GLOBAL3DB(db.Model):
+	UN = db.StringProperty(required = True)
+	TS = db.DateTimeProperty(auto_now_add = True)
+	CATS = db.StringProperty(required = True)
+	PLOTDATA = db.TextProperty(required = True)
+	TITLE = db.StringProperty(required = True)
+	DESC = db.TextProperty()	#description
+	XL = db.StringProperty()	#y-axis Label
+	YL = db.StringProperty()	#x-axis Label
+	SZ = db.StringProperty()	#number of datapoints in the set
+	XF = db.StringProperty()	#x-axis format
+	YF = db.StringProperty()	#y-axis format
+	CSET = db.StringProperty()	#color format
+	SERIES = db.StringProperty()	#data series name, used to feature datasets
+
 class GlobalHandler(Plot3Handler):
 	    def get(self):
 		
