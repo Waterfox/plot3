@@ -512,7 +512,7 @@ class MainSettingHandler(Plot3Handler):
 class PlotSettingHandler(Plot3Handler):
 	def get(self):
 		[loggedIn,admin,UN] = self.checkCookies()
-		if loggedIn: self.render('settings.html',admin=loggedIn)
+		if loggedIn: self.render('settings.html',admin=loggedIn,UN=UN)
 		else: self.response.out.write('You are not an logged in')
 
 	def post(self):
