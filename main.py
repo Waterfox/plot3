@@ -39,12 +39,14 @@ g_data =([{"key": "set1", "values": [[1.0, 100], [2.0, 200], [3.0, 400]]},
 
 def modJson(inData):	# change the strings into numbers
 	plotData = json.loads(inData)
-	for i in xrange(len(plotData)):
-		for j in xrange(len(plotData[i]['values'])):
+	shapes = ['circle', 'cross', 'triangle-up', 'triangle-down', 'diamond', 'square']
+	for i in xrange(len(plotData)): #iter set (columns)
+		plotData[i]['shape'] = shapes[i % 6] 
+		for j in xrange(len(plotData[i]['values'])): #iter rows
 			try:
 				plotData[i]['values'][j][1] = float(plotData[i]['values'][j][1])
 			except:
-				plotData[i]['values'][j+1] = plotData[i]['values'][j+1]
+				plotData[i]['values'][j] = plotData[i]['values'][j]
 	plotData = json.dumps(plotData)
 	return plotData
 
@@ -241,7 +243,7 @@ class Plot3Handler(webapp2.RequestHandler):
 				
 		
 	def checkDataFormat(self,dS,entry_id,GlobeRandom=''):
-		firstEl = json.loads(dS.PLOTDATA)[0].values()[0][0][0]
+		firstEl = json.loads(dS.PLOTDATA)[0]['values'][0][0]
 		#First Element a string?
 		if isinstance(firstEl,str) or isinstance(firstEl,unicode) and (len(json.loads(dS.PLOTDATA))==1):
 			buttonSet = BP %{"id":GlobeRandom+str(entry_id)}
@@ -406,11 +408,17 @@ class AddDataHandler(Plot3Handler):
 
 		#check there isn't an identical entry
 		TITLEcheck = db.GqlQuery("SELECT * FROM PERSONAL3DB WHERE TITLE = :titlecheck", titlecheck = title).fetch(100)
-		for match in TITLEcheck:
-			if match.CATS==cats:
-				w1="There is already an identical entry in your database"
-				self.render('add_data_form.html',loggedIn=loggedIn,warn1=w1,data=plotData)
+		if TITLEcheck:
+				w1="There is already an entry with this title in your database"
+				self.render('add_data_form.html',loggedIn=loggedIn,UN=UN,warn1=w1,data=plotData)
 				return
+
+
+		#for match in TITLEcheck:
+		#	if match.CATS==cats:
+		#		w1="There is already an identical entry in your database"
+		#		self.render('add_data_form.html',loggedIn=loggedIn,warn1=w1,data=plotData)
+		#		return
 
 		entry = PERSONAL3DB(UN=UN,CATS=cats,PLOTDATA=plotData,TITLE=title,DESC=description,XL=xlabel,YL=ylabel,CSET=cSet,XF=xf,YF=yf)
 		entry.put()
@@ -864,7 +872,7 @@ class RandomPlotSet(Plot3Handler):
 		
 		dS = memcache.get(str(entry_id)+'r')
 		if dS is None:
-			dS=PERSONAL3DB.get_by_id(int(entry_id))
+			dS=RANDOM3DB.get_by_id(int(entry_id))
 			logging.error("DB QUERY")
 			if dS: memcache.set(str(entry_id),dS)
 			else:
@@ -887,7 +895,7 @@ class RandomPlotSet(Plot3Handler):
 
 class RandomPlotSettingHandler(Plot3Handler):
 	def get(self):
-		self.render('settings.html',admin=True) #allow any property to be changed
+		self.render('settings.html',admin=True,randset=True) #allow any property to be changed
 		
 		
 	def post(self):
@@ -902,11 +910,11 @@ class RandomPlotSettingHandler(Plot3Handler):
 		key = str(entry_id)+'r'
 		dS = memcache.get(key)
 		if dS is None:
-			dS=GLOBAL3DB.get_by_id(int(entry_id))
+			dS=RANDOM3DB.get_by_id(int(entry_id))
 			logging.error("DB QUERY")
-		dS.CSET = cSet
-		dS.XF=xf
-		dS.YF=yf
+		if cSet: dS.CSET = cSet
+		if xf: dS.XF=xf
+		if yf: dS.YF=yf
 		dS.put()
 		memcache.set(key,dS)
 		self.redirect('/random'+str(entry_id))
@@ -930,8 +938,10 @@ app = webapp2.WSGIApplication([('/', MainHandler),
 								#('/globalsettings',GlobalPlotSettingHandler),
 								#('/global([0-9]+)',GlobalPlotSet),
 								('/plotSomething',RandomAddData),
+								('/plotsomething',RandomAddData),
+								('/PlotSomething',RandomAddData),
 								('/random([0-9]+)',RandomPlotSet),
-								('/randomsettings',RandomPlotSettingHandler)],
+								('/randomSettings',RandomPlotSettingHandler)],
                               debug=True)
 
 							  #functions to write (check dash)

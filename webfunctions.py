@@ -51,4 +51,5 @@ def validate_cats(cats):
 	#return CATS_RE.match(cats)
 
 def validate_title(title):
-	return validate_name(title)
+	TITLE_RE = re.compile(r"^.{3,20}$")
+	return TITLE_RE.match(title)

@@ -21,6 +21,9 @@
 #Chart{
 	height: 90%;
 }
+.plotWrapper{
+	height: 99%;
+}
 
 .cbutton embed{
 margin-top: 10px;
@@ -54,5 +57,6 @@ margin: 0 0 0 0;
 	text-align: left; /* this overrides the text-align: center on the body element. */
 }
 body {
-font-family: "Helvetica Neue", Helvetica, sans-serif;
+	font-family: "Helvetica Neue", Helvetica, sans-serif;
+	
 }
