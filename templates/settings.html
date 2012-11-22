@@ -68,7 +68,7 @@
 						
 						<li><a href="/contact"><em>Contact</em></a></li>
 						<li><a href="/settings_main">Settings</a></li>
-						<li><a href="/logout" class="emph">Log Out (!username here!)</a></li>
+						<li><a href="/logout" class="emph">Log Out ({{UN}})</a></li>
 					</ul>
 				</nav>
 			</header>
@@ -155,8 +155,8 @@
 						<br />
 						<br />
 						{% endif %}
-						<input type="submit" name="submit" value="Save Settings" class="button" />
-						<input type="button" name="cancel" value="Cancel" onmouseup="window.location = '/'" class="button" />
+						<input type="submit" name="submit" value="Save Settings" class="button"  />
+						<input type="button" name="cancel" value="Cancel" onmouseup="window.location = '/'" class="button" id="cancelBtn"/>
 					</div>
 				</form>
 			</article>
@@ -164,5 +164,20 @@
 				Powererd by  <a href="https://github.com/mbostock/d3/wiki">D3</a> and <a href="http://nvd3.com/">NVD3</a>.
 			</footer>
 		</div>
+		{% if randset==True %}
+		<script>
+			var link = document.getElementById("cancelBtn");
+			loc = document.location.href;
+			var numb = loc.match(/\d+/g);
+			link.setAttribute("onmouseup","window.location ='/random"+numb.pop().toString()+"'");		
+		</script>
+		{% else %}
+		<script>
+			var link = document.getElementById("cancelBtn");
+			loc = document.location.href;
+			var numb = loc.match(/\d+/g);
+			link.setAttribute("onmouseup","window.location ='/"+numb.pop().toString()+"'");		
+		</script>
+		{% endif %}
 	</body>
 </html>

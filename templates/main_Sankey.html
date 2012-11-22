@@ -188,11 +188,11 @@
 								if (d.id >0){
 								var rect = d3.select(this);
 								rect.attr("fill-opacity",0.7)
-								.attr("cursor","crosshair")
+								//.attr("cursor","crosshair")
 								.style("stroke-width",2.0);}
 								else{
 								var rect = d3.select(this);
-								rect.attr("cursor","move");
+								//rect.attr("cursor","move");
 								}
 							};
 							
@@ -206,7 +206,7 @@
 								if (d.id >0){
 								var rect = d3.select(this);
 								rect.attr("fill-opacity",0.7)
-								.attr("cursor","crosshair")
+								//.attr("cursor","crosshair")
 								.style("stroke-width",2.0);}
 								};
 								
@@ -259,11 +259,11 @@
 						  .on("click", clickbot )
 						  .on("mouseover",fade)
 						  .on("mouseout",unfade)
-						  .on("mousedown",hold)
-						  .call(d3.behavior.drag()
-						  .origin(function(d) { return d; })
-						  .on("dragstart", function() { this.parentNode.appendChild(this); })
-						  .on("drag", dragmove));
+						  .on("mousedown",hold);
+						  //.call(d3.behavior.drag()
+						  //.origin(function(d) { return d; })
+						  //.on("dragstart", function() { this.parentNode.appendChild(this); })
+						  //.on("drag", dragmove));
 
 						node.append("rect")
 						  .attr("height", function(d) { return d.dy; })

@@ -39,12 +39,14 @@ g_data =([{"key": "set1", "values": [[1.0, 100], [2.0, 200], [3.0, 400]]},
 
 def modJson(inData):	# change the strings into numbers
 	plotData = json.loads(inData)
-	for i in xrange(len(plotData)):
-		for j in xrange(len(plotData[i]['values'])):
+	shapes = ['circle', 'cross', 'triangle-up', 'triangle-down', 'diamond', 'square']
+	for i in xrange(len(plotData)): #iter set (columns)
+		plotData[i]['shape'] = shapes[i % 6] 
+		for j in xrange(len(plotData[i]['values'])): #iter rows
 			try:
 				plotData[i]['values'][j][1] = float(plotData[i]['values'][j][1])
 			except:
-				plotData[i]['values'][j+1] = plotData[i]['values'][j+1]
+				plotData[i]['values'][j] = plotData[i]['values'][j]
 	plotData = json.dumps(plotData)
 	return plotData
 
@@ -241,7 +243,7 @@ class Plot3Handler(webapp2.RequestHandler):
 				
 		
 	def checkDataFormat(self,dS,entry_id,GlobeRandom=''):
-		firstEl = json.loads(dS.PLOTDATA)[0].values()[0][0][0]
+		firstEl = json.loads(dS.PLOTDATA)[0]['values'][0][0]
 		#First Element a string?
 		if isinstance(firstEl,str) or isinstance(firstEl,unicode) and (len(json.loads(dS.PLOTDATA))==1):
 			buttonSet = BP %{"id":GlobeRandom+str(entry_id)}
@@ -281,7 +283,7 @@ class PERSONAL3DB(db.Model,Plot3Handler):
 class RANDOM3DB(db.Model,Plot3Handler):
 	TS = db.DateTimeProperty(auto_now_add = True)
 	PLOTDATA = db.TextProperty(required = True)
-	TITLE = db.StringProperty(required = True)
+	TITLE = db.StringProperty()
 	DESC = db.TextProperty()	#description
 	XL = db.StringProperty()	#y-axis Label
 	YL = db.StringProperty()	#x-axis Label
@@ -290,21 +292,6 @@ class RANDOM3DB(db.Model,Plot3Handler):
 	YF = db.StringProperty()	#y-axis format
 	CSET = db.StringProperty()	#color format
 	
-	
-class GLOBAL3DB(db.Model):
-	UN = db.StringProperty(required = True)
-	TS = db.DateTimeProperty(auto_now_add = True)
-	CATS = db.StringProperty(required = True)
-	PLOTDATA = db.TextProperty(required = True)
-	TITLE = db.StringProperty(required = True)
-	DESC = db.TextProperty()	#description
-	XL = db.StringProperty()	#y-axis Label
-	YL = db.StringProperty()	#x-axis Label
-	SZ = db.StringProperty()	#number of datapoints in the set
-	XF = db.StringProperty()	#x-axis format
-	YF = db.StringProperty()	#y-axis format
-	CSET = db.StringProperty()	#color format
-	SERIES = db.StringProperty()	#data series name, used to feature datasets
 	
 class UNPW(db.Model):
 	UN = db.StringProperty(required = True)
@@ -421,11 +408,17 @@ class AddDataHandler(Plot3Handler):
 
 		#check there isn't an identical entry
 		TITLEcheck = db.GqlQuery("SELECT * FROM PERSONAL3DB WHERE TITLE = :titlecheck", titlecheck = title).fetch(100)
-		for match in TITLEcheck:
-			if match.CATS==cats:
-				w1="There is already an identical entry in your database"
-				self.render('add_data_form.html',loggedIn=loggedIn,warn1=w1,data=plotData)
+		if TITLEcheck:
+				w1="There is already an entry with this title in your database"
+				self.render('add_data_form.html',loggedIn=loggedIn,UN=UN,warn1=w1,data=plotData)
 				return
+
+
+		#for match in TITLEcheck:
+		#	if match.CATS==cats:
+		#		w1="There is already an identical entry in your database"
+		#		self.render('add_data_form.html',loggedIn=loggedIn,warn1=w1,data=plotData)
+		#		return
 
 		entry = PERSONAL3DB(UN=UN,CATS=cats,PLOTDATA=plotData,TITLE=title,DESC=description,XL=xlabel,YL=ylabel,CSET=cSet,XF=xf,YF=yf)
 		entry.put()
@@ -527,7 +520,7 @@ class MainSettingHandler(Plot3Handler):
 class PlotSettingHandler(Plot3Handler):
 	def get(self):
 		[loggedIn,admin,UN] = self.checkCookies()
-		if loggedIn: self.render('settings.html',admin=loggedIn)
+		if loggedIn: self.render('settings.html',admin=loggedIn,UN=UN)
 		else: self.response.out.write('You are not an logged in')
 
 	def post(self):
@@ -824,14 +817,14 @@ class ContactHandler(Plot3Handler):
 		newComm = COMMENTS(UN=name,EM=em,COMM=comm)
 		newComm.put()
 
-		message = mail.EmailMessage(sender="info@plot3.com",
+		message = mail.EmailMessage(sender="Robot@plot-3.appspotmail.com",
                             subject="Contact from P3")
 		message.to = 'rob.a.edwards@gmail.com'
-		message.body=(name+'has conacted your from PLOT3.com \n' +
+		message.body=(name+' has conacted your from PLOT3.com \n' +
 					'Email: ' + em + '\n' +
 					'Logged in as: ' + UN + '\n' +
 					'Message: \n ' + comm )
-		message.send
+		message.send()
 
 		recvd = 'Thank you for your Feedback!'
 		
@@ -858,9 +851,8 @@ class RandomAddData(Plot3Handler):
 		xlabel = cgi.escape(xlabel)
 		ylabel = self.request.get('ylabel')
 		ylabel = cgi.escape(ylabel)
-		plotdata = self.request.get('plotdata')
-		plotdata = cgi.escape(plotdata)
-		plotdata_js,size = tab2json(plotdata,title)
+		plotData = self.request.get('plotData')
+		plotData = modJson(plotData)
 		
 		xf = self.request.get('XF')		
 		yf = self.request.get('YF')
@@ -868,7 +860,7 @@ class RandomAddData(Plot3Handler):
 		cSet = self.getPlotColour() #set the user's default colour when adding data
 		if cSet=='0':
 			cSet='d3set20'
-		entry = RANDOM3DB(PLOTDATA=plotdata_js,TITLE=title,DESC=description,XL=xlabel,YL=ylabel,SZ=size,CSET=cSet,XF=xf,YF=yf)
+		entry = RANDOM3DB(PLOTDATA=plotData,loggedIn=loggedIn,UN=UN,TITLE=title,DESC=description,XL=xlabel,YL=ylabel,CSET=cSet,XF=xf,YF=yf)
 		entry.put()
 		entry_id=str(entry.key().id())
 		memcache.set(entry_id+'r',entry) #put in memcache
@@ -880,7 +872,7 @@ class RandomPlotSet(Plot3Handler):
 		
 		dS = memcache.get(str(entry_id)+'r')
 		if dS is None:
-			dS=PERSONAL3DB.get_by_id(int(entry_id))
+			dS=RANDOM3DB.get_by_id(int(entry_id))
 			logging.error("DB QUERY")
 			if dS: memcache.set(str(entry_id),dS)
 			else:
@@ -903,7 +895,7 @@ class RandomPlotSet(Plot3Handler):
 
 class RandomPlotSettingHandler(Plot3Handler):
 	def get(self):
-		self.render('settings.html',admin=True) #allow any property to be changed
+		self.render('settings.html',admin=True,randset=True) #allow any property to be changed
 		
 		
 	def post(self):
@@ -918,11 +910,11 @@ class RandomPlotSettingHandler(Plot3Handler):
 		key = str(entry_id)+'r'
 		dS = memcache.get(key)
 		if dS is None:
-			dS=GLOBAL3DB.get_by_id(int(entry_id))
+			dS=RANDOM3DB.get_by_id(int(entry_id))
 			logging.error("DB QUERY")
-		dS.CSET = cSet
-		dS.XF=xf
-		dS.YF=yf
+		if cSet: dS.CSET = cSet
+		if xf: dS.XF=xf
+		if yf: dS.YF=yf
 		dS.put()
 		memcache.set(key,dS)
 		self.redirect('/random'+str(entry_id))
@@ -946,8 +938,10 @@ app = webapp2.WSGIApplication([('/', MainHandler),
 								#('/globalsettings',GlobalPlotSettingHandler),
 								#('/global([0-9]+)',GlobalPlotSet),
 								('/plotSomething',RandomAddData),
+								('/plotsomething',RandomAddData),
+								('/PlotSomething',RandomAddData),
 								('/random([0-9]+)',RandomPlotSet),
-								('/randomsettings',RandomPlotSettingHandler)],
+								('/randomSettings',RandomPlotSettingHandler)],
                               debug=True)
 
 							  #functions to write (check dash)
