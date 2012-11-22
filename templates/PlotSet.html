@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+<<<<<<< HEAD
 <head>
 	<meta charset="utf-8">
 
@@ -33,6 +34,54 @@
 			var color = '#';
 			for (var i = 0; i < 6; i++ ) {
 				color += letters[Math.round(Math.random() * 15)];
+=======
+	<head>
+		<meta charset="utf-8">
+		<link href="javascript/nvd3/src/nv.d3.css" rel="stylesheet" type="text/css">
+		
+		<link href="stylesheets/rstyle.css" rel="stylesheet" type="text/css">
+		<link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" href="stylesheets/global_style.css" />
+		<link rel="stylesheet" href="stylesheets/style.css" />
+		<title>Plot3</title>
+		<script type="text/javascript" src="javascript/d3.v2.js"> </script>
+		<script type="text/javascript" src="javascript/nv.d3.js"> </script>
+		<script type="text/javascript" src="javascript/jquery.js"></script>
+		<!--[if lt IE 9]>
+			<script src="javascript/html5shiv.js"></script>
+		<![endif]-->
+		<script type="text/javascript">
+			document.createElement("header");
+			document.createElement("nav");
+			document.createElement("article");
+			document.createElement("aside");
+			document.createElement("section");
+			document.createElement("svg");
+			document.createElement("footer");
+		</script>
+
+		<script>
+			function getParameterByName(name)
+			{
+			  name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+			  var regexS = "[\\?&]" + name + "=([^&#]*)";
+			  var regex = new RegExp(regexS);
+			  var results = regex.exec(window.location.search);
+			  if(results == null)
+				return "";
+			  else
+				return decodeURIComponent(results[1].replace(/\+/g, " "));
+			}
+		</script>
+		<script type="text/javascript">
+			function get_random_color() {
+				var letters = '0123456789ABCDEF'.split('');
+				var color = '#';
+				for (var i = 0; i < 6; i++ ) {
+					color += letters[Math.round(Math.random() * 15)];
+				}
+				return color;
+>>>>>>> 93ba714521cb36ad22855844d8935739d6dfdf25
 			}
 			return color;
 		}
