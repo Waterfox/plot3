@@ -75,7 +75,7 @@
 </head>
 
 <body>
-	<div class="wrapper">
+	<div class="plotWrapper">
 		
 		
 		<div id="Chart">
@@ -111,7 +111,7 @@
 				var link = document.getElementById("set");
 				loc = document.location.href;
 				var numb = loc.match(/\d+/g);
-				link.setAttribute('onmouseup',"window.location ='/randomsettings?id="+numb.pop().toString()+"'");
+				link.setAttribute('onmouseup',"window.location ='/randomSettings?id="+numb.pop().toString()+"'");
 				//link.href = 'settings?id='+numb.pop();
 			</script>			
 			{% else %}
@@ -262,6 +262,11 @@
 	var shapes = ['circle', 'cross', 'triangle-up', 'triangle-down', 'diamond', 'square'];
 	var set_len = data[0].values.length;
 	
+	for (i=0; i<data.length; i++) {
+		for (j = 0; j < data[i].values.length; j++) {
+	      data[i].values[j].shape = data[i].shape;
+	    }
+	}
 	//document.write(shapes[Math.floor(260/set_len)]);
 	d3.scale.colorset = function() {
 	return d3.scale.ordinal().range(d3_colorset);

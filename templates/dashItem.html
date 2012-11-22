@@ -188,6 +188,14 @@
 	var d3_colorset{{id}} = {{colorset}};
 	var shapes = ['circle', 'cross', 'triangle-up', 'triangle-down', 'diamond', 'square'];
 	var set_len = data{{id}}[0].values.length;
+
+	var shapes = ['circle', 'cross', 'triangle-up', 'triangle-down', 'diamond', 'square'];
+	
+	for (i=0; i<data{{id}}.length; i++) {
+		for (j = 0; j < data{{id}}[i].values.length; j++) {
+	      data{{id}}[i].values[j].shape = data{{id}}[i].shape;
+	    }
+	}
 	
 	d3.scale.colorset{{id}} = function() {
 		return d3.scale.ordinal().range(d3_colorset{{id}});
