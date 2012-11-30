@@ -239,7 +239,7 @@ class Plot3Handler(webapp2.RequestHandler):
 		for i in xrange(len(index)):
 			if (str(index[i][0]) == str(id)):
 				del index[i]
-		return index
+				return index
 				
 		
 	def checkDataFormat(self,dS,entry_id,GlobeRandom=''):
@@ -480,9 +480,9 @@ class DeleteSet(Plot3Handler):
 					memcache.delete(key)
 					memcache.delete('dbTC'+UN)
 					UNdb = db.GqlQuery("SELECT * FROM UNPW WHERE UN=:USER",USER=UN).get()
-					templist = json.loads(UNdb.DASH)	#get user's the dash list
-					templist = self.remove_from_dash(templist,entry_id) #remove that ID to it with default properties
-					UNdb.DASH = json.dumps(templist)
+					dashlist = json.loads(UNdb.DASH)	#get user's the dash list
+					dashlist = self.remove_from_dash(dashlist,entry_id) #remove that ID to it with default properties
+					UNdb.DASH = json.dumps(dashlist)
 					UNdb.put()
 					self.redirect('/')
 				else: self.response.out.write('Thats not your set to delete carl')
@@ -918,6 +918,18 @@ class RandomPlotSettingHandler(Plot3Handler):
 		dS.put()
 		memcache.set(key,dS)
 		self.redirect('/random'+str(entry_id))
+
+
+# Plot3 Samples ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+class SampleDash(Plot3Handler):
+	def get(self):
+		#self.response.out.write('where am I?')
+		self.render('Sample_Dash.html')
+
+class Logo(Plot3Handler):
+	def get(self):
+		cSet = 'Rset3'
+		self.render('Plot3Logo.html',colorset=colorDict[cSet])
 		
 app = webapp2.WSGIApplication([('/', MainHandler),
 								
@@ -941,7 +953,9 @@ app = webapp2.WSGIApplication([('/', MainHandler),
 								('/plotsomething',RandomAddData),
 								('/PlotSomething',RandomAddData),
 								('/random([0-9]+)',RandomPlotSet),
-								('/randomSettings',RandomPlotSettingHandler)],
+								('/randomSettings',RandomPlotSettingHandler),
+								('/sampledash',SampleDash),
+								('/logo',Logo)],
                               debug=True)
 
 							  #functions to write (check dash)
