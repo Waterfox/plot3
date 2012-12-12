@@ -406,13 +406,25 @@ class AddDataHandler(Plot3Handler):
 		if cSet=='0':
 			cSet='d3set20'
 
-		#check there isn't an identical entry
-		TITLEcheck = db.GqlQuery("SELECT * FROM PERSONAL3DB WHERE TITLE = :titlecheck", titlecheck = title).fetch(100)
-		if TITLEcheck:
-				w1="There is already an entry with this title in your database"
-				self.render('add_data_form.html',loggedIn=loggedIn,UN=UN,warn1=w1,data=plotData)
-				return
+		#check there isn't an identical entry *This works for Title only
+		# TITLEcheck = db.GqlQuery("SELECT * FROM PERSONAL3DB WHERE TITLE = :titlecheck", titlecheck = title).fetch(100)
+		# if TITLEcheck:
+		# 		w1="There is already an entry with this title or  in your database"
+		# 		self.render('add_data_form.html',loggedIn=loggedIn,UN=UN,warn1=w1,data=plotData)
+		# 		return
 
+		#check there isn't an identical entry *This works for Title and Cats
+		dbTC = memcache.get('dbTC'+UN)
+		if dbTC is None:	#in memcache?
+			dbTC = db.GqlQuery("SELECT TITLE,CATS FROM PERSONAL3DB WHERE UN = :USER ORDER BY TS DESC",USER=UN).fetch(50)
+			#logging.error("DB QUERY")
+			if dbTC: memcache.set('dbTC'+UN,dbTC) #in DB?
+		if dbTC:
+			for SET in dbTC:
+				if title.lower() in SET.TITLE.lower() or title.lower() in [CAT.lower() for CAT in SET.CATS.split(',')]:	
+			 		w1="There is already an entry with this title or catergory in your database"
+			 		self.render('add_data_form.html',loggedIn=loggedIn,UN=UN,warn1=w1,data=plotData)
+					return
 
 		#for match in TITLEcheck:
 		#	if match.CATS==cats:

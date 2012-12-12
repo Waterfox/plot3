@@ -101,9 +101,12 @@
 		<div class="container">
 			<span id="login_frontpage_text">Already a Plot3 User?</span>
 			<input type="button" class="button" id="login_frontpage" value="Log In" onmouseup="window.location='/login'" />
+			<span id="plot_frontpage_text">Skip the signup. Just make a plot!</span>
+			<input type="button" class="button" id="plot_frontpage" value="  Plot  " onmouseup="window.location='/plotSomething'" />
 			<header>
-				<h1 id="header_title">Plot<span id="title_num">3</span></h1>
-
+				<div id="header_title">
+					<h1 >Plot<span id="title_num">3</span></h1>
+				</div>
 				<nav>
 					<ul>
 						<li><a href="#intro" id="introbtn">Intro</a></li>
@@ -123,7 +126,7 @@
 						</script>
  					<![endif]-->
 
- 					<object data="content/P3intro.svg" type="image/svg+xml"></object>
+ 					<object data="content/P3intro_link.svg" type="image/svg+xml"></object>
  				</div>
  			</article>
  			<footer>
