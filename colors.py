@@ -8,4 +8,4 @@ colorDict =({'Rset1': ["#FFF200", "#7065AD", "#EE2971", "#51B848"],
 			'Rset3':["#ff6600", "#2a7fff", "#6f7c91", "#37c871","#00ffff", "#ffff00", "#ff7f2a", "#ff2a2a","#5f5fd3", "#8a6f91", "#37c871", "#8d5fd3","#87aade", "#d3bc5f", "#918a6f", "#d35f5f","#8dd35f", "#ff80b2", "#93aca7", "#37c871"]}
 			)
 cSet = 'Rset2'
-axisdict = {'0d':'d3.format(\',r\')','1d':'d3.format(\',.1f\')','2d':'d3.format(\',.2f\')','3d':'d3.format(\',.3f\')','strf':'function(d) { return d3.time.format(\'%x\')(new Date(d))}'}
+axisdict = {'0d':'d3.format(\',f\')','1d':'d3.format(\',.1f\')','2d':'d3.format(\',.2f\')','3d':'d3.format(\',.3f\')','strf':'function(d) { return d3.time.format(\'%x\')(new Date(d))}'}

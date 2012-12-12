@@ -39,14 +39,22 @@
 		var window_height = $(window).height();
 
 		$("#Chart{{id}}").resizable({
-			//helper: "ui-resizable-helper",
+			helper: "ui-resizable-helper",
 			//ghost:true,
+			//animate:true,
+			//animateDuration: "fast",
+			//start: function(event,ui) {
+			//	$("#Chart{{id}}").hide();
+			//},
 			stop: function(event, ui) {
 				var res ='';
 				res = ui.size;
 				$("#{{id}}res").remove();
 				var inputres = '<input type="hidden" name="{{id}}res" id="{{id}}res" value="'+res.width+','+res.height+'"/>';
 				$('#posForm').append(inputres);
+				//$("#Chart{{id}}").show();
+				$("#Chart{{id}}").trigger('resize');
+
 			}
 		});
 
