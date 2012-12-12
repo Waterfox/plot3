@@ -13,7 +13,7 @@ header h1 {
 	margin: 0px;
 
 	padding-top: 75px;
-	padding-bottom: 75px;
+	padding-bottom: 25px;
 
 	text-align: center;
 
@@ -112,4 +112,34 @@ article h1 {
 	top: 20px;
 
 	z-index: 100;
+}
+
+#plot_frontpage {
+	position: absolute;
+	
+	right: 10px;
+	top: 60px;
+
+	z-index: 100;
+}
+#plot_frontpage_text {
+	font-family: 'Lato', sans-serif;
+	font-style: italic;
+	color: #999;
+
+	position: absolute;
+	
+	right: 95px;
+	top: 70px;
+
+	z-index: 100;
+}
+
+#header_text {
+	font-family: 'Lato', sans-serif;
+	font-style: italic;
+	text-align: center;
+	color: #777;
+	z-index: 100;
+	font-size: 24px;
 }
