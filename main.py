@@ -1,6 +1,6 @@
 # +++++++++++++++++++++++++++++++++++++++++++WFDN+++++++++++++++++++++++++++++++++++
 import webapp2
-import jinja2, os, logging, cgi ,json, random
+import jinja2, os, logging, cgi ,json, random, time
 from google.appengine.ext import db
 from google.appengine.api import memcache, mail
 from webfunctions import validate_name, validate_pass, validate_match, validate_email, make_salt, make_pw_hash, valid_pw, make_secure_val, check_secure_val, validate_cats, validate_title
@@ -37,12 +37,17 @@ g_data =([{"key": "set1", "values": [[1.0, 100], [2.0, 200], [3.0, 400]]},
 # cSet = 'Rset2'
 # axisdict = {'0d':'d3.format(\',r\')','1d':'d3.format(\',.1f\')','2d':'d3.format(\',.2f\')','3d':'d3.format(\',.3f\')','strf':'function(d) { return d3.time.format(\'%x\')(new Date(d))}'}
 
-def modJson(inData):	# change the strings into numbers
+def modJson(inData,tFormat=None):	# change the strings into numbers
 	plotData = json.loads(inData)
 	shapes = ['circle', 'cross', 'triangle-up', 'triangle-down', 'diamond', 'square']
 	for i in xrange(len(plotData)): #iter set (columns)
 		plotData[i]['shape'] = shapes[i % 6] 
 		for j in xrange(len(plotData[i]['values'])): #iter rows
+			try:
+				plotData[i]['values'][j][0] = time.mktime(time.strptime(plotData[i]['values'][j][0],tFormat))*1000
+			except:
+				plotData[i]['values'][j] = plotData[i]['values'][j]
+
 			try:
 				plotData[i]['values'][j][1] = float(plotData[i]['values'][j][1])
 			except:
@@ -401,10 +406,17 @@ class AddDataHandler(Plot3Handler):
 		
 		xf = self.request.get('XF')		
 		yf = self.request.get('YF')
+
+		if xf=='strf': tFormat = self.request.get('tFormat')
+		else: tFormat == None
+
 		
 		cSet = self.getPlotColour() #set the user's default colour when adding data
 		if cSet=='0':
 			cSet='d3set20'
+
+		plotData = self.request.get('plotData')
+		plotData = modJson(plotData,tFormat)
 
 		#check there isn't an identical entry *This works for Title only
 		# TITLEcheck = db.GqlQuery("SELECT * FROM PERSONAL3DB WHERE TITLE = :titlecheck", titlecheck = title).fetch(100)

@@ -117,7 +117,18 @@
 					$('.addrow').css('width', ($('.htBlockedRows').width()-10).toString() + 'px');
 				}
 
+
 				upd_addrow_w();
+				//hide the tFormat box initially
+				$('input[name="tFormat"]').css('visibility','hidden')
+
+				$('input[name="XF"]').change(function(){
+					//document.write('CHANGE')
+					xfState = $('input[name="XF"]:checked').val();
+					if (xfState=='strf') {$('input[name="tFormat"]').css('visibility','visible');}
+					else {$('input[name="tFormat"]').css('visibility','hidden');}
+				})
+				
 			});
 		</script>
 	</head>
@@ -389,6 +400,7 @@
 						<input name="XF" type="radio" value="3d" /> 1234.567
 						<br />
 						<input name="XF" type="radio" value="strf" /> Time Format
+						<input name="tFormat" type="text" class="textbox" />
 						<br />
 						<br />
 						<label for="YF">Y axis format</label>

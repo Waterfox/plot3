@@ -16,8 +16,8 @@
 		</g>
 	</g>
 </g>
-<text transform="matrix(1 0 0 1 91.665 110.7578)" font-family="'MyriadPro-BoldCond'" font-size="72">1</text>
-<text transform="matrix(1 0 0 1 0 373.6367)" font-family="'MyriadPro-BoldCond'" font-size="72">Sign-Up</text>
+<text transform="matrix(1 0 0 1 91.665 110.7578)" font-family="'Helvetica'" font-size="54">1</text>
+<text transform="matrix(1 0 0 1 0 373.6367)" font-family="'Helvetica'" font-size="54">Sign-Up</text>
 <circle fill="#A8CF38" stroke="#000000" stroke-width="20" stroke-miterlimit="10" cx="335.461" cy="354.836" r="75"/>
 <g>
 	<g>
@@ -28,8 +28,8 @@
 		</g>
 	</g>
 </g>
-<text transform="matrix(1 0 0 1 319.7798 377.0942)" font-family="'MyriadPro-BoldCond'" font-size="72">2</text>
-<text transform="matrix(1 0 0 1 590.998 373.6367)" font-family="'MyriadPro-BoldCond'" font-size="72">Add Data</text>
+<text transform="matrix(1 0 0 1 319.7798 377.0942)" font-family="'Helvetica'" font-size="54">2</text>
+<text transform="matrix(1 0 0 1 590.998 373.6367)" font-family="'Helvetica'" font-size="54">Add Data</text>
 <circle fill="#D159A1" stroke="#000000" stroke-width="20" stroke-miterlimit="10" cx="928.834" cy="357.108" r="75"/>
 <g>
 	<g>
@@ -40,8 +40,8 @@
 		</g>
 	</g>
 </g>
-<text transform="matrix(1 0 0 1 916.7544 379.8662)" font-family="'MyriadPro-BoldCond'" font-size="72">3</text>
-<text transform="matrix(1 0 0 1 659.4902 653.1245)" font-family="'MyriadPro-BoldCond'" font-size="72">Visualize your Database</text>
+<text transform="matrix(1 0 0 1 916.7544 379.8662)" font-family="'Helvetica'" font-size="54">3</text>
+<text transform="matrix(1 0 0 1 659.4902 653.1245)" font-family="'Helvetica'" font-size="54">Visualize your Database</text>
 <g>
 	
 		<image overflow="visible" width="1112" height="741" xlink:href="intro_1.png"  transform="matrix(0.7496 0 0 0.7497 587 710)">
@@ -77,8 +77,8 @@
 		</g>
 	</g>
 </g>
-<text transform="matrix(1 0 0 1 587.0391 183.6641)"><tspan x="0" y="0" fill="#8A8C8E" stroke="#8A8C8E" stroke-miterlimit="10" font-family="'MyriadPro-BoldCond'" font-size="48">Add Categories</tspan><tspan x="249.402" y="0" fill="#6D6E71" stroke="#8A8C8E" font-family="'MyriadPro-BoldCond'" font-size="48"> </tspan></text>
-<text transform="matrix(1 0 0 1 189.4863 1001.6499)"><tspan x="0" y="0" fill="#8A8C8E" stroke="#8A8C8E" stroke-miterlimit="10" font-family="'MyriadPro-BoldCond'" font-size="48">Click a Category</tspan><tspan x="-64.319" y="57.601" fill="#8A8C8E" stroke="#8A8C8E" font-family="'MyriadPro-BoldCond'" font-size="48">to Expand the Diagram</tspan><tspan x="317.275" y="57.601" fill="#6D6E71" stroke="#8A8C8E" font-family="'MyriadPro-BoldCond'" font-size="48"> </tspan></text>
+<text transform="matrix(1 0 0 1 587.0391 183.6641)"><tspan x="0" y="0" fill="#8A8C8E" stroke="#8A8C8E" stroke-miterlimit="10" font-family="'Helvetica'" font-size="36">Add Categories</tspan><tspan x="249.402" y="0" fill="#6D6E71" stroke="#8A8C8E" font-family="'Helvetica'" font-size="36"> </tspan></text>
+<text transform="matrix(1 0 0 1 189.4863 1001.6499)"><tspan x="0" y="0" fill="#8A8C8E" stroke="#8A8C8E" stroke-miterlimit="10" font-family="'Helvetica'" font-size="36">Click a Category</tspan><tspan x="-64.319" y="57.601" fill="#8A8C8E" stroke="#8A8C8E" font-family="'Helvetica'" font-size="36">to Expand the Diagram</tspan><tspan x="317.275" y="57.601" fill="#6D6E71" stroke="#8A8C8E" font-family="'Helvetica'" font-size="36"> </tspan></text>
 <circle fill="#F26926" stroke="#000000" stroke-width="20" stroke-miterlimit="10" cx="1656.982" cy="1213.873" r="75"/>
 <g>
 	<g>
@@ -89,14 +89,14 @@
 		</g>
 	</g>
 </g>
-<text transform="matrix(1 0 0 1 1642.4023 1236.6304)" font-family="'MyriadPro-BoldCond'" font-size="72">4</text>
-<text transform="matrix(1 0 0 1 1542.4473 1016.0405)"><tspan x="0" y="0" fill="#8A8C8E" stroke="#8A8C8E" stroke-miterlimit="10" font-family="'MyriadPro-BoldCond'" font-size="48">Click a Dataset</tspan><tspan x="2.039" y="57.601" fill="#8A8C8E" stroke="#8A8C8E" font-family="'MyriadPro-BoldCond'" font-size="48">to View a Plot</tspan><tspan x="231.236" y="57.601" fill="#6D6E71" stroke="#8A8C8E" font-family="'MyriadPro-BoldCond'" font-size="48"> </tspan></text>
+<text transform="matrix(1 0 0 1 1642.4023 1236.6304)" font-family="'Helvetica'" font-size="54">4</text>
+<text transform="matrix(1 0 0 1 1542.4473 1016.0405)"><tspan x="0" y="0" fill="#8A8C8E" stroke="#8A8C8E" stroke-miterlimit="10" font-family="'Helvetica'" font-size="36">Click a Dataset</tspan><tspan x="2.039" y="57.601" fill="#8A8C8E" stroke="#8A8C8E" font-family="'Helvetica'" font-size="36">to View a Plot</tspan><tspan x="231.236" y="57.601" fill="#6D6E71" stroke="#8A8C8E" font-family="'Helvetica'" font-size="36"> </tspan></text>
 <g>
 	
 		<image overflow="visible" width="1092" height="724" xlink:href="intro_2.png"  transform="matrix(0.75 0 0 0.78 1255 1560)">
 	</image>
 </g>
-<text transform="matrix(1 0 0 1 1455.3164 1505.6265)" font-family="'MyriadPro-BoldCond'" font-size="72">Plot your Datasets</text>
+<text transform="matrix(1 0 0 1 1455.3164 1505.6265)" font-family="'Helvetica'" font-size="54">Plot your Datasets</text>
 <circle fill="#E7E518" stroke="#000000" stroke-width="20" stroke-miterlimit="10" cx="1050.563" cy="1554.593" r="75"/>
 <g>
 	<g>
@@ -107,8 +107,8 @@
 		</g>
 	</g>
 </g>
-<text transform="matrix(1 0 0 1 1035.9834 1577.3511)" font-family="'MyriadPro-BoldCond'" font-size="72">5</text>
-<text transform="matrix(1 0 0 1 335.7798 1713.6938)" font-family="'MyriadPro-BoldCond'" font-size="72">Create a Dashboard</text>
+<text transform="matrix(1 0 0 1 1035.9834 1577.3511)" font-family="'Helvetica'" font-size="54">5</text>
+<text transform="matrix(1 0 0 1 335.7798 1713.6938)" font-family="'Helvetica'" font-size="54">Create a Dashboard</text>
 <rect x="117.365" y="1757.274" width="900" height="620"/>
 <g>
 	
@@ -124,7 +124,7 @@
 		</g>
 	</g>
 </g>
-<text transform="matrix(1 0 0 1 1092.8311 2291.4663)"><tspan x="0" y="0" fill="#8A8C8E" stroke="#8A8C8E" stroke-miterlimit="10" font-family="'MyriadPro-BoldCond'" font-size="48">Position and </tspan><tspan x="9.36" y="57.601" fill="#8A8C8E" stroke="#8A8C8E" stroke-miterlimit="10" font-family="'MyriadPro-BoldCond'" font-size="48">Resize </tspan><tspan x="122.878" y="57.601" fill="#8A8C8E" stroke="#8A8C8E" font-family="'MyriadPro-BoldCond'" font-size="48">Plots</tspan></text>
+<text transform="matrix(1 0 0 1 1092.8311 2291.4663)"><tspan x="0" y="0" fill="#8A8C8E" stroke="#8A8C8E" stroke-miterlimit="10" font-family="'Helvetica'" font-size="36">Position and </tspan><tspan x="9.36" y="57.601" fill="#8A8C8E" stroke="#8A8C8E" stroke-miterlimit="10" font-family="'Helvetica'" font-size="36">Resize </tspan><tspan x="122.878" y="57.601" fill="#8A8C8E" stroke="#8A8C8E" font-family="'Helvetica'" font-size="36">Plots</tspan></text>
 <g>
 	<g>
 		
@@ -134,7 +134,7 @@
 		</g>
 	</g>
 </g>
-<text transform="matrix(1 0 0 1 1712.3564 2274.4663)"><tspan x="0" y="0" fill="#8A8C8E" stroke="#8A8C8E" stroke-miterlimit="10" font-family="'MyriadPro-BoldCond'" font-size="48">Adjust Colors</tspan><tspan x="2.448" y="57.601" fill="#8A8C8E" stroke="#8A8C8E" stroke-miterlimit="10" font-family="'MyriadPro-BoldCond'" font-size="48">and Settings</tspan></text>
+<text transform="matrix(1 0 0 1 1712.3564 2274.4663)"><tspan x="0" y="0" fill="#8A8C8E" stroke="#8A8C8E" stroke-miterlimit="10" font-family="'Helvetica'" font-size="36">Adjust Colors</tspan><tspan x="2.448" y="57.601" fill="#8A8C8E" stroke="#8A8C8E" stroke-miterlimit="10" font-family="'Helvetica'" font-size="36">and Settings</tspan></text>
 <line stroke="#000000" stroke-width="20" stroke-miterlimit="10" x1="0" y1="2505.466" x2="2112.901" y2="2505.466"/>
 <polygon fill="#7ACBBF" stroke="#000000" stroke-width="20" stroke-miterlimit="10" points="177.016,2587.824 223.257,2667.469 
 	176.996,2747.112 84.493,2747.109 38.251,2667.463 84.513,2587.821 "/>
@@ -147,8 +147,8 @@
 		</g>
 	</g>
 </g>
-<text transform="matrix(1 0 0 1 111.665 2686.7573)" font-family="'MyriadPro-BoldCond'" font-size="72">1</text>
-<text transform="matrix(1 0 0 1 461.3164 2686.7573)" font-family="'MyriadPro-BoldCond'" font-size="72">Plot3.com/plotSomething</text>
+<text transform="matrix(1 0 0 1 111.665 2686.7573)" font-family="'Helvetica'" font-size="54">1</text>
+<text transform="matrix(1 0 0 1 461.3164 2686.7573)" font-family="'Helvetica'" font-size="54">Plot3.com/plotSomething</text>
 <line stroke="#000000" stroke-width="20" stroke-miterlimit="10" x1="7.361" y1="2829.466" x2="2120.263" y2="2829.466"/>
 <g>
 	<g>
@@ -159,5 +159,5 @@
 		</g>
 	</g>
 </g>
-<text transform="matrix(1 0 0 1 1293.502 2659.4663)"><tspan x="0" y="0" fill="#8A8C8E" stroke="#8A8C8E" stroke-miterlimit="10" font-family="'MyriadPro-BoldCond'" font-size="48">Make a Plot</tspan><tspan x="-39.742" y="57.601" fill="#8A8C8E" stroke="#8A8C8E" stroke-miterlimit="10" font-family="'MyriadPro-BoldCond'" font-size="48">Skip the Sign-Up</tspan></text>
+<text transform="matrix(1 0 0 1 1293.502 2659.4663)"><tspan x="0" y="0" fill="#8A8C8E" stroke="#8A8C8E" stroke-miterlimit="10" font-family="'Helvetica'" font-size="36">Make a Plot</tspan><tspan x="-39.742" y="57.601" fill="#8A8C8E" stroke="#8A8C8E" stroke-miterlimit="10" font-family="'Helvetica'" font-size="36">Skip the Sign-Up</tspan></text>
 </svg>
