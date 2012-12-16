@@ -43,11 +43,15 @@ def modJson(inData,tFormat=None):	# change the strings into numbers
 	for i in xrange(len(plotData)): #iter set (columns)
 		plotData[i]['shape'] = shapes[i % 6] 
 		for j in xrange(len(plotData[i]['values'])): #iter rows
-			try:
-				plotData[i]['values'][j][0] = time.mktime(time.strptime(plotData[i]['values'][j][0],tFormat))*1000
-			except:
-				plotData[i]['values'][j] = plotData[i]['values'][j]
-
+			if tFormat:
+				 
+				try:
+					tss =time.strptime(plotData[i]['values'][j][0],tFormat)
+					ts2 =time.mktime(tss)*1000
+					plotData[i]['values'][j][0] = ts2
+					#current limitation: Must include a year > 1970
+				except:
+					plotData[i]['values'][j] = plotData[i]['values'][j]
 			try:
 				plotData[i]['values'][j][1] = float(plotData[i]['values'][j][1])
 			except:
@@ -386,8 +390,7 @@ class AddDataHandler(Plot3Handler):
 		xlabel = cgi.escape(xlabel)
 		ylabel = self.request.get('ylabel')
 		ylabel = cgi.escape(ylabel)
-		plotData = self.request.get('plotData')
-		plotData = modJson(plotData)
+
 		#self.response.out.write(json.loads(plotData)[1]['values'])
 		#plotdata = cgi.escape(plotdata)
 		#plotdata_js,size = tab2json(plotdata,title)
@@ -407,16 +410,15 @@ class AddDataHandler(Plot3Handler):
 		xf = self.request.get('XF')		
 		yf = self.request.get('YF')
 
-		if xf=='strf': tFormat = self.request.get('tFormat')
-		else: tFormat == None
-
-		
-		cSet = self.getPlotColour() #set the user's default colour when adding data
-		if cSet=='0':
-			cSet='d3set20'
+		if xf=='strf':tFormat = self.request.get('tFormat')
+		else: tFormat = None
 
 		plotData = self.request.get('plotData')
 		plotData = modJson(plotData,tFormat)
+
+		cSet = self.getPlotColour() #set the user's default colour when adding data
+		if cSet=='0':
+			cSet='d3set20'
 
 		#check there isn't an identical entry *This works for Title only
 		# TITLEcheck = db.GqlQuery("SELECT * FROM PERSONAL3DB WHERE TITLE = :titlecheck", titlecheck = title).fetch(100)
@@ -450,7 +452,7 @@ class AddDataHandler(Plot3Handler):
 		memcache.set(entry_id,entry) #put in memcache
 		memcache.delete('dbTC'+UN)
 		ptype,buttonSet,noXlabels = self.checkDataFormat(entry,entry_id)
-		self.redirect('/%s?ptype=%s' %(entry_id,ptype))
+		#self.redirect('/%s?ptype=%s' %(entry_id,ptype))
 		
 
 # *******************************************PLOTS**********************************************************************		
@@ -875,15 +877,22 @@ class RandomAddData(Plot3Handler):
 		xlabel = cgi.escape(xlabel)
 		ylabel = self.request.get('ylabel')
 		ylabel = cgi.escape(ylabel)
-		plotData = self.request.get('plotData')
-		plotData = modJson(plotData)
+
 		
 		xf = self.request.get('XF')		
 		yf = self.request.get('YF')
+
+		if xf=='strf':
+			tFormat = self.request.get('tFormat')
+		else: tFormat = None
+
+		plotData = self.request.get('plotData')
+		plotData = modJson(plotData,tFormat)
 		
 		cSet = self.getPlotColour() #set the user's default colour when adding data
 		if cSet=='0':
 			cSet='d3set20'
+
 		entry = RANDOM3DB(PLOTDATA=plotData,loggedIn=loggedIn,UN=UN,TITLE=title,DESC=description,XL=xlabel,YL=ylabel,CSET=cSet,XF=xf,YF=yf)
 		entry.put()
 		entry_id=str(entry.key().id())
