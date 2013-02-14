@@ -397,16 +397,7 @@ class AddDataHandler(Plot3Handler):
 		#print validate_cats(cats)
 		#print validate_title(title)
 		#return
-		if not validate_cats(cats):
-			w2 = 'Category string must included and be CSV </br>'
-			self.render('add_data_form.html',loggedIn=loggedIn,warn2=w2,data=plotData)
-			return
-		if not validate_title(title):
-			w1 = 'Title must be included </br>'
-			self.render('add_data_form.html',loggedIn=loggedIn,warn1=w1,data=plotData)
-			return
-
-		
+	
 		xf = self.request.get('XF')		
 		yf = self.request.get('YF')
 
@@ -419,6 +410,15 @@ class AddDataHandler(Plot3Handler):
 		cSet = self.getPlotColour() #set the user's default colour when adding data
 		if cSet=='0':
 			cSet='d3set20'
+
+		if not validate_cats(cats):
+			w2 = 'Category string must be included and be CSV </br>'
+			self.render('add_data_form.html',loggedIn=loggedIn,warn2=w2,data=plotData)
+			return
+		if not validate_title(title):
+			w1 = 'Title must be included and be between 3 and 32 characters </br>'
+			self.render('add_data_form.html',loggedIn=loggedIn,warn1=w1,data=plotData)
+			return
 
 		#check there isn't an identical entry *This works for Title only
 		# TITLEcheck = db.GqlQuery("SELECT * FROM PERSONAL3DB WHERE TITLE = :titlecheck", titlecheck = title).fetch(100)
@@ -866,7 +866,7 @@ class RandomAddData(Plot3Handler):
 		
 	def post(self):
 		[loggedIn,admin,UN] = self.checkCookies()
-			
+			 
 		cats = self.request.get('cats')
 		cats = cgi.escape(cats)
 		title = self.request.get('title')
