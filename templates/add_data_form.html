@@ -129,9 +129,25 @@
 					$('.addrow').css('width', ($('.htBlockedRows').width()-10).toString() + 'px');
 				}
 
+
 				upd_addrow_w();
+				//hide the tFormat box initially
+				$('input[name="tFormat"]').css('visibility','hidden')
+
+				$('input[name="XF"]').change(function(){
+					//document.write('CHANGE')
+					xfState = $('input[name="XF"]:checked').val();
+					if (xfState=='strf') {$('input[name="tFormat"]').css('visibility','visible');}
+					else {$('input[name="tFormat"]').css('visibility','hidden');}
+				})
+				
 			});
 		</script>
+
+		<style>
+			#tFormat span { display: none; color: #FFFFFF; }
+			#tFormat:hover span { display: block; position: absolute; width: 300px; background-color: #aaa; height: 120px; left: 120px; top: -10px; color: #FFFFFF; padding: 5px; font-size:14px;}
+		</style>
 	</head>
 	<body>
 		<div class="wrapper">
@@ -401,7 +417,12 @@
 						<input name="XF" type="radio" value="3d" /> 1234.567
 						<br />
 						<input name="XF" type="radio" value="strf" /> Time Format
-						<br />
+						<div id="tFormat">
+							<input name="tFormat" type="text" class="textbox" />
+							<span>Selecting 'Time Format' will allow you to enter time in milliseconds since the epoch. </br>
+								A date can also be interpreted according to the format entered in the box (See time.strftime in the Python documentation). The year must be included.</br>
+								January-13-1986 = %B-%d-%Y</span>
+						</div>
 						<br />
 						<label for="YF">Y axis format</label>
 						<input name="YF" type ="radio" value ="0d" /> 9876
