@@ -156,7 +156,7 @@
 
 				<nav>
 					<ul>
-						<li><a href="/contact">Contact</a></li>
+						<li><a href="/contact"><em>Contact</em></a></li>
 						{% if loggedIn == True %}
 						<li><a href="/logout" class="emph">Log Out ({{UN}})</a></li>
 						{% endif %}
@@ -173,7 +173,7 @@
 
 						</div>
 
-						<label for="cats">*Add New Category</label> <span style="color: red">{{warn2}}</span>
+						<label for="cats">*Add New Category</label> <span style="color: red">{{warn2}}</span> <!-- replace this with HTML python error method -->
 						<input name="cats" id="cats" type="text" class="textbox" /> <input id="catbutton" type="button" class="button inline" value="+" />
 						{% endif %}
 

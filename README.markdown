@@ -2,7 +2,7 @@
 
 ## Dashboard
 
-dashlist list:
+### Dashlist List
 
 ```python
 [[str: 'save', str: x-pos+'px', str: y-pos+'px'],
@@ -10,20 +10,22 @@ dashlist list:
 [id2...],[id3...]]
 ```
 
-
 ## Sankey Diagram
 
-link list:
+### Link List
 
 ```python
 [[node,[link1,linkN..],value],[node2..]...]
 ```
 
 node: name of node
+
 link1: where the node links to
+
 value: number of links
 
-name list:
+### Name List
+
 ```python
 [[node,ID],[node2,ID2],...]
 ```
