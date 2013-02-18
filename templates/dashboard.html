@@ -110,6 +110,9 @@
 				var window_width = $(window).width();
 				var window_height = $(window).height();
 
+				$('.wrapper').css('height', window_height + 'px');
+				$('.wrapper').css('width', window_width + 'px');
+
 				$("#posForm").draggable({
 					containment: [0, 0, window_width, window_height],
 					containment: [0, 0, window_width, window_height], //1910, 1190
