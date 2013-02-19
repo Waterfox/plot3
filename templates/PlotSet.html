@@ -1,211 +1,101 @@
-<!DOCTYPE html>
-<html>
-<!-- gitwhy
-<head>
-	<meta charset="utf-8">
+{% extends "base.html" %}
 
-	<link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" href="stylesheets/global_style.css" />
-	<link rel="stylesheet" href="stylesheets/style.css" />
-	<link href="javascript/nvd3/src/nv.d3.css" rel="stylesheet" type="text/css">
-	<link href="stylesheets/rstyle.css" rel="stylesheet" type="text/css">
+{% block title %}View Plot{% endblock %}
 
-	<title>Plot3</title>
-	<script src="javascript/jquery.js" type="text/javascript"></script>
-	<script src="javascript/d3.v2.js" type="text/javascript"></script>
-	<script src="javascript/nv.d3.js" type="text/javascript"> </script>
-	
-	<script>
-		function getParameterByName(name)
-		{
-		  name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
-		  var regexS = "[\\?&]" + name + "=([^&#]*)";
-		  var regex = new RegExp(regexS);
-		  var results = regex.exec(window.location.search);
-		  if(results == null)
+{% block headerclass %}thin float{% endblock %}
+
+{% block styles %}
+<link href="stylesheets/rstyle.css" rel="stylesheet" type="text/css" /> <!-- do we even need -->
+<link href="javascript/nvd3/src/nv.d3.css" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+	function getParameterByName(name) {
+		name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+		var regexS = "[\\?&]" + name + "=([^&#]*)";
+		var regex = new RegExp(regexS);
+		var results = regex.exec(window.location.search);
+		if(results == null)
 			return "";
-		  else
+		else
 			return decodeURIComponent(results[1].replace(/\+/g, " "));
-		}
-	</script>
-	<script type="text/javascript">
-		function get_random_color() {
-			var letters = '0123456789ABCDEF'.split('');
-			var color = '#';
-			for (var i = 0; i < 6; i++ ) {
-				color += letters[Math.round(Math.random() * 15)];
--->
-	<head>
-		<meta charset="utf-8">
-		<link href="javascript/nvd3/src/nv.d3.css" rel="stylesheet" type="text/css">
-		
-		<link href="stylesheets/rstyle.css" rel="stylesheet" type="text/css">
-		<link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic' rel='stylesheet' type='text/css'>
-		<link rel="stylesheet" href="stylesheets/global_style.css" />
-		<link rel="stylesheet" href="stylesheets/style.css" />
-		<title>Plot3</title>
-		<script type="text/javascript" src="javascript/d3.v2.js"> </script>
-		<script type="text/javascript" src="javascript/nv.d3.js"> </script>
-		<script type="text/javascript" src="javascript/jquery.js"></script>
-		<!--[if lt IE 9]>
-			<script src="javascript/html5shiv.js"></script>
-		<![endif]-->
-		<script type="text/javascript">
-			document.createElement("header");
-			document.createElement("nav");
-			document.createElement("article");
-			document.createElement("aside");
-			document.createElement("section");
-			document.createElement("svg");
-			document.createElement("footer");
-		</script>
+	}
+</script>
+{% endblock %}
 
-		<script>
-			function getParameterByName(name)
-			{
-			  name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
-			  var regexS = "[\\?&]" + name + "=([^&#]*)";
-			  var regex = new RegExp(regexS);
-			  var results = regex.exec(window.location.search);
-			  if(results == null)
-				return "";
-			  else
-				return decodeURIComponent(results[1].replace(/\+/g, " "));
-			}
-		</script>
-		<script type="text/javascript">
-			function get_random_color() {
-				var letters = '0123456789ABCDEF'.split('');
-				var color = '#';
-				for (var i = 0; i < 6; i++ ) {
-					color += letters[Math.round(Math.random() * 15)];
-				}
-				return color;
-			}
+{% block content %}
+<div class="plotWrapper">
+	<div id="Chart">
+		<svg>
+		</svg>
+	</div>
 
-			$(document).ready(function() {
-				var rand_color = get_random_color().toString()
-
-				$('#title_num').css('color', rand_color);
-				$('.emph').css('color', rand_color);
-
-				$('article a').css('color', rand_color);
-				$('article a').hover(function() {
-					$(this).css('color', '#666');
-				}, function() {
-					$(this).css('color', rand_color);
-				});
-
-				$('footer a').css('color', rand_color);
-				$('footer a').hover(function() {
-					$(this).css('color', '#666');
-				}, function() {
-					$(this).css('color', rand_color);
-				});
-
-				$('.textbox').focus(function() {
-					$(this).css('border-color', rand_color);
-				});
-				$('.textbox').blur(function() {
-					$(this).css('border-color', '#111');
-				});
-
-				$('.textarea').focus(function() {
-					$(this).css('border-color', rand_color);
-				});
-				$('.textarea').blur(function() {
-					$(this).css('border-color', '#111');
-				});
-			});
-		</script>
-	</head>
-
-	<body>
-		<div class="wrapper">
-			<header class="thin float">
-				<h1 id="header_title"><a href="/">Plot<span id="title_num">3</a></span></h1>
-
-				<nav>
-					<ul>
-						<li><a href="contact.html"><em>Contact</em></a></li>
-						<li><a href="#" class="emph">Log Out ({{UN}})</a></li>
-					</ul>
-				</nav>
-			</header>
-			<div class="plotWrapper">
-				<div id="Chart">
-					<svg>
-					</svg>
-				</div>
-
-				<!-- <div id ="info">
-					Title: {{title}} | 
-					Catergories: {{cats}} | 
-					Number of Datapoints: {{size}} |
-					Description: {{description}} 
-				</div> -->
-				<nav>
-				
-				<div id="buttons">
-					{{buttonSet}}
-				</div>
-
-				<div id="settings">
-					{% if globe==True %}
-					<input type="button" class="button"  value="Settings" id="globalset" onmouseup="window.location = '/globalsettings'" >
-					<script>
-						var link = document.getElementById("globalset");
-						loc = document.location.href;
-						var numb = loc.match(/\d+/g);
-						link.setAttribute("onmouseup","window.location ='/globalsettings?id="+numb.pop().toString()+"'");
-						//link.href = 'globalsettings?id='+numb.pop();
-					</script>
-					{% elif randplot==True %}
-					<input type="button" class="button"  value="Settings" id="set" onmouseup="window.location = '/randomssettings'" >
-					<script>
-						var link = document.getElementById("set");
-						loc = document.location.href;
-						var numb = loc.match(/\d+/g);
-						link.setAttribute('onmouseup',"window.location ='/randomSettings?id="+numb.pop().toString()+"'");
-						//link.href = 'settings?id='+numb.pop();
-					</script>			
-					{% else %}
-					<input type="button" class="button"  value="Settings" id="set" onmouseup="window.location = '/settings'" >
-					<script>
-						var link = document.getElementById("set");
-						loc = document.location.href;
-						var numb = loc.match(/\d+/g);
-						link.setAttribute('onmouseup',"window.location ='/settings?id="+numb.pop().toString()+"'");
-						//link.href = 'settings?id='+numb.pop();
-					</script>
-					{% endif %}
-					<input type="button" class="button"  value="Home" id="home" onmouseup="window.location = '/'" >
-					{% if loggedIn==True %}
-					<input type="button" class="button"  value="Delete" id="del" onmouseup="window.location = '/delete'">
-					<script>
-						var link = document.getElementById("del");
-						loc = document.location.href;
-						var numb = loc.match(/\d+/g);
-						link.setAttribute('onmouseup',"if (confirm('Are you sure you want to delete?')) window.location ='/delete?id="+numb.pop().toString()+"';return false");
-					</script>
-						
-					<input type="button" class="button"  value="Add Dash" id="dash" onmouseup="window.location = '/addDash'" >
-					<script>
-						var link = document.getElementById("dash");
-						loc = document.location.href;
-						var numb = loc.match(/\d+/g);
-						ptype=getParameterByName('ptype');
-						link.setAttribute('onmouseup',"window.location='addDash?id="+numb.pop().toString()+'&ptype='+ptype.toString()+"'");
-					</script>	
-					{% endif %}
-				</div>
-				
-				</nav>
-			</div>
+	<!-- <div id ="info">
+		Title: {{title}} | 
+		Catergories: {{cats}} | 
+		Number of Datapoints: {{size}} |
+		Description: {{description}} 
+	</div> -->
+	<nav>
+		<div id="buttons">
+			{{buttonSet}}
 		</div>
-	{% if ptype == 'line' %}
+
+		<div id="settings">
+			{% if globe==True %}
+				<input type="button" class="button"  value="Settings" id="globalset" onmouseup="window.location = '/globalsettings'" >
+				<script>
+					var link = document.getElementById("globalset");
+					loc = document.location.href;
+					var numb = loc.match(/\d+/g);
+					link.setAttribute("onmouseup","window.location ='/globalsettings?id="+numb.pop().toString()+"'");
+					//link.href = 'globalsettings?id='+numb.pop();
+				</script>
+			{% elif randplot==True %}
+				<input type="button" class="button"  value="Settings" id="set" onmouseup="window.location = '/randomssettings'" >
+				<script>
+					var link = document.getElementById("set");
+					loc = document.location.href;
+					var numb = loc.match(/\d+/g);
+					link.setAttribute('onmouseup',"window.location ='/randomSettings?id="+numb.pop().toString()+"'");
+					//link.href = 'settings?id='+numb.pop();
+				</script>
+			{% else %}
+				<input type="button" class="button"  value="Settings" id="set" onmouseup="window.location = '/settings'" >
+				<script>
+					var link = document.getElementById("set");
+					loc = document.location.href;
+					var numb = loc.match(/\d+/g);
+					link.setAttribute('onmouseup',"window.location ='/settings?id="+numb.pop().toString()+"'");
+					//link.href = 'settings?id='+numb.pop();
+				</script>
+			{% endif %}
+			<input type="button" class="button"  value="Home" id="home" onmouseup="window.location = '/'" >
+			{% if loggedIn==True %}
+				<input type="button" class="button"  value="Delete" id="del" onmouseup="window.location = '/delete'">
+				<script>
+					var link = document.getElementById("del");
+					loc = document.location.href;
+					var numb = loc.match(/\d+/g);
+					link.setAttribute('onmouseup',"if (confirm('Are you sure you want to delete?')) window.location ='/delete?id="+numb.pop().toString()+"';return false");
+				</script>
+					
+				<input type="button" class="button"  value="Add Dash" id="dash" onmouseup="window.location = '/addDash'" >
+				<script>
+					var link = document.getElementById("dash");
+					loc = document.location.href;
+					var numb = loc.match(/\d+/g);
+					ptype=getParameterByName('ptype');
+					link.setAttribute('onmouseup',"window.location='addDash?id="+numb.pop().toString()+'&ptype='+ptype.toString()+"'");
+				</script>	
+			{% endif %}
+		</div>
+	</nav>
+</div>
+
+{% if ptype == 'line' %}
 	<script type="text/javascript">
-		var chart;
 		var data = {{plotData}};
 		var d3_colorset = {{colorset}};
 		
@@ -214,10 +104,10 @@
 		};	
 		
 		nv.addGraph(function() {
-	    	chart = nv.models.lineChart()
-					.x(function(d) { return d[0] })
-					.y(function(d) { return d[1] }) 
-					.color(d3.scale.colorset().range());
+	    	var chart = nv.models.lineChart() // NEED TO SET HEIGHT TO PREVENT TOO MUCH HEIGHT
+						  .x(function(d) { return d[0] })
+						  .y(function(d) { return d[1] }) 
+						  .color(d3.scale.colorset().range());
 	 
 			chart.xAxis
 				 .axisLabel('{{xlabel}}')
@@ -239,7 +129,7 @@
 			return chart;
 		});
 	</script>
-	{% elif ptype == 'area' %}
+{% elif ptype == 'area' %}
 	<script type="text/javascript">
 		var data = {{plotData}};	
 		var d3_colorset = {{colorset}};
@@ -250,31 +140,31 @@
 		
 
 		nv.addGraph(function() {
-		  var chart = nv.models.stackedAreaChart()
-						.x(function(d) { return d[0] })
-						.y(function(d) { return d[1] })
-						.color(d3.scale.colorset().range())
+			var chart = nv.models.stackedAreaChart()
+						  .x(function(d) { return d[0] })
+						  .y(function(d) { return d[1] })
+						  .color(d3.scale.colorset().range())
 						//.clipEdge(true);
 
-		  chart.xAxis
-			  .axisLabel('{{xlabel}}')
-			  .tickFormat({{XF}});
-			  //.tickFormat(function(d) { return d3.time.format('%x')(new Date(d)) });
+			chart.xAxis
+				 .axisLabel('{{xlabel}}')
+				 .tickFormat({{XF}});
+			   //.tickFormat(function(d) { return d3.time.format('%x')(new Date(d)) });
 
-		  chart.yAxis
-			  .tickFormat({{YF}})
-			  .axisLabel('{{ylabel}}');
+			chart.yAxis
+				 .tickFormat({{YF}})
+				 .axisLabel('{{ylabel}}');
 
-		  d3.select('#Chart svg')
-			.datum(data)
-			  .transition().duration(500).call(chart);
+			d3.select('#Chart svg')
+				.datum(data)
+					.transition().duration(500).call(chart);
 
-		  nv.utils.windowResize(chart.update);
+			nv.utils.windowResize(chart.update);
 
-		  return chart;
+			return chart;
 		});
 	</script>
-	{% elif ptype == 'bar' %}
+{% elif ptype == 'bar' %}
 	<script type="text/javascript">
 		var data = {{plotData}};
 		var d3_colorset = {{colorset}};
@@ -283,35 +173,32 @@
 		return d3.scale.ordinal().range(d3_colorset);
 		};	
 		nv.addGraph(function() { 
+			var chart = nv.models.multiBarChart()
+						  .x(function(d) { return d[0] })
+						  .y(function(d) { return d[1] })
+						  .color(d3.scale.colorset().range());
 
-			  var chart = nv.models.multiBarChart()
-			   .x(function(d) { return d[0] })
-			   .y(function(d) { return d[1] })
-			   .color(d3.scale.colorset().range());
-			   
-				{% if xflag %}
-				
-				{% else %}
+			{% if not xflag %}
 				chart.xAxis
-				.axisLabel('{{xlabel}}')
-			    .tickFormat({{XF}});
-				{% endif %}
+					 .axisLabel('{{xlabel}}')
+					 .tickFormat({{XF}});
+			{% endif %}
 
-				chart.yAxis
-				.tickFormat({{YF}})
-				.axisLabel('{{ylabel}}');
+			chart.yAxis
+				 .tickFormat({{YF}})
+				 .axisLabel('{{ylabel}}');
 
-			  d3.select('#Chart svg')
-				  .datum(data)
-				.transition().duration(500)
-				  .call(chart);
+			d3.select('#Chart svg')
+				.datum(data)
+					.transition().duration(500)
+					.call(chart);
 
-			  nv.utils.windowResize(chart.update);
+			nv.utils.windowResize(chart.update);
 
-			  return chart;
-			});
+			return chart;
+		});
 	</script>
-	{% elif ptype == 'scatter' %}
+{% elif ptype == 'scatter' %}
 	<script type="text/javascript">
 		var data = {{plotData}};
 		var d3_colorset = {{colorset}};
@@ -332,36 +219,36 @@
 		nv.addGraph(function() {
 			var k=0,
 				j=0;
-		  var chart = nv.models.scatterChart()
-						.showDistX(true)
-						.showDistY(true)
-						.color(d3.scale.colorset().range())
-						.x(function(d) { return d[0] })
-						.y(function(d) { return d[1] }) 
-						.size(function(d) { return d[1] });
+			var chart = nv.models.scatterChart()
+						  .showDistX(true)
+						  .showDistY(true)
+						  .color(d3.scale.colorset().range())
+						  .x(function(d) { return d[0] })
+						  .y(function(d) { return d[1] }) 
+						  .size(function(d) { return d[1] });
 						//.size(function(d,i) { if (i>0) return 10; else return 1;})
 						//.shape(function() {if (k==set_len){k=0; j++;} k++; return shapes[j % 6];});
 						//.shape(function(d,i) { if (i==set_len-1){j++;} return shapes[j % 6];});
-						
-		  chart.xAxis
-		  .tickFormat({{XF}})
-		  .axisLabel('{{xlabel}}');
+		
+			chart.xAxis
+				 .tickFormat({{XF}})
+				 .axisLabel('{{xlabel}}');
 		  
-		  chart.yAxis
-		  .tickFormat({{YF}})
-		  .axisLabel('{{ylabel}}');
+			chart.yAxis
+				 .tickFormat({{YF}})
+				 .axisLabel('{{ylabel}}');
 
-		  d3.select('#Chart svg')
-			  .datum(data)
-			.transition().duration(500)
-			 .call(chart);
+			d3.select('#Chart svg')
+				.datum(data)
+					.transition().duration(500)
+					.call(chart);
 
-		  nv.utils.windowResize(chart.update);
+			nv.utils.windowResize(chart.update);
 
-		  return chart;
+			return chart;
 		});
 	</script>
-	{% elif ptype == 'pie' %}
+{% elif ptype == 'pie' %}
 	<script type="text/javascript">
 		var data = {{plotData}};
 
@@ -372,29 +259,28 @@
 		};	
 
 		nv.addGraph(function() {
-			var width = window.height-400,
+			var width = window.height-200,
 				height = window.width;
 
 			var chart = nv.models.pieChart()
-				.x(function(d) { return d[0] })
-				.y(function(d) { return d[1] })
-				//.showLabels(false)
-				.color(d3.scale.colorset().range())
-				.width(width)
-				.height(height);
+						  .x(function(d) { return d[0] })
+						  .y(function(d) { return d[1] })
+						//.showLabels(false)
+						  .color(d3.scale.colorset().range())
+						  .width(width)
+						  .height(height);
 
-			  d3.select("#Chart svg")
-				  .datum(data)
-				  //.datum(testdata)
-				.transition().duration(500)
-				  .attr('width', width)
-				  .attr('height', height)
-				  .call(chart);
+			d3.select("#Chart svg")
+				.datum(data)
+				//.datum(testdata)
+					.transition().duration(500)
+					.attr('width', width)
+					.attr('height', height)
+					.call(chart);
 			nv.utils.windowResize(chart.update);  	
 			return chart;
 		});
 	</script>
-	{% endif %}
+{% endif %}
 
-	</body>
-</html>
+{% endblock %}

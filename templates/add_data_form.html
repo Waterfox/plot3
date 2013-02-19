@@ -72,8 +72,10 @@
 				$('.textarea').blur(function() {
 					$(this).css('border-color', '#111');
 				});
-
-				$('.handsontable .htBorder.current').css('background-color', rand_color);
+			});
+		</script>
+		<script type="text/javascript">
+			$('.handsontable .htBorder.current').css('background-color', rand_color);
 				$('.handsontable .htBorder.selection').css('background-color', rand_color);
 				$('.handsontable .htFillHandle').css('background-color', rand_color);
 
@@ -139,8 +141,7 @@
 					xfState = $('input[name="XF"]:checked').val();
 					if (xfState=='strf') {$('input[name="tFormat"]').css('visibility','visible');}
 					else {$('input[name="tFormat"]').css('visibility','hidden');}
-				})
-				
+				});
 			});
 		</script>
 
