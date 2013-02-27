@@ -452,7 +452,7 @@ class AddDataHandler(Plot3Handler):
 		memcache.set(entry_id,entry) #put in memcache
 		memcache.delete('dbTC'+UN)
 		ptype,buttonSet,noXlabels = self.checkDataFormat(entry,entry_id)
-		#self.redirect('/%s?ptype=%s' %(entry_id,ptype))
+		self.redirect('/%s?ptype=%s' %(entry_id,ptype))
 		
 
 # *******************************************PLOTS**********************************************************************		
