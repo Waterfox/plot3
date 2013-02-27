@@ -1,107 +1,32 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>Plot3 Contact</title>
+{% extends "base.html" %}
 
-		<link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic' rel='stylesheet' type='text/css'>
+{% block title %}Contact Us{% endblock %}
 
-		<link rel="stylesheet" href="stylesheets/global_style.css" />
-		<link rel="stylesheet" href="stylesheets/style.css" />
+{% block content %}
 
-		<script src="javascript/jquery.js"></script>
-		<script src="javascript/d3.v2.js"></script>
-		<script src="javascript/sankey.js"></script>
-		
+<h1>Contact Us</h1>
+<br />
+We would love to hear your feedback and suggestions for features.
+<br />
+<br />
+<!--<p>You can contact us at <a href="mailto:info@plot3.com">info@plot3.com</a> or fill out this form:</p>-->
 
-		<script type="text/javascript">
-			function get_random_color() {
-				var letters = '0123456789ABCDEF'.split('');
-				var color = '#';
-				for (var i = 0; i < 6; i++ ) {
-					color += letters[Math.round(Math.random() * 15)];
-				}
-				return color;
-			}
+<form method="post">
+	<label for="name">Your Name</label>
+	 <input type="text" class="textbox" name="name" value="{{name}}">
 
-			$(document).ready(function() {
-				var rand_color = get_random_color().toString()
+	<label for="email">Your E-mail</label>
+	<span style="color: red">{{w2}}</span>
+	 <input type="text" class="textbox long" name="email" value="{{em}}">
 
-				$('#title_num').css('color', rand_color);
-				$('.emph').css('color', rand_color);
+	<label for="comm">Comments/Feedback</label> {{w1}}
+	<textarea name="comm" class="textarea">{{comm}}</textarea>
 
-				$('article a').css('color', rand_color);
-				$('article a').hover(function() {
-					$(this).css('color', '#666');
-				}, function() {
-					$(this).css('color', rand_color);
-				});
+	<label></label>
 
-				$('footer a').css('color', rand_color);
-				$('footer a').hover(function() {
-					$(this).css('color', '#666');
-				}, function() {
-					$(this).css('color', rand_color);
-				});
+	<input type="submit" name="submit" class="button" value="Submit" />
+</form>
+<br />
+{{recvd}}
 
-				$('.textbox').focus(function() {
-					$(this).css('border-color', rand_color);
-				});
-				$('.textbox').blur(function() {
-					$(this).css('border-color', '#111');
-				});
-
-				$('.textarea').focus(function() {
-					$(this).css('border-color', rand_color);
-				});
-				$('.textarea').blur(function() {
-					$(this).css('border-color', '#111');
-				});
-			});
-		</script>
-	</head>
-	<body>
-		<div class="container">
-			<header>
-				<h1 id="header_title"><a href="/">Plot<span id="title_num">3</a></span></h1>
-
-				<nav>
-					{% if loggedIn==True %}
-					<ul>
-						<li><a href="/logout" class="emph">Log Out ({{UN}})</a></li>
-					</ul>
-					{% endif %}
-				</nav>
-			</header>
-			<article>
-				<h1>Contact Us</h1>
-				<br />
-				We would love to hear your feedback and suggestions for features
-				<br />
-				<br />
-				<!--<p>You can contact us at <a href="mailto:info@plot3.com">info@plot3.com</a> or fill out this form:</p>-->
-
-				<form method="post">
-					<label for="name">Your Name</label>
-					 <input type="text" class="textbox" name="name" value={{name}}>
-
-					<label for="email">Your E-mail</label>
-					<span style="color: red">{{w2}}</span>
-					 <input type="text" class="textbox long" name="email" value={{em}}>
-
-					<label for="comm">Comments/Feedback</label>
-					<span style="color: red">{{w1}}</span>
-					<textarea name="comm" class="textarea" >{{comm}}</textarea>
-
-					<label></label>
-
-					<input type="submit" name="submit" class="button" value="Submit" />
-				</form>
-				</br>
-				{{recvd}}
-			</article>
-			<footer>
-				Powererd by  <a href="https://github.com/mbostock/d3/wiki">D3</a> and <a href="http://nvd3.com/">NVD3</a>.
-			</footer>
-		</div>
-	</body>
-</html>
+{% endblock %}

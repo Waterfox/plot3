@@ -452,7 +452,7 @@ class AddDataHandler(Plot3Handler):
 		memcache.set(entry_id,entry) #put in memcache
 		memcache.delete('dbTC'+UN)
 		ptype,buttonSet,noXlabels = self.checkDataFormat(entry,entry_id)
-		#self.redirect('/%s?ptype=%s' %(entry_id,ptype))
+		self.redirect('/%s?ptype=%s' %(entry_id,ptype))
 		
 
 # *******************************************PLOTS**********************************************************************		
@@ -598,7 +598,7 @@ class Login(Plot3Handler):
 		if validname and validpass:
 			q = db.GqlQuery("SELECT * FROM UNPW WHERE UN = :1",input_name).get()
 			if not q:
-				w1 = 'Username doesnt exist'
+				w1 = HTMLError('Username doesn\'t exist.')
 				self.write_login(input_name,w1)
 			else:
 				if q.UN and valid_pw(input_name, input_pass, q.PW):
@@ -617,10 +617,10 @@ class Login(Plot3Handler):
 				
 					
 		elif not validname:
-			w1 = 'Not a valid username'
+			w1 = HTMLError('Not a valid username.')
 			self.write_login('',w1)
 		else:		
-			wp2 = 'Not a valid password'
+			wp2 = HTMLError('Not a valid password.')
 			self.write_login(input_name,'',wp2)
 			
 class Logout(Plot3Handler):
@@ -656,20 +656,20 @@ class Signup(Plot3Handler):
 		UNchek = db.GqlQuery("SELECT * FROM UNPW WHERE UN = :user", user = input_name)
 		
 		if  UNchek.get():
-			warn1 = "Username is taken"
+			warn1 = HTMLError("Username is taken.")
 			self.write_form(input_name,input_em,warn1)
 		elif not validem:
-			warn4 = "Not a Valid Email"
+			warn4 = HTMLError("Not a Valid Email.")
 			self.write_form(input_name,input_em,'','','',warn4)
 		elif (not validname):
-			warn1 = "Not a Valid Username"
+			warn1 = HTMLError("Not a Valid Username.")
 			self.write_form(input_name,input_em,warn1)
 		elif validname and (not validpass):
-			warn2 = "Not a Valid Password"
+			warn2 = HTMLError("Not a Valid Password.")
 			self.write_form(input_name,input_em,'',warn2)
 			#self.response.out.write("No good bro")
 		elif validname and (not validmatch):
-			warn3 = "Passwords do not match"
+			warn3 = HTMLError("Passwords do not match.")
 			self.write_form(input_name,input_em,'','',warn3)
 		elif (validname and validpass and validmatch):
 			PWH = make_pw_hash(input_name, input_pass)
@@ -952,6 +952,14 @@ class RandomPlotSettingHandler(Plot3Handler):
 		memcache.set(key,dS)
 		self.redirect('/random'+str(entry_id))
 
+
+# Plot3 HTML Formatting Methods ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+def HTMLError(errortext):
+	return '<strong class="error">' + errortext + '</strong>'
+
+def HTMLWarn(warntext):
+	return '<strong class="warn">' + warntext + '</strong>'
 
 # Plot3 Samples ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 class SampleDash(Plot3Handler):
