@@ -22,12 +22,6 @@ LASB = """
 <input type="button" class="button"  value="Bar Plot" onmouseup="window.location = '%(id)s?ptype=bar'" >
 """
 
-FOOTER = """
-<footer>
-	Powererd by  <a href="https://github.com/mbostock/d3/wiki">D3</a> and <a href="http://nvd3.com/">NVD3</a>.
-</footer>
-"""
-
 g_data =([{"key": "set1", "values": [[1.0, 100], [2.0, 200], [3.0, 400]]},
 		{"key": "set2", "values": [[1.0, 110], [2.0, 310], [3.0, 150]]},
 		{"key": "set3", "values": [[1.0, 220], [2.0, 140], [3.0, 320]]},
