@@ -28,7 +28,7 @@
 			document.createElement("footer");
 		</script>
 
-		<script type="text/css">
+		<script type="text/javascript">
 			function get_random_color() {
 				var letters = '0123456789ABCDEF'.split('');
 				var color = '#';
@@ -40,6 +40,8 @@
 
 			$(document).ready(function() {
 				var rand_color = get_random_color().toString();
+
+				console.log('Color: ' + rand_color);
 
 				$('#title_num').css('color', rand_color);
 				$('.emph').css('color', rand_color);
@@ -107,6 +109,8 @@
 			cSet={{cSet}};
 		
 			$(document).ready(function() {
+				$('#subbtn').width($('#homebtn').width());
+
 				var window_width = $(window).width();
 				var window_height = $(window).height();
 
@@ -142,7 +146,7 @@
 		</script>
 		<div class="wrapper">
 			<header class="thin">
-				<h1 id="header_title"><a href="/">Plot<span id="title_num">3</a></span></h1>
+				<h1 id="header_title"><a href="/">Plot<span id="title_num">3</span></a></h1>
 
 				<nav>
 					<ul>

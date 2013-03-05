@@ -6,18 +6,18 @@
 }
 #buttons {
 	color: #0C6;
-	left: 5%;
 	position: relative;
+	width: 50%;
 }
 
 #settings {
-	position: relative;
-	top: -40px;
-	left: 65%;
+	position: static;
+	margin-top: -40px;
+	float: right;
 }
 
 #Chart{
-	height: 90%;
+	height: 80%;
 }
 .plotWrapper{
 	height: 99%;
