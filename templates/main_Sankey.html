@@ -6,8 +6,9 @@
 
 <h1>{{UN}}'s Database</h1>
 
-<input type="button" class="button" style="float: right; margin-left:10px;" value="Dashboard" onmouseup="window.location='/dash'" />
-<input type="button" class="button" style="float: right;" value="Add Data" onmouseup="window.location='/addNew'" />
+<div class="buttons_main">
+	<input type="button" class="button" value="Dashboard" onmouseup="window.location='/dash'" /><input type="button" class="button" value="Add Data" onmouseup="window.location='/addNew'" />
+</div>
 
 <div id="chart">
 </div>
@@ -18,7 +19,7 @@
 	var nodeBook = [nodeVar];
 	var nodeBookIdx = 0;
 
-	expandData = function(d){
+	function expandData(d) {
 		function findNode(nodes,attr,tgt) {
 			var retVal=new Array;
 			$.each(nodes,function(idx, val){
@@ -236,6 +237,11 @@
 	}
 
 	sankBot(nodeVar);
+
+	$(window).resize(function() {
+		d3.select("#chart svg").remove();
+		sankBot(nodeVar);
+	});
 </script>
 
 {% endblock %}
