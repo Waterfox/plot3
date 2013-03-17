@@ -56,8 +56,8 @@
 			<embed src="content/Rset3.svg" type="image/svg+xml" />
 		</div>
 	</div>
-	{% if admin==True %}
-		<div class="col_two_shr">
+	<div class="col_two_shr">
+		{% if admin==True %}
 			<label for="XF">X axis format</label>
 
 			<input name="XF" type="radio" value="0d" /> 1234
@@ -85,10 +85,10 @@
 
 			<br />
 			<br />
-		</div>
-	{% endif %}
-	<input type="submit" name="submit" value="Save Settings" class="button"  />
-	<input type="button" name="cancel" value="Cancel" onmouseup="window.location = '/'" class="button" id="cancelBtn"/>
+		{% endif %}
+		<input type="submit" name="submit" value="Save Settings" class="button"  />
+		<input type="button" name="cancel" value="Cancel" onmouseup="window.location = '/'" class="button" id="cancelBtn"/>
+	</div>
 </form>
 
 {% if randset==True %}

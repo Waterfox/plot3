@@ -10,6 +10,7 @@
 		<link rel="stylesheet" href="stylesheets/sankeyStyle.css" />
 
 		<script src="javascript/jquery.js" type="text/javascript"></script>
+		<script src="javascript/d3.v2.js" type="text/javascript"></script>
 		<!--[if lt IE 9]>
 			<script src="javascript/html5shiv.js"></script>
 			<script type="text/javascript">
@@ -111,6 +112,115 @@
 		<!--[if lt IE 9]>
 			<strong>Please use Internet Explorer 9 or larger, or get a modern browser like Google Chrome.</strong>
 		<![endif]-->
+		<script type="text/javascript">
+			var d3_colorset = {{colorset}}
+
+			
+			var h = window.innerHeight,
+				w = window.innerWidth,
+				cx = w/2,
+				cy = h/2;
+			
+			xo = 200;
+			yo = 100;
+			lo = 100;
+			var p3coords = [[cx-xo,cy-yo],[cx-xo,cy+31-yo],[cx-xo,cy+62-yo],[cx-xo,cy+93-yo],[cx-xo+31,cy-yo],[cx-xo+51,cy+31-yo],[cx-xo+31,cy+62-yo],
+							[cx-xo+lo,cy-yo],[cx-xo+lo,cy+31-yo],[cx-xo+lo,cy+62-yo],[cx-xo+lo,cy+93-yo],
+							[cx-xo+1.5*lo,cy+62-yo],[cx-xo+1.5*lo,cy+93-yo],[cx-xo+1.5*lo+31,cy+62-yo],[cx-xo+1.5*lo+31,cy+93-yo],
+							[cx-xo+2.5*lo,cy-yo],[cx-xo+2.5*lo+16,cy+31-yo],[cx-xo+2.5*lo-16,cy+31-yo],[cx-xo+2.5*lo,cy+62-yo],[cx-xo+2.5*lo,cy+93-yo],
+							[cx-xo+3.5*lo,cy-yo],[cx-xo+3.5*lo,cy+62-yo],[cx-xo+3.5*lo,cy+124-yo],[cx-xo+3.5*lo+31,cy+11-yo],[cx-xo+3.5*lo+31,cy+42-yo],[cx-xo+3.5*lo+31,cy+81-yo],[cx-xo+3.5*lo+31,cy+112-yo]];
+			
+			function setLogo(){
+					var i=0;
+					d3.selectAll("rect")
+					.transition()
+					.duration(3000)
+					.delay(function(d,i){return i*200;})
+					.attr("class","selected")
+					.attr("x",function(d,i){if (i<p3coords.length){return d[0]=p3coords[i][0];} else {return d[0];}})
+					.attr("y",function(d,i){if (i<p3coords.length){return d[1]=p3coords[i][1];} else {return d[1];}});
+
+					$('svg').delay(10000).slideUp(2000);
+				}
+			
+
+				
+					
+			var fade = function (){
+				var rect = d3.select(this);
+				rect.attr("fill-opacity",0.5);
+		  	}
+			
+			var unfade = function(){
+				var rect = d3.select(this);
+				rect.attr("fill-opacity",1.0);
+		  	}
+			var dataset = [];
+			
+			for (i=0;i<Math.max(w/15,25);i++){
+				do {
+				x = Math.random()*(w-30);
+				y = Math.random()*(h-30);}
+				while (x>(cx-xo-50) && x<(cx+xo+50) && y>(cy-yo-50) && y<(cy+yo+50))
+				item = [x,y];
+				dataset.push(item); }
+						
+			d3.scale.colorset = function() {
+			return d3.scale.ordinal().range(d3_colorset);
+			};				
+			
+			function dragmove(d) {
+			  var box = d3.select(this);
+				box
+				  .attr("x", d[0]=d3.event.x)
+				  .attr("y", d[1]=d3.event.y);
+				if (box.attr("fill")=="#ff80b2" || box.attr("fill")=="#ffff00")
+				{
+					//document.location.href = "/login";
+					var boxes = d3.selectAll("rect");
+					for (i=0;i<boxes.length;i++) {
+						//document.write(boxes[0][i].__data__[0]);
+						if ((Math.pow(boxes[0][i].__data__[0]-box.attr("x"),2)+Math.pow(boxes[0][i].__data__[1]-box.attr("y"),2))<1000)// && boxes[i].attr("fill")=="#ff80b2")
+						{
+							document.location.href = "/login";
+						}
+					}
+				}
+					
+			}
+			
+			var drag = d3.behavior.drag()
+				.origin(function(d,i){
+				//if (!(d.x)&&!(d.y)){
+				d.x = d[0]; d.y=d[1];
+				return d;})
+				.on("drag", dragmove);
+				
+			
+			var svg = d3.select("body").append("svg");
+			svg.attr("width", w)
+				.attr("height", h);
+		   
+		    svg.selectAll("rect")
+				.data(dataset)
+			.enter()
+				.append("rect")
+				.attr("x",function(d){return d[0];})
+				.attr("y",function(d) {return d[1];})
+				.attr("width", 25)
+				.attr("height", 25)
+			    .attr("fill",d3.scale.colorset())
+				.on("mouseover",fade)
+				.on("mouseout",unfade)
+				//.on("mouseover",animate)
+				.attr("stroke","#000000")
+				//.attr("class","unselected")
+				.call(drag);
+
+				
+			$(document).ready(setLogo());
+		</script>
+
 		<div class="container">
 			<span id="login_frontpage_text">Already a Plot3 User?</span>
 			<input type="button" class="button" id="login_frontpage" value="Log In" onmouseup="window.location='/login'" />

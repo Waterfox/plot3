@@ -253,6 +253,13 @@ svg {
 	height: 280px;
 }
 
+#settings_form {
+
+}
+#settings_form embed {
+	max-width: 100%;
+}
+
 .col_one {
 	position: relative;
 	vertical-align: top;
@@ -278,6 +285,13 @@ svg {
 
 	width: 35.9%;
 	display: inline-block;
+}
+
+.buttons_main {
+	float: right;
+}
+.buttons_main input {
+	margin-left: 5px;
 }
 
 footer {
@@ -320,6 +334,40 @@ footer a {
 		width: 100%;
 	}
 	header nav ul li a {
+		width: 100%;
+	}
+	.buttons_main {
+		float: none;
+		width: 100%;
+	}
+	.buttons_main input {
+		width: 49%;
+		margin: 0px;
+		display: inline-block;
+	}
+	.buttons_main input:last-child {
+		margin-left: 2%;
+	}
+	.col_one {
+		position: static;
+		display: block;
+		width: 100%;
+	}
+	.col_one_exp {
+		position: static;
+		display: block;
+		width: 100%;
+	}
+	.col_two {
+		margin-top: 1px;
+		position: static;
+		display: block;
+		width: 100%;
+	}
+	.col_two_shr {
+		margin-top: 10px;
+		position: static;
+		display: block;
 		width: 100%;
 	}
 }
