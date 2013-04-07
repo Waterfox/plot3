@@ -33,6 +33,30 @@
 				}
 				return color;
 			}
+			function filterPath(string) {
+				return string
+					.replace(/^\//,'')
+					.replace(/(index|default).[a-zA-Z]{3,4}$/,'')
+					.replace(/\/$/,'');
+			}
+			// use the first element that is "scrollable"
+			function scrollableElement(els) {
+				for (var i = 0, argLength = arguments.length; i <argLength; i++) {
+					var el = arguments[i],
+							$scrollElement = $(el);
+					if ($scrollElement.scrollTop()> 0) {
+						return el;
+					} else {
+						$scrollElement.scrollTop(1);
+						var isScrollable = $scrollElement.scrollTop()> 0;
+						$scrollElement.scrollTop(0);
+						if (isScrollable) {
+							return el;
+						}
+					}
+				}
+				return [];
+			}
 
 			$(document).ready(function() {
 				$('header').css('height', ($(window).height()-20).toString()+'px');
@@ -53,34 +77,6 @@
 				$('.textbox').blur(function() {
 					$(this).css('border-color', '#111');
 				});
-
-				function filterPath(string) {
-					return string
-						.replace(/^\//,'')
-						.replace(/(index|default).[a-zA-Z]{3,4}$/,'')
-						.replace(/\/$/,'');
-				}
-				var locationPath = filterPath(location.pathname);
-				var scrollElem = scrollableElement('html', 'body');
-			 
-				// use the first element that is "scrollable"
-				function scrollableElement(els) {
-					for (var i = 0, argLength = arguments.length; i <argLength; i++) {
-						var el = arguments[i],
-								$scrollElement = $(el);
-						if ($scrollElement.scrollTop()> 0) {
-							return el;
-						} else {
-							$scrollElement.scrollTop(1);
-							var isScrollable = $scrollElement.scrollTop()> 0;
-							$scrollElement.scrollTop(0);
-							if (isScrollable) {
-								return el;
-							}
-						}
-					}
-					return [];
-				}
 				
 				$('#introsvg').css('height', ($('#introsvg').width()*1.35).toString()+'px');
 				$('#introsvg svg').css('height', '100%');
@@ -96,7 +92,6 @@
 		<![endif]-->
 		<script type="text/javascript">
 			var d3_colorset = {{colorset}}
-
 			
 			var h = window.innerHeight,
 				w = window.innerWidth,
@@ -122,24 +117,27 @@
 					.attr("x",function(d,i){if (i<p3coords.length){return d[0]=p3coords[i][0];} else {return d[0];}})
 					.attr("y",function(d,i){if (i<p3coords.length){return d[1]=p3coords[i][1];} else {return d[1];}});
 
-					$('svg').delay(10000).slideUp(2000);
+					$('svg').delay(10000).slideUp(2000, function() {
+						var locationPath = filterPath(location.pathname);
+						var scrollElem = scrollableElement('html', 'body');
 
-					$('a[href*=#]').each(function() {
-						var thisPath = filterPath(this.pathname) || locationPath;
-						if (locationPath == thisPath
-						&& (location.hostname == this.hostname || !this.hostname)
-						&& this.hash.replace(/#/,'') ) {
-							var $target = $(this.hash), target = this.hash;
-							if (target) {
-								var targetOffset = $target.offset().top;
-								$(this).click(function(event) {
-									event.preventDefault();
-									$(scrollElem).animate({scrollTop: targetOffset}, 400, function() {
-										location.hash = target;
+						$('a[href*=#]').each(function() {
+							var thisPath = filterPath(this.pathname) || locationPath;
+							if (locationPath == thisPath
+							&& (location.hostname == this.hostname || !this.hostname)
+							&& this.hash.replace(/#/,'') ) {
+								var $target = $(this.hash), target = this.hash;
+								if (target) {
+									var targetOffset = $target.offset().top;
+									$(this).click(function(event) {
+										event.preventDefault();
+										$(scrollElem).animate({scrollTop: targetOffset}, 400, function() {
+											location.hash = target;
+										});
 									});
-								});
+								}
 							}
-						}
+						});
 					});
 				}
 			
