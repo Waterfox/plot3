@@ -294,6 +294,22 @@ svg {
 	margin-left: 5px;
 }
 
+.colorlist {
+	display: inline-block;
+	line-height: 12px;
+}
+.colorlist .box {
+	display: inline-block;
+	width: 28px;
+	height: 28px;
+	border: 1px solid black;
+	/*border-right: none;*/
+	margin-left: -1px;
+}
+.colorlist .box:last-child {
+	/*border-right: 1px solid black;*/
+}
+
 footer {
 	position: fixed;
 	bottom: 0px;

@@ -11,49 +11,73 @@
 		<div class="cbutton">
 			<label>4 Colors</label>
 			<input type="radio" name="cSet" id="Rset1" value="Rset1" class="rbtn" />
-			<embed src="content/Rset1.svg" type="image/svg+xml" />
+			<!--<embed src="content/Rset1.svg" type="image/svg+xml" />-->
+			<div class="colorlist">
+				{% for color in colorDict['Rset1'] %}<div class="box" style="background-color: {{ color }}"></div>{% endfor %}
+			</div>
 		</div>
 
 		<div class="cbutton">
 			<label>8 Colors</label>
 			<input type="radio" name="cSet" value="CBset3" class="rbtn" />
-			<embed src="content/CBset3.svg" type="image/svg+xml" />
+			<!--<embed src="content/CBset3.svg" type="image/svg+xml" />-->
+			<div class="colorlist">
+				{% for color in colorDict['CBset3'] %}<div class="box" style="background-color: {{ color }}"></div>{% endfor %}
+			</div>
 		</div>
 			
 		<div class="cbutton">
 			<label>10 Colors (1)</label>
 			<input type="radio" name="cSet" value="Rset2" class="rbtn" />
-			<embed src="content/Rset2.svg" type="image/svg+xml" />
+			<!--<embed src="content/Rset2.svg" type="image/svg+xml" />-->
+			<div class="colorlist">
+				{% for color in colorDict['Rset2'] %}<div class="box" style="background-color: {{ color }}"></div>{% endfor %}
+			</div>
 		</div>
 			
 		<div class="cbutton">
 			<label>10 Colors (2)</label>
 			<input type="radio" name="cSet" value="d3set10" class="rbtn" />
-			<embed src="content/d3set10.svg" type="image/svg+xml" />
+			<!--<embed src="content/d3set10.svg" type="image/svg+xml" />-->
+			<div class="colorlist">
+				{% for color in colorDict['d3set10'] %}<div class="box" style="background-color: {{ color }}"></div>{% endfor %}
+			</div>
 		</div>
 			
 		<div class="cbutton">
 			<label>20 Colors (1)</label>
 			<input type="radio" name="cSet" value="d3set20" class="rbtn" />
-			<embed src = "content/d3set20.svg" type = "image/svg+xml" />
+			<!--<embed src = "content/d3set20.svg" type = "image/svg+xml" />-->
+			<div class="colorlist">
+				{% for color in colorDict['d3set20'] %}<div class="box" style="background-color: {{ color }}"></div>{% endfor %}
+			</div>
 		</div>
 
 		<div class="cbutton">
 			<label>20 Colors (2)</label>
 			<input type="radio" name="cSet" value="d3set20b" class="rbtn" />
-			<embed src="content/d3set20b.svg" type="image/svg+xml" />
+			<!--<embed src="content/d3set20b.svg" type="image/svg+xml" />-->
+			<div class="colorlist">
+				{% for color in colorDict['d3set20b'] %}<div class="box" style="background-color: {{ color }}"></div>{% endfor %}
+			</div>
 		</div>	
 			
 		<div class="cbutton">
 			<label>20 Colors (3)</label>
 			<input type="radio" name="cSet" value="d3set20c" class="rbtn" />
-			<embed src="content/d3set20c.svg" type="image/svg+xml" />
+			<!--<embed src="content/d3set20c.svg" type="image/svg+xml" />-->
+			<div class="colorlist">
+				{% for color in colorDict['d3set20c'] %}<div class="box" style="background-color: {{ color }}"></div>{% endfor %}
+			</div>
 		</div>	
 			
 		<div class="cbutton">
 			<label>20 Colors (4)</label>
 			<input type="radio" name="cSet" value="Rset3" class="rbtn" />
-			<embed src="content/Rset3.svg" type="image/svg+xml" />
+			<!--<embed src="content/Rset3.svg" type="image/svg+xml" />-->
+			<div class="colorlist">
+				{% for color in colorDict['Rset3'] %}<div class="box" style="background-color: {{ color }}"></div>{% endfor %}
+			</div>
 		</div>
 	</div>
 	<div class="col_two_shr">
