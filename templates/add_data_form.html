@@ -72,10 +72,9 @@
 				$('.textarea').blur(function() {
 					$(this).css('border-color', '#111');
 				});
-			});
-		</script>
-		<script type="text/javascript">
-			$('.handsontable .htBorder.current').css('background-color', rand_color);
+			
+
+				$('.handsontable .htBorder.current').css('background-color', rand_color);
 				$('.handsontable .htBorder.selection').css('background-color', rand_color);
 				$('.handsontable .htFillHandle').css('background-color', rand_color);
 
@@ -115,6 +114,7 @@
 					$('#csv_maninput').css('visibility', 'hidden');
 					$('#csv_maninput').css('height', '0px');
 				});
+
 				$('#input_in').click(function() {
 					state = "input";
 
